@@ -5,11 +5,11 @@
 
 ## Concept
 
-- Experimental Synthesizer for Arduino Uno
+- Pseudo Polyphonic Synthesizer for Arduino Uno
 
 ## Features
 
-- Monophonic Synthesizer (or MIDI Sound Module)
+- Pseudo Polyphonic Synthesizer (or MIDI Sound Module)
 - Serial MIDI In (38400 bps), PWM Audio Out (Pin 6), PWM Rate: 62500 Hz
 - Sampling Rate: 15625 Hz, Bit Depth: 8 bits
 - LPF Attenuation Slope: -12 dB/oct
