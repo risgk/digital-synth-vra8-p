@@ -1,7 +1,7 @@
-# Digital Synth VRA8-X 1.1.0
+# Digital Synth VRA8-P 0.0.0
 
-- 2015-11-30 ISGK Instruments
-- <https://github.com/risgk/digital-synth-vra8-x>
+- 2016-00-00 ISGK Instruments
+- <https://github.com/risgk/digital-synth-vra8-p>
 
 ## Concept
 
@@ -15,18 +15,18 @@
 - LPF Attenuation Slope: -12 dB/oct
 - Recommending [Hairless MIDI<->Serial Bridge](http://projectgus.github.io/hairless-midiserial/) to connect PC
 - Files
-    - `DigitalSynthVRA8X.ino` is a sketch for Arduino Uno
+    - `DigitalSynthVRA8P.ino` is a sketch for Arduino Uno
     - `MakeSampleWavFile.cc` is for Debugging on PC
         - Requiring GCC (G++) or other
         - `make-sample-wav-file-cc.bat` makes a sample WAV file (in Windows)
     - `generate-*.rb` generate source files
         - Requiring a Ruby execution environment
 
-## VRA8-X CTRL
+## VRA8-P CTRL
 
-- Parameter Editor (MIDI Controller) for VRA8-X, Web App
+- Parameter Editor (MIDI Controller) for VRA8-P, Web App
 - We recommend Google Chrome, which implements Web MIDI API
-- Recommending [loopMIDI](http://www.tobias-erichsen.de/software/loopmidi.html) (virtual loopback MIDI cable) to connect VRA8-X
+- Recommending [loopMIDI](http://www.tobias-erichsen.de/software/loopmidi.html) (virtual loopback MIDI cable) to connect VRA8-P
 - CAUTION: Click sounds occur sometimes when you change the controllers
 
 ## Controllers
@@ -81,8 +81,8 @@
 
 ## MIDI Implementation Chart
 
-      [Experimental Synthesizer]                                      Date: 2015-11-30       
-      Model  Digital Synth VRA8-X     MIDI Implementation Chart       Version: 1.1.0         
+      [Experimental Synthesizer]                                      Date: 2016-00-00       
+      Model  Digital Synth VRA8-P     MIDI Implementation Chart       Version: 0.0.0         
     +-------------------------------+---------------+---------------+-----------------------+
     | Function...                   | Transmitted   | Recognized    | Remarks               |
     +-------------------------------+---------------+---------------+-----------------------+
