@@ -8,12 +8,10 @@ class SynthCore {
   static uint8_t m_system_data_remaining;
   static uint8_t m_running_status;
   static uint8_t m_first_data;
-  static uint8_t m_note_number;
 
 public:
   INLINE static void initialize() {
     IVoice<0>::initialize();
-    m_note_number = NOTE_NUMBER_MIN;
     m_system_exclusive = false;
     m_system_data_remaining = 0;
     m_running_status = STATUS_BYTE_INVALID;
@@ -87,8 +85,7 @@ public:
   INLINE static void control_change(uint8_t controller_number, uint8_t controller_value) {
     switch (controller_number) {
     case ALL_NOTES_OFF:
-      m_note_number = 0xFF;
-      IVoice<0>::note_off();
+      IVoice<0>::all_note_off();
       break;
     default:
       IVoice<0>::control_change(controller_number, controller_value);
@@ -118,15 +115,11 @@ private:
   }
 
   INLINE static void note_on(uint8_t note_number) {
-    m_note_number = note_number;
-    IVoice<0>::note_on(m_note_number);
+    IVoice<0>::note_on(note_number);
   }
 
   INLINE static void note_off(uint8_t note_number) {
-    if (m_note_number == note_number) {
-      m_note_number = 0xFF;
-      IVoice<0>::note_off();
-    }
+    IVoice<0>::note_off(note_number);
   }
 };
 
@@ -134,4 +127,3 @@ template <uint8_t T> uint8_t SynthCore<T>::m_system_exclusive;
 template <uint8_t T> uint8_t SynthCore<T>::m_system_data_remaining;
 template <uint8_t T> uint8_t SynthCore<T>::m_running_status;
 template <uint8_t T> uint8_t SynthCore<T>::m_first_data;
-template <uint8_t T> uint8_t SynthCore<T>::m_note_number;

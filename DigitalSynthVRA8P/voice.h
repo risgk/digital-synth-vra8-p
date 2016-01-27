@@ -2,8 +2,14 @@
 
 template <uint8_t T>
 class Voice {
+  static uint8_t m_note_number[4];
+
 public:
   INLINE static void initialize() {
+    m_note_number[0] = 0xFF;
+    m_note_number[1] = 0xFF;
+    m_note_number[2] = 0xFF;
+    m_note_number[3] = 0xFF;
     IOsc<0>::initialize();
     IFilter<0>::initialize();
     IAmp<0>::initialize();
@@ -11,13 +17,52 @@ public:
   }
 
   INLINE static void note_on(uint8_t note_number) {
-    if ((note_number >= NOTE_NUMBER_MIN) && (note_number <= NOTE_NUMBER_MAX)) {
-      IOsc<0>::note_on(note_number);
-      IEG<0>::note_on();
+    if ((note_number < NOTE_NUMBER_MIN) || (note_number > NOTE_NUMBER_MAX)) {
+      return;
+    }
+
+    if (m_note_number[0] == 0xFF) {
+      m_note_number[0] = note_number;
+      IOsc<0>::note_on(0, note_number);
+    } else if (m_note_number[1] == 0xFF) {
+      m_note_number[1] = note_number;
+      IOsc<0>::note_on(1, note_number);
+    } else if (m_note_number[2] == 0xFF) {
+      m_note_number[2] = note_number;
+      IOsc<0>::note_on(2, note_number);
+    } else if (m_note_number[3] == 0xFF) {
+      m_note_number[3] = note_number;
+      IOsc<0>::note_on(3, note_number);
+    } else {
+      m_note_number[0] = note_number;
+      IOsc<0>::note_on(0, note_number);
+    }
+
+    IEG<0>::note_on();
+  }
+
+  INLINE static void note_off(uint8_t note_number) {
+    if (m_note_number[0] == note_number) {
+      m_note_number[0] = 0xFF;
+      IOsc<0>::note_off(0);
+    } else if (m_note_number[1] == note_number) {
+      m_note_number[1] = 0xFF;
+      IOsc<0>::note_off(1);
+    } else if (m_note_number[2] == note_number) {
+      m_note_number[2] = 0xFF;
+      IOsc<0>::note_off(2);
+    } else if (m_note_number[3] == note_number) {
+      m_note_number[3] = 0xFF;
+      IOsc<0>::note_off(3);
+    }
+
+    if (m_note_number[0] == 0xFF && m_note_number[1] == 0xFF &&
+        m_note_number[2] == 0xFF && m_note_number[3] == 0xFF) {
+      IEG<0>::note_off();
     }
   }
 
-  INLINE static void note_off() {
+  INLINE static void all_note_off() {
     IEG<0>::note_off();
   }
 
@@ -51,10 +96,17 @@ public:
   }
 
   INLINE static int8_t clock() {
+#if 0
     uint8_t eg_output     = IEG<0>::clock();
     int16_t osc_output    = IOsc<0>::clock(eg_output);
     int16_t filter_output = IFilter<0>::clock(osc_output, eg_output);
     int16_t amp_output    = IAmp<0>::clock(filter_output, eg_output);
     return high_sbyte(amp_output);
+#else
+    int16_t osc_output    = IOsc<0>::clock(0);
+    return high_sbyte(osc_output);
+#endif
   }
 };
+
+template <uint8_t T> uint8_t Voice<T>::m_note_number[4];
