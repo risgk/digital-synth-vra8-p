@@ -8,11 +8,11 @@ def freq_from_note_number(note_number)
   cent = (note_number * 100.0) - 6900.0
   hz = A4_PITCH * (2.0 ** (cent / 1200.0))
   freq = (hz * (1 << OSC_PHASE_RESOLUTION_BITS) / SAMPLING_RATE).floor.to_i
-  freq = freq + 1 if freq.odd?
+  freq = freq + 1 if freq.even?
   freq
 end
 
-$file.printf("const uint16_t g_osc_freq_table[] = {\n  ")
+$file.printf("const __uint24 g_osc_freq_table[] = {\n  ")
 (NOTE_NUMBER_MIN..NOTE_NUMBER_MAX).each do |note_number|
   if (note_number < NOTE_NUMBER_MIN) || (note_number > NOTE_NUMBER_MAX)
     freq = 0
@@ -20,10 +20,10 @@ $file.printf("const uint16_t g_osc_freq_table[] = {\n  ")
     freq = freq_from_note_number(note_number)
   end
 
-  $file.printf("0x%04X,", freq)
+  $file.printf("0x%06X,", freq)
   if note_number == DATA_BYTE_MAX
     $file.printf("\n")
-  elsif note_number % 12 == 11
+  elsif note_number % 6 == 5
     $file.printf("\n  ")
   else
     $file.printf(" ")
