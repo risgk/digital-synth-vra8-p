@@ -6,8 +6,8 @@
 
 template <uint8_t T>
 class Osc {
-  static uint16_t       m_phase[8];
-  static uint16_t       m_freq[8];
+  static uint16_t       m_phase[4];
+  static uint16_t       m_freq[4];
   static const uint8_t* m_wave_table[4];
   static uint8_t        m_mode;
   static uint8_t        m_color;
@@ -21,12 +21,6 @@ public:
     m_freq[1] = g_osc_freq_table[NOTE_NUMBER_MIN];
     m_freq[2] = g_osc_freq_table[NOTE_NUMBER_MIN];
     m_freq[3] = g_osc_freq_table[NOTE_NUMBER_MIN];
-
-    m_freq[4] = g_osc_freq_table[NOTE_NUMBER_MIN] + 3;
-    m_freq[5] = g_osc_freq_table[NOTE_NUMBER_MIN] + 3;
-    m_freq[6] = g_osc_freq_table[NOTE_NUMBER_MIN] + 3;
-    m_freq[7] = g_osc_freq_table[NOTE_NUMBER_MIN] + 3;
-
     m_wave_table[0] = g_osc_saw_wave_tables[0];
     m_wave_table[1] = g_osc_saw_wave_tables[0];
     m_wave_table[2] = g_osc_saw_wave_tables[0];
@@ -89,17 +83,13 @@ public:
   INLINE static void note_on(uint8_t osc_number, uint8_t note_number) {
     m_wave_table[osc_number] = g_osc_saw_wave_tables[note_number - NOTE_NUMBER_MIN];
     m_freq[osc_number] = g_osc_freq_table[note_number - NOTE_NUMBER_MIN];
-    m_freq[osc_number + 4] = m_freq[osc_number] + 3;
-    m_phase[osc_number] = 127 << 8;
-    m_phase[osc_number + 4] = 127 << 8;
+    m_phase[0] = 127;
   }
 
   INLINE static void note_off(uint8_t osc_number) {
     m_wave_table[osc_number] = g_osc_saw_wave_tables[0];
     m_freq[osc_number] = 0;
-    m_freq[osc_number + 4] = 0;
-    m_phase[osc_number] = 127 << 8;
-    m_phase[osc_number + 4] = 127 << 8;
+    m_phase[0] = 127;
   }
 
   INLINE static int16_t clock(uint8_t mod_eg_control) {
@@ -109,19 +99,12 @@ public:
     m_phase[1] += m_freq[1];
     m_phase[2] += m_freq[2];
     m_phase[3] += m_freq[3];
-    m_phase[4] += m_freq[4];
-    m_phase[5] += m_freq[5];
-    m_phase[6] += m_freq[6];
-    m_phase[7] += m_freq[7];
 
-    result = ((int8_t) high_byte(m_phase[0]) +
-              (int8_t) high_byte(m_phase[1]) +
-              (int8_t) high_byte(m_phase[2]) +
-              (int8_t) high_byte(m_phase[3]) +
-              (int8_t) high_byte(m_phase[4]) +
-              (int8_t) high_byte(m_phase[5]) +
-              (int8_t) high_byte(m_phase[6]) +
-              (int8_t) high_byte(m_phase[7])) << 4;
+    int8_t wave_0 = get_wave_level(m_wave_table[0], m_phase[0]);
+    int8_t wave_1 = get_wave_level(m_wave_table[1], m_phase[1]);
+    int8_t wave_2 = get_wave_level(m_wave_table[2], m_phase[2]);
+    int8_t wave_3 = get_wave_level(m_wave_table[3], m_phase[3]);
+    result = (wave_0 + wave_1 + wave_2 + wave_3) << 5;
 
     return result;
   }
@@ -184,8 +167,8 @@ private:
   }
 };
 
-template <uint8_t T> uint16_t        Osc<T>::m_phase[8];
-template <uint8_t T> uint16_t        Osc<T>::m_freq[8];
+template <uint8_t T> uint16_t        Osc<T>::m_phase[4];
+template <uint8_t T> uint16_t        Osc<T>::m_freq[4];
 template <uint8_t T> const uint8_t*  Osc<T>::m_wave_table[4];
 template <uint8_t T> uint8_t         Osc<T>::m_mode;
 template <uint8_t T> uint8_t         Osc<T>::m_color;
