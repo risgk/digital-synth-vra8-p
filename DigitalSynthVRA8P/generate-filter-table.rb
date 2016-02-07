@@ -7,7 +7,7 @@ $file.printf("#pragma once\n\n")
 OCTAVES = 5
 
 def generate_filter_lpf_table(name, q)
-  $file.printf("const uint8_t g_filter_lpf_table_%s[] = {\n  ", name)
+  $file.printf("const uint8_t g_filter_lpf_table_%s[] PROGMEM = {\n  ", name)
   (0..DATA_BYTE_MAX).each do |i|
     f = [[0, i - 4].max, 120].min
     f_0_over_fs = (2.0 ** (f / (120.0 / OCTAVES))) * 0.9 /

@@ -95,9 +95,9 @@ public:
     int8_t wave_2_1 = get_wave_level(m_wave_table[2], m_phase[2] + m_phase[3]);
 
     // amps and a mixer
-    result = (((wave_0_0 + wave_0_1) >> 1) * (eg_control_0 >> 2)) +
-             (((wave_1_0 + wave_1_1) >> 1) * (eg_control_1 >> 2)) +
-             (((wave_2_0 + wave_2_1) >> 1) * (eg_control_2 >> 2));
+    result = ((wave_0_0 + wave_0_1) * (eg_control_0 >> 2)) +
+             ((wave_1_0 + wave_1_1) * (eg_control_1 >> 2)) +
+             ((wave_2_0 + wave_2_1) * (eg_control_2 >> 2));
 
     return result;
   }

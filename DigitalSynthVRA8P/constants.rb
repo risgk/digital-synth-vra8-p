@@ -11,7 +11,7 @@ NOTE_NUMBER_INVALID = 255
 A4_PITCH            = 440.0
 
 OSC_PHASE_RESOLUTION_BITS              = 16
-OSC_WAVE_TABLE_AMPLITUDE               = 63
+OSC_WAVE_TABLE_AMPLITUDE               = 48
 OSC_WAVE_TABLE_SAMPLES_BITS            = 8
 FILTER_TABLE_FRACTION_BITS             = 14
 EG_LEVEL_MAX                           = (127 << 1) << 8
