@@ -1,4 +1,3 @@
-
 #include "Arduino.h"
 #include "common.h"
 #include "synth.h"

@@ -61,18 +61,6 @@ public:
   }
 
   INLINE static void set_mod_rate(uint8_t controller_value) {
-    switch (m_mode) {
-    case OSC_MODE_FM:
-      {
-        uint8_t old_fm_ratio = mod_rate_to_fm_ratio(m_mod_rate);
-        uint8_t new_fm_ratio = mod_rate_to_fm_ratio(controller_value);
-        if (old_fm_ratio != new_fm_ratio) {
-          reset_phase();
-        }
-      }
-      break;
-    }
-
     m_mod_rate = controller_value;
   }
 
@@ -83,30 +71,33 @@ public:
   INLINE static void note_on(uint8_t osc_number, uint8_t note_number) {
     m_wave_table[osc_number] = g_osc_saw_wave_tables[note_number - NOTE_NUMBER_MIN];
     m_freq[osc_number] = g_osc_freq_table[note_number - NOTE_NUMBER_MIN];
-    m_phase[0] = 127;
   }
 
   INLINE static void note_off(uint8_t osc_number) {
-    m_wave_table[osc_number] = g_osc_saw_wave_tables[0];
-    m_freq[osc_number] = 0;
-    m_phase[0] = 127;
+    // do nothing
   }
 
-  INLINE static int16_t clock(uint8_t mod_eg_control) {
+  INLINE static int16_t clock(uint8_t eg_control_0,
+                              uint8_t eg_control_1,
+                              uint8_t eg_control_2) {
     int16_t result = 0;
 
     m_phase[0] += m_freq[0];
     m_phase[1] += m_freq[1];
     m_phase[2] += m_freq[2];
-    m_phase[3] += 4;
+    m_phase[3] -= (m_mod_rate >> 4) + 1;
 
-    int8_t wave_0 = get_wave_level(m_wave_table[0], m_phase[0]);
-    int8_t wave_1 = get_wave_level(m_wave_table[1], m_phase[1]);
-    int8_t wave_2 = get_wave_level(m_wave_table[2], m_phase[2]);
-    int8_t wave_3 = get_wave_level(m_wave_table[0], m_phase[0] + m_phase[3]);
-    int8_t wave_4 = get_wave_level(m_wave_table[1], m_phase[1] + m_phase[3]);
-    int8_t wave_5 = get_wave_level(m_wave_table[2], m_phase[2] + m_phase[3]);
-    result = (wave_0 + wave_1 + wave_2 + wave_3 + wave_4 + wave_5) << 4;
+    int8_t wave_0_0 = get_wave_level(m_wave_table[0], m_phase[0]);
+    int8_t wave_1_0 = get_wave_level(m_wave_table[1], m_phase[1]);
+    int8_t wave_2_0 = get_wave_level(m_wave_table[2], m_phase[2]);
+    int8_t wave_0_1 = get_wave_level(m_wave_table[0], m_phase[0] + m_phase[3]);
+    int8_t wave_1_1 = get_wave_level(m_wave_table[1], m_phase[1] + m_phase[3]);
+    int8_t wave_2_1 = get_wave_level(m_wave_table[2], m_phase[2] + m_phase[3]);
+
+    // amps and a mixer
+    result = (((wave_0_0 + wave_0_1) >> 1) * (eg_control_0 >> 2)) +
+             (((wave_1_0 + wave_1_1) >> 1) * (eg_control_1 >> 2)) +
+             (((wave_2_0 + wave_2_1) >> 1) * (eg_control_2 >> 2));
 
     return result;
   }
