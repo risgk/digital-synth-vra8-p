@@ -2,14 +2,13 @@
 
 template <uint8_t T>
 class Voice {
-  static uint8_t m_note_number[4];
+  static uint8_t m_note_number[3];
 
 public:
   INLINE static void initialize() {
     m_note_number[0] = 0xFF;
     m_note_number[1] = 0xFF;
     m_note_number[2] = 0xFF;
-    m_note_number[3] = 0xFF;
     IOsc<0>::initialize();
     IFilter<0>::initialize();
     IAmp<0>::initialize();
@@ -30,9 +29,6 @@ public:
     if (m_note_number[2] == 0xFF) {
       IOsc<0>::note_off(2);
     }
-    if (m_note_number[3] == 0xFF) {
-      IOsc<0>::note_off(3);
-    }
 
     if (m_note_number[0] == 0xFF) {
       m_note_number[0] = note_number;
@@ -40,15 +36,9 @@ public:
     } else if (m_note_number[1] == 0xFF) {
       m_note_number[1] = note_number;
       IOsc<0>::note_on(1, note_number);
-    } else if (m_note_number[2] == 0xFF) {
+    } else {
       m_note_number[2] = note_number;
       IOsc<0>::note_on(2, note_number);
-    } else if (m_note_number[3] == 0xFF) {
-      m_note_number[3] = note_number;
-      IOsc<0>::note_on(3, note_number);
-    } else {
-      m_note_number[0] = note_number;
-      IOsc<0>::note_on(0, note_number);
     }
 
     IEG<0>::note_on();
@@ -61,12 +51,10 @@ public:
       m_note_number[1] = 0xFF;
     } else if (m_note_number[2] == note_number) {
       m_note_number[2] = 0xFF;
-    } else if (m_note_number[3] == note_number) {
-      m_note_number[3] = 0xFF;
     }
 
     if (m_note_number[0] == 0xFF && m_note_number[1] == 0xFF &&
-        m_note_number[2] == 0xFF && m_note_number[3] == 0xFF) {
+        m_note_number[2] == 0xFF) {
       IEG<0>::note_off();
     }
   }
@@ -113,4 +101,4 @@ public:
   }
 };
 
-template <uint8_t T> uint8_t Voice<T>::m_note_number[4];
+template <uint8_t T> uint8_t Voice<T>::m_note_number[3];
