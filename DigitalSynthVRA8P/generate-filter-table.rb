@@ -20,10 +20,8 @@ def generate_filter_lpf_table(name, q)
     a_0 = 1.0 + alpha
     a_1 = (-2.0) * Math.cos(w_0)
 
-    b_2_over_a_0 = ((b_2 / a_0) * (1 << FILTER_TABLE_FRACTION_BITS)).floor.to_i
-    a_1_over_a_0 = ((a_1 / a_0) * (1 << FILTER_TABLE_FRACTION_BITS)).floor.to_i
-    b_2_over_a_0 = b_2_over_a_0   # correction
-    a_1_over_a_0 = a_1_over_a_0   # correction
+    b_2_over_a_0 = ((b_2 / a_0) * (1 << FILTER_TABLE_FRACTION_BITS)).round.to_i
+    a_1_over_a_0 = ((a_1 / a_0) * (1 << FILTER_TABLE_FRACTION_BITS)).round.to_i
 
     b_2_over_a_0 += 0x10000 if b_2_over_a_0 < 0
     a_1_over_a_0 += 0x10000 if a_1_over_a_0 < 0
