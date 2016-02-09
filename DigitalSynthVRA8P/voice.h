@@ -11,6 +11,7 @@ public:
     m_note_number[2] = NOTE_NUMBER_INVALID;
     IOsc<0>::initialize();
     IFilter<0>::initialize();
+    IAmp<0>::initialize();
     IEG<0>::initialize();
   }
 
@@ -103,7 +104,8 @@ public:
                                            eg_output[1],
                                            eg_output[2]);
     int16_t filter_output = IFilter<0>::clock(osc_output, eg_output[3]);
-    return high_sbyte(filter_output);
+    int16_t amp_output    = IAmp<0>::clock(filter_output, eg_output[3]);
+    return high_sbyte(amp_output);
   }
 };
 
