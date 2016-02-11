@@ -49,15 +49,15 @@ public:
     case 0:
       sub_clock<0>();
       break;
-    case 1:
+    case 4:
       sub_clock<1>();
       break;
-    case 2:
+    case 8:
       sub_clock<2>();
       break;
-    case 3:
+    }
+    if ((m_count & 0x03) == 0) {
       sub_clock<3>();
-      break;
     }
   }
 
@@ -75,7 +75,7 @@ private:
           m_level[N] += 1;
         }
       } else if (m_level[N] > 0) {
-        m_level[N] -= 16;
+        m_level[N] -= 4;
       }
     } else {
       if (m_gate[N]) {

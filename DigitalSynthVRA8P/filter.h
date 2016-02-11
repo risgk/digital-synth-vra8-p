@@ -8,11 +8,14 @@
 
 template <uint8_t T>
 class Filter {
-  static uint8_t  m_count;
+  static uint8_t        m_count;
   static const uint8_t* m_lpf_table;
   static uint8_t        m_b_2_over_a_0_low;
   static int8_t         m_b_2_over_a_0_high;
   static int8_t         m_a_1_over_a_0_high;
+
+  static uint8_t        cutoff;
+
   static int16_t        m_x_1;
   static int16_t        m_x_2;
   static int16_t        m_y_1;
@@ -55,7 +58,7 @@ public:
 
   INLINE static int16_t clock(int16_t audio_input, uint8_t cutoff_eg_control) {
     m_count++;
-    if ((m_count & 0x0F) == 0) {
+    if ((m_count & 0x03) == 0) {
       uint8_t cutoff = m_cutoff_base + high_byte((m_cutoff_eg_depth + 1) * cutoff_eg_control);
       const uint8_t* p = m_lpf_table + (cutoff * 3);
       m_b_2_over_a_0_low  = pgm_read_byte(p++);

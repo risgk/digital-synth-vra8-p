@@ -28,12 +28,12 @@ public:
     // Preset
     ISynthCore<0>::control_change(OSC_MODE      , 0  );
     ISynthCore<0>::control_change(OSC_COLOR     , 127);
-    ISynthCore<0>::control_change(MOD_RATE      , 62 );
+    ISynthCore<0>::control_change(MOD_RATE      , 32 );
     ISynthCore<0>::control_change(MOD_DEPTH     , 127);
-    ISynthCore<0>::control_change(LPF_CUTOFF_ENV, 0  );
+    ISynthCore<0>::control_change(LPF_CUTOFF_ENV, 127);
     ISynthCore<0>::control_change(LPF_RESONANCE , 64 );
-    ISynthCore<0>::control_change(ENV_A         , 80 );
-    ISynthCore<0>::control_change(ENV_D_R       , 72 );
+    ISynthCore<0>::control_change(ENV_A         , 64 );
+    ISynthCore<0>::control_change(ENV_D_R       , 64 );
   }
 
   INLINE static void receive_midi_byte(uint8_t b) {
