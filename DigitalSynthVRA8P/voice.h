@@ -104,7 +104,7 @@ public:
                                            eg_output[1],
                                            eg_output[2]);
     int16_t filter_output = IFilter<0>::clock(osc_output, eg_output[3]);
-    int16_t amp_output    = IAmp<0>::clock(filter_output, eg_output[3]);
+    int16_t amp_output    = IAmp<0>::clock(filter_output, eg_output[0]);  // TODO
     return high_sbyte(amp_output);
   }
 };

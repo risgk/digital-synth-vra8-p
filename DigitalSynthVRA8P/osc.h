@@ -98,6 +98,7 @@ public:
     result = ((wave_0_0 + wave_0_1) * (eg_control_0 >> 2)) +
              ((wave_1_0 + wave_1_1) * (eg_control_1 >> 2)) +
              ((wave_2_0 + wave_2_1) * (eg_control_2 >> 2));
+    result >>= 1;
 
     return result;
   }

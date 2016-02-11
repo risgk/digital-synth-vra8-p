@@ -45,17 +45,17 @@ public:
 
   INLINE static void clock() {
     m_count++;
-    switch (m_count) {
+    switch (m_count & 0x0F) {
     case 0:
       sub_clock<0>();
       break;
-    case 64:
+    case 1:
       sub_clock<1>();
       break;
-    case 128:
+    case 2:
       sub_clock<2>();
       break;
-    case 192:
+    case 3:
       sub_clock<3>();
       break;
     }
@@ -69,11 +69,22 @@ public:
 private:
   template <uint8_t N>
   INLINE static void sub_clock() {
-    if (m_gate[N]) {
-      m_level[N] = ~high_byte(static_cast<uint8_t>(~m_level[N]) *
-                                                   m_attack_rate);
+    if (N == 3) {
+      if (m_gate[N]) {
+        if (m_level[N] < 240) {
+          m_level[N] += 1;
+        }
+      } else if (m_level[N] > 0) {
+        m_level[N] -= 16;
+      }
     } else {
-      m_level[N] = high_byte(m_level[N] * m_release_rate);
+      if (m_gate[N]) {
+        if (m_level[N] < 240) {
+          m_level[N] += 16;
+        }
+      } else if (m_level[N] > 0) {
+        m_level[N] -= 16;
+      }
     }
   }
 };
