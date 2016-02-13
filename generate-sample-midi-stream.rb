@@ -6,100 +6,75 @@ def control_change(control_number, value)
   $file.write([(CONTROL_CHANGE | MIDI_CH), control_number, value].pack("C*"))
 end
 
-def play(note_number, length)
+def note_on(note_number)
   $file.write([(NOTE_ON  | MIDI_CH), note_number, 64].pack("C*"))
-  (length * 7 / 8).times { $file.write([ACTIVE_SENSING].pack("C")) }
+end
+
+def note_off(note_number)
   $file.write([(NOTE_OFF | MIDI_CH), note_number, 64].pack("C*"))
-  (length * 1 / 8).times { $file.write([ACTIVE_SENSING].pack("C")) }
 end
 
 def wait(length)
   length.times { $file.write([ACTIVE_SENSING].pack("C")) }
 end
 
-def play_cegbdfac(c)
-  play(12 + (c * 12), 1200)
-  play(16 + (c * 12), 1200)
-  play(19 + (c * 12), 1200)
-  play(23 + (c * 12), 1200)
-  play(14 + (c * 12), 1200)
-  play(17 + (c * 12), 1200)
-  play(21 + (c * 12), 1200)
-  play(24 + (c * 12), 6400)
-  wait(6400)
+def play_a(oct)
+  play_triad_a(12, 16, 19, oct)
+  play_triad_a(16, 19, 23, oct)
+  play_triad_a(14, 17, 21, oct)
+  play_triad_a(17, 21, 24, oct)
+end
+
+def play_b(oct)
+  play_triad_b(12, 16, 19, oct)
+  play_triad_b(16, 19, 23, oct)
+  play_triad_b(14, 17, 21, oct)
+  play_triad_b(17, 21, 24, oct)
+end
+
+def play_triad_a(x, y, z, oct)
+  note_on(x + (oct * 12))
+  note_on(y + (oct * 12))
+  note_on(z + (oct * 12))
+  wait(5000)
+  note_off(x + (oct * 12))
+  note_off(y + (oct * 12))
+  note_off(z + (oct * 12))
+  wait(1250)
+end
+
+def play_triad_b(x, y, z, oct)
+  note_on(x + (oct * 12))
+  wait(1250)
+  note_on(y + (oct * 12))
+  wait(1250)
+  note_on(z + (oct * 12))
+  wait(5000)
+  note_off(z + (oct * 12))
+  wait(2500)
+  note_off(y + (oct * 12))
+  wait(2500)
+  note_off(x + (oct * 12))
+  wait(1250)
 end
 
 def sound_off
   control_change(ENV_D_R      , 0  )
   control_change(ALL_NOTES_OFF, 0  )
-  wait(800)
+  wait(1250)
 end
 
 sound_off
 control_change(OSC_MODE      , 0  )
 control_change(OSC_COLOR     , 127)
-control_change(MOD_RATE      , 8  )
+control_change(MOD_RATE      , 127)
 control_change(MOD_DEPTH     , 127)
 control_change(LPF_CUTOFF_ENV, 127)
 control_change(LPF_RESONANCE , 127)
 control_change(ENV_A         , 64 )
-control_change(ENV_D_R       , 86 )
-play_cegbdfac(3)
-
-sound_off
-control_change(OSC_MODE      , 16 )
-control_change(OSC_COLOR     , 0  )
-control_change(MOD_RATE      , 8  )
-control_change(MOD_DEPTH     , 64 )
-control_change(LPF_CUTOFF_ENV, 0  )
-control_change(LPF_RESONANCE , 0  )
-control_change(ENV_A         , 44 )
-control_change(ENV_D_R       , 96 )
-play_cegbdfac(4)
-
-sound_off
-control_change(OSC_MODE      , 32 )
-control_change(OSC_COLOR     , 64 )
-control_change(MOD_RATE      , 8  )
-control_change(MOD_DEPTH     , 32 )
-control_change(LPF_CUTOFF_ENV, 0  )
-control_change(LPF_RESONANCE , 64 )
-control_change(ENV_A         , 44 )
-control_change(ENV_D_R       , 96 )
-play_cegbdfac(3)
-
-sound_off
-control_change(OSC_MODE      , 64 )
-control_change(OSC_COLOR     , 127)
-control_change(MOD_RATE      , 64 )
-control_change(MOD_DEPTH     , 8  )
-control_change(LPF_CUTOFF_ENV, 0  )
-control_change(LPF_RESONANCE , 0  )
-control_change(ENV_A         , 4  )
-control_change(ENV_D_R       , 96 )
-play_cegbdfac(4)
-
-sound_off
-control_change(OSC_MODE      , 96 )
-control_change(OSC_COLOR     , 35 )
-control_change(MOD_RATE      , 64 )
-control_change(MOD_DEPTH     , 8  )
-control_change(LPF_CUTOFF_ENV, 127)
-control_change(LPF_RESONANCE , 0  )
-control_change(ENV_A         , 44 )
-control_change(ENV_D_R       , 96 )
-play_cegbdfac(4)
-
-sound_off
-control_change(OSC_MODE      , 127)
-control_change(OSC_COLOR     , 8  )
-control_change(MOD_RATE      , 24 )
-control_change(MOD_DEPTH     , 32 )
-control_change(LPF_CUTOFF_ENV, 127)
-control_change(LPF_RESONANCE , 0  )
-control_change(ENV_A         , 4  )
-control_change(ENV_D_R       , 52 )
-play_cegbdfac(4)
+control_change(ENV_D_R       , 64 )
+play_a(4)
+play_b(3)
 
 sound_off
 
