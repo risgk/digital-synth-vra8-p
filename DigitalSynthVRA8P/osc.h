@@ -26,46 +26,21 @@ public:
     m_wave_table[2] = g_osc_saw_wave_tables[0];
     m_wave_table[3] = g_osc_saw_wave_tables[0];
     reset_phase();
-    set_mode(0);
-    set_color(0);
-    set_mod_rate(0);
-    set_mod_depth(0);
+    set_poly_mono(0);
+    set_saw_sq(0);
+    set_detune(0);
     m_param_binary = m_color;
   }
 
-  INLINE static void set_mode(uint8_t controller_value) {
-    uint8_t mode = (static_cast<uint8_t>(controller_value + 8) >> 4) << 4;
-    if (mode >= 128) {
-      mode = 127;
-    }
-    if (m_mode != mode) {
-      m_mode = mode;
-      reset_phase();
-    }
+  INLINE static void set_poly_mono(uint8_t controller_value) {
   }
 
-  INLINE static void set_color(uint8_t controller_value) {
-    switch (m_mode) {
-    case OSC_MODE_FM:
-      {
-        uint8_t old_low_freq = (value_to_low_freq(m_color) >> 1) << 1;
-        uint8_t new_low_freq = (value_to_low_freq(controller_value) >> 1) << 1;
-        if (old_low_freq != 0 && new_low_freq == 0) {
-          reset_phase();
-        }
-      }
-      break;
-    }
-
+  INLINE static void set_saw_sq(uint8_t controller_value) {
     m_color = controller_value;
   }
 
-  INLINE static void set_mod_rate(uint8_t controller_value) {
+  INLINE static void set_detune(uint8_t controller_value) {
     m_mod_rate = controller_value;
-  }
-
-  INLINE static void set_mod_depth(uint8_t controller_value) {
-    m_mod_depth = controller_value << 1;
   }
 
   INLINE static void note_on(uint8_t osc_number, uint8_t note_number) {

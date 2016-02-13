@@ -58,6 +58,9 @@ public:
   }
 
   INLINE static void all_note_off() {
+    m_note_number[0] = NOTE_NUMBER_INVALID;
+    m_note_number[1] = NOTE_NUMBER_INVALID;
+    m_note_number[2] = NOTE_NUMBER_INVALID;
     IEG<0>::note_off(0);
     IEG<0>::note_off(1);
     IEG<0>::note_off(2);
@@ -66,28 +69,29 @@ public:
 
   INLINE static void control_change(uint8_t controller_number, uint8_t controller_value) {
     switch (controller_number) {
-    case OSC_MODE:
-      IOsc<0>::set_mode(controller_value);
+    case OSC_POLY_MONO:
+      IOsc<0>::set_poly_mono(controller_value);
       break;
-    case OSC_COLOR:
-      IOsc<0>::set_color(controller_value);
+    case OSC_SAW_SQ:
+      IOsc<0>::set_saw_sq(controller_value);
       break;
-    case MOD_RATE:
-      IOsc<0>::set_mod_rate(controller_value);
+    case OSC_DETUNE:
+      IOsc<0>::set_detune(controller_value);
       break;
-    case MOD_DEPTH:
-      IOsc<0>::set_mod_depth(controller_value);
+    case AMP_GATE_ENV:
+      // todo
       break;
-    case LPF_CUTOFF_ENV:
+    case LPF_CUTOFF:
       IFilter<0>::set_cutoff(controller_value);
       break;
     case LPF_RESONANCE:
       IFilter<0>::set_resonance(controller_value);
       break;
-    case ENV_A:
-      IEG<0>::set_attack(controller_value);
+    case LPF_ENV_AMT:
+      IFilter<0>::set_env_amt(controller_value);
       break;
-    case ENV_D_R:
+    case ENV_D_S_A:
+      IEG<0>::set_attack(controller_value);
       IEG<0>::set_release(controller_value);
       break;
     }

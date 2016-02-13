@@ -34,16 +34,11 @@ public:
     m_y_2 = 0;
     set_cutoff(127);
     set_resonance(0);
+    set_env_amt(0);
   }
 
   INLINE static void set_cutoff(uint8_t controller_value) {
-    if (controller_value < 64) {
-      m_cutoff_base = 126 - (controller_value << 1);
-      m_cutoff_eg_depth = 0;
-    } else {
-      m_cutoff_base = 0;
-      m_cutoff_eg_depth = (controller_value - 64) << 1;
-    }
+    m_cutoff_base = controller_value;
   }
 
   INLINE static void set_resonance(uint8_t controller_value) {
@@ -56,10 +51,17 @@ public:
     }
   }
 
+  INLINE static void set_env_amt(uint8_t controller_value) {
+    m_cutoff_eg_depth = controller_value;
+  }
+
   INLINE static int16_t clock(int16_t audio_input, uint8_t cutoff_eg_control) {
     m_count++;
     if ((m_count & 0x03) == 0) {
       uint8_t cutoff = m_cutoff_base + high_byte((m_cutoff_eg_depth + 1) * cutoff_eg_control);
+      if (cutoff > 127) {
+        cutoff = 127;
+      }
       const uint8_t* p = m_lpf_table + (cutoff * 3);
       m_b_2_over_a_0_low  = pgm_read_byte(p++);
       m_b_2_over_a_0_high = pgm_read_byte(p++);
