@@ -6,13 +6,12 @@
 
 template <uint8_t T>
 class Osc {
+  static boolean        m_mono;
   static uint16_t       m_phase[6];
   static uint16_t       m_freq[4];
   static const uint8_t* m_wave_table[4];
-  static uint8_t        m_mode;
   static uint8_t        m_color;
-  static uint16_t       m_mod_rate;
-  static uint16_t       m_mod_depth;
+  static uint16_t       m_detune;
   static uint8_t        m_param_binary;
 
 public:
@@ -26,13 +25,17 @@ public:
     m_wave_table[2] = g_osc_saw_wave_tables[0];
     m_wave_table[3] = g_osc_saw_wave_tables[0];
     reset_phase();
-    set_poly_mono(0);
     set_saw_sq(0);
     set_detune(0);
     m_param_binary = m_color;
   }
 
   INLINE static void set_poly_mono(uint8_t controller_value) {
+    if (controller_value >= 64) {
+      m_mono = true;
+    } else {
+      m_mono = false;
+    }
   }
 
   INLINE static void set_saw_sq(uint8_t controller_value) {
@@ -40,12 +43,25 @@ public:
   }
 
   INLINE static void set_detune(uint8_t controller_value) {
-    m_mod_rate = controller_value;
+    m_detune = (controller_value >> 2) + 1;
+    if (m_mono) {
+      m_freq[1] = m_freq[0] + (m_detune << 2);
+      m_freq[2] = m_freq[0] - (m_detune << 2);
+    }
   }
 
   INLINE static void note_on(uint8_t osc_number, uint8_t note_number) {
-    m_wave_table[osc_number] = g_osc_saw_wave_tables[note_number - NOTE_NUMBER_MIN];
-    m_freq[osc_number] = g_osc_freq_table[note_number - NOTE_NUMBER_MIN];
+    if (m_mono) {
+      m_wave_table[0] = g_osc_saw_wave_tables[note_number - NOTE_NUMBER_MIN];
+      m_wave_table[1] = m_wave_table[0];
+      m_wave_table[2] = m_wave_table[0];
+      m_freq[0] = g_osc_freq_table[note_number - NOTE_NUMBER_MIN];
+      m_freq[1] = m_freq[0] + (m_detune << 1);
+      m_freq[2] = m_freq[0] - (m_detune << 1);
+    } else {
+      m_wave_table[osc_number] = g_osc_saw_wave_tables[note_number - NOTE_NUMBER_MIN];
+      m_freq[osc_number] = g_osc_freq_table[note_number - NOTE_NUMBER_MIN];
+    }
   }
 
   INLINE static void note_off(uint8_t osc_number) {
@@ -60,7 +76,7 @@ public:
     m_phase[0] += m_freq[0];
     m_phase[1] += m_freq[1];
     m_phase[2] += m_freq[2];
-    m_phase[3] -= (m_mod_rate >> 4) + 1;
+    m_phase[3] -= m_mono ? m_detune : (m_detune << 1);
 
     int8_t wave_0_0 = get_wave_level(m_wave_table[0], m_phase[0]);
     int8_t wave_1_0 = get_wave_level(m_wave_table[1], m_phase[1]);
@@ -136,11 +152,10 @@ private:
   }
 };
 
+template <uint8_t T> boolean         Osc<T>::m_mono;
 template <uint8_t T> uint16_t        Osc<T>::m_phase[6];
 template <uint8_t T> uint16_t        Osc<T>::m_freq[4];
 template <uint8_t T> const uint8_t*  Osc<T>::m_wave_table[4];
-template <uint8_t T> uint8_t         Osc<T>::m_mode;
 template <uint8_t T> uint8_t         Osc<T>::m_color;
-template <uint8_t T> uint16_t        Osc<T>::m_mod_rate;
-template <uint8_t T> uint16_t        Osc<T>::m_mod_depth;
+template <uint8_t T> uint16_t        Osc<T>::m_detune;
 template <uint8_t T> uint8_t         Osc<T>::m_param_binary;

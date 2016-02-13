@@ -221,12 +221,12 @@ function preset(number) {
   var presetControllers = {};
   presetControllers[OSC_POLY_MONO] = [0  , 0  , 16 , 32 , 48 , 64 , 80 , 96 , 112, 127 ];
   presetControllers[OSC_SAW_SQ   ] = [0  , 127, 0  , 64 , 0  , 127, 0  , 35 , 0  , 8   ];
-  presetControllers[OSC_DETUNE   ] = [0  , 8  , 8  , 8  , 0  , 64 , 0  , 64 , 0  , 24  ];
+  presetControllers[OSC_DETUNE   ] = [32 , 8  , 8  , 8  , 0  , 64 , 0  , 64 , 0  , 24  ];
   presetControllers[AMP_GATE_ENV ] = [0  , 127, 64 , 32 , 0  , 8  , 0  , 8  , 0  , 32  ];
-  presetControllers[LPF_CUTOFF   ] = [0  , 127, 0  , 0  , 0  , 0  , 0  , 127, 0  , 127 ];
+  presetControllers[LPF_CUTOFF   ] = [127, 127, 0  , 0  , 0  , 0  , 0  , 127, 0  , 127 ];
   presetControllers[LPF_RESONANCE] = [0  , 127, 0  , 64 , 0  , 0  , 0  , 0  , 0  , 0   ];
   presetControllers[LPF_ENV_AMT  ] = [0  , 64 , 44 , 44 , 0  , 4  , 0  , 44 , 0  , 4   ];
-  presetControllers[ENV_D_S_A    ] = [127, 86 , 96 , 96 , 127, 96 , 127, 96 , 127, 52  ];
+  presetControllers[ENV_D_S_A    ] = [64 , 86 , 96 , 96 , 127, 96 , 127, 96 , 127, 52  ];
 
   for (var i = CONTROLLERS_FIRST; i <= CONTROLLERS_LAST; i++) {
     onChangeControlChange(i, presetControllers[i][number]);
