@@ -2,7 +2,6 @@
 
 #include "common.h"
 #include "mul-q.h"
-#include "eg-table.h"
 
 template <uint8_t T>
 class EG {

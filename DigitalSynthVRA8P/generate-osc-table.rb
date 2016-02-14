@@ -54,6 +54,32 @@ def generate_osc_wave_table_sawtooth(last)
   $file.printf("};\n\n")
 end
 
+def generate_osc_wave_table_square(last)
+  $file.printf("const uint8_t g_osc_sq_wave_table_h%d[] PROGMEM = {\n  ", last)
+  (0..(1 << OSC_WAVE_TABLE_SAMPLES_BITS)).each do |n|
+    level = 0
+    (1..last).each do |k|
+      if k % 2 == 1
+        level += (4.0 / Math::PI) * Math.sin((2.0 * Math::PI) * ((n + 0.5) /
+                 (1 << OSC_WAVE_TABLE_SAMPLES_BITS)) * k) / k
+      end
+    end
+    level *= 1 / Math.sqrt(3.0)
+    level = (level * OSC_WAVE_TABLE_AMPLITUDE).floor.to_i
+
+    level += 0x100 if level < 0
+    $file.printf("0x%02X,", level)
+    if n == (1 << OSC_WAVE_TABLE_SAMPLES_BITS)
+      $file.printf("\n")
+    elsif n % 16 == 15
+      $file.printf("\n  ")
+    else
+      $file.printf(" ")
+    end
+  end
+  $file.printf("};\n\n")
+end
+
 $osc_harmonics_restriction_table = []
 
 (NOTE_NUMBER_MIN..NOTE_NUMBER_MAX).each do |note_number|
@@ -61,9 +87,12 @@ $osc_harmonics_restriction_table = []
   $osc_harmonics_restriction_table << freq
 end
 
+MAX_DETUNE = 16
+
 def last_harmonic(freq)
   last = (freq != 0) ? ((FREQUENCY_MAX *
-                         (1 << OSC_PHASE_RESOLUTION_BITS)) / (freq * SAMPLING_RATE)) : 0
+                         (1 << OSC_PHASE_RESOLUTION_BITS)) /
+                        ((freq + MAX_DETUNE) * SAMPLING_RATE)) : 0
   last = last - 1 if last.even?
   last = 127 if last > 127
   last
@@ -73,9 +102,26 @@ $osc_harmonics_restriction_table.map { |freq| last_harmonic(freq) }.uniq.sort.re
   generate_osc_wave_table_sawtooth(i)
 end
 
+$osc_harmonics_restriction_table.map { |freq| last_harmonic(freq) }.uniq.sort.reverse.each do |i|
+  generate_osc_wave_table_square(i)
+end
+
 $file.printf("const uint8_t* g_osc_saw_wave_tables[] = {\n  ")
 $osc_harmonics_restriction_table.each_with_index do |freq, idx|
   $file.printf("g_osc_saw_wave_table_h%-3d,", last_harmonic(freq))
+  if idx == DATA_BYTE_MAX
+    $file.printf("\n")
+  elsif idx % 4 == 3
+    $file.printf("\n  ")
+  else
+    $file.printf(" ")
+  end
+end
+$file.printf("};\n\n")
+
+$file.printf("const uint8_t* g_osc_sq_wave_tables[] = {\n  ")
+$osc_harmonics_restriction_table.each_with_index do |freq, idx|
+  $file.printf("g_osc_sq_wave_table_h%-3d,", last_harmonic(freq))
   if idx == DATA_BYTE_MAX
     $file.printf("\n")
   elsif idx % 4 == 3

@@ -13,15 +13,12 @@ class Filter {
   static uint8_t        m_b_2_over_a_0_low;
   static int8_t         m_b_2_over_a_0_high;
   static int8_t         m_a_1_over_a_0_high;
-
-  static uint8_t        cutoff;
-
   static int16_t        m_x_1;
   static int16_t        m_x_2;
   static int16_t        m_y_1;
   static int16_t        m_y_2;
-  static uint8_t        m_cutoff_base;
-  static uint8_t        m_cutoff_eg_depth;
+  static uint8_t        m_cutoff;
+  static uint8_t        m_cutoff_mod;
 
   static const uint8_t AUDIO_FRACTION_BITS = 14;
 
@@ -38,7 +35,7 @@ public:
   }
 
   INLINE static void set_cutoff(uint8_t controller_value) {
-    m_cutoff_base = controller_value;
+    m_cutoff = controller_value;
   }
 
   INLINE static void set_resonance(uint8_t controller_value) {
@@ -52,13 +49,13 @@ public:
   }
 
   INLINE static void set_env_amt(uint8_t controller_value) {
-    m_cutoff_eg_depth = controller_value;
+    m_cutoff_mod = controller_value;
   }
 
-  INLINE static int16_t clock(int16_t audio_input, uint8_t cutoff_eg_control) {
+  INLINE static int16_t clock(int16_t audio_input, uint8_t cutoff_mod) {
     m_count++;
     if ((m_count & 0x03) == 0) {
-      uint8_t cutoff = m_cutoff_base + high_byte((m_cutoff_eg_depth + 1) * cutoff_eg_control);
+      uint8_t cutoff = m_cutoff + high_byte((m_cutoff_mod + 1) * cutoff_mod);
       if (cutoff > 127) {
         cutoff = 127;
       }
@@ -90,7 +87,7 @@ public:
     m_x_1 = x_0;
     m_y_1 = y_0;
 
-    return y_0 << 2;
+    return y_0 << (16 - AUDIO_FRACTION_BITS);
   }
 };
 
@@ -103,5 +100,5 @@ template <uint8_t T> int16_t        Filter<T>::m_x_1;
 template <uint8_t T> int16_t        Filter<T>::m_x_2;
 template <uint8_t T> int16_t        Filter<T>::m_y_1;
 template <uint8_t T> int16_t        Filter<T>::m_y_2;
-template <uint8_t T> uint8_t        Filter<T>::m_cutoff_base;
-template <uint8_t T> uint8_t        Filter<T>::m_cutoff_eg_depth;
+template <uint8_t T> uint8_t        Filter<T>::m_cutoff;
+template <uint8_t T> uint8_t        Filter<T>::m_cutoff_mod;

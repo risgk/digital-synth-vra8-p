@@ -17,7 +17,7 @@ public:
     m_mono = false;
   }
 
-  INLINE static void set_poly_mono(uint8_t controller_value) {
+  INLINE static void set_mono(uint8_t controller_value) {
     if (!m_mono && controller_value >= 64) {
       m_mono = true;
       all_note_off();
@@ -97,11 +97,11 @@ public:
   INLINE static void control_change(uint8_t controller_number, uint8_t controller_value) {
     switch (controller_number) {
     case OSC_POLY_MONO:
-      set_poly_mono(controller_value);
-      IOsc<0>::set_poly_mono(controller_value);
+      set_mono(controller_value);
+      IOsc<0>::set_mono(controller_value);
       break;
     case OSC_SAW_SQ:
-      IOsc<0>::set_saw_sq(controller_value);
+      IOsc<0>::set_waveform(controller_value);
       break;
     case OSC_DETUNE:
       IOsc<0>::set_detune(controller_value);
