@@ -17,15 +17,15 @@ public:
   INLINE static void initialize() {
     m_mono = false;
     m_waveform = 0;
-    m_wave_table[0] = g_osc_saw_wave_tables[60];
-    m_wave_table[1] = g_osc_saw_wave_tables[62];
-    m_wave_table[2] = g_osc_saw_wave_tables[64];
-    m_wave_table[3] = g_osc_saw_wave_tables[60];
-    m_wave_table[4] = g_osc_saw_wave_tables[62];
-    m_wave_table[5] = g_osc_saw_wave_tables[64];
-    m_freq[0] = g_osc_freq_table[60];
-    m_freq[1] = g_osc_freq_table[62];
-    m_freq[2] = g_osc_freq_table[64];
+    m_wave_table[0] = g_osc_saw_wave_tables[0];
+    m_wave_table[1] = g_osc_saw_wave_tables[2];
+    m_wave_table[2] = g_osc_saw_wave_tables[4];
+    m_wave_table[3] = g_osc_saw_wave_tables[0];
+    m_wave_table[4] = g_osc_saw_wave_tables[2];
+    m_wave_table[5] = g_osc_saw_wave_tables[4];
+    m_freq[0] = g_osc_freq_table[0];
+    m_freq[1] = g_osc_freq_table[2];
+    m_freq[2] = g_osc_freq_table[4];
     m_freq_detune = 0;
     m_phase[0] = 0;
     m_phase[1] = 0;
@@ -99,6 +99,7 @@ public:
     int8_t wave_0_1 = get_wave_level(m_wave_table[3], m_phase[0] + m_phase_detune);
     int8_t wave_1_1 = get_wave_level(m_wave_table[4], m_phase[1] + m_phase_detune);
     int8_t wave_2_1 = get_wave_level(m_wave_table[5], m_phase[2] + m_phase_detune);
+
 
     // amp and mix
     int16_t result = 0;

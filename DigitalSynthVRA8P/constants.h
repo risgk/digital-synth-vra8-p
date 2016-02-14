@@ -14,9 +14,6 @@ const uint8_t   OSC_PHASE_RESOLUTION_BITS              = 16;
 const uint8_t   OSC_WAVE_TABLE_AMPLITUDE               = 48;
 const uint8_t   OSC_WAVE_TABLE_SAMPLES_BITS            = 8;
 const uint8_t   FILTER_TABLE_FRACTION_BITS             = 14;
-const uint16_t  EG_LEVEL_MAX                           = (127 << 1) << 8;
-const uint8_t   EG_CONTROLLER_STEPS_BITS               = 5;
-const uint8_t   EG_DECAY_RELEASE_RATE_DENOMINATOR_BITS = 8;
 
 const uint8_t   DATA_BYTE_MAX         = 0x7F;
 const uint8_t   STATUS_BYTE_INVALID   = 0x7F;

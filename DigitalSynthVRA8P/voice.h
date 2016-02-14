@@ -13,7 +13,8 @@ public:
     IOsc<0>::initialize();
     IFilter<0>::initialize();
     IAmp<0>::initialize();
-    IEG<0>::initialize();
+    IGate<0>::initialize();
+    IEnvGen<0>::initialize();
     m_mono = false;
   }
 
@@ -38,26 +39,27 @@ public:
       IOsc<0>::note_on(0, note_number);
       IOsc<0>::note_on(1, note_number);
       IOsc<0>::note_on(2, note_number);
-      IEG<0>::note_on(0);
-      IEG<0>::note_on(1);
-      IEG<0>::note_on(2);
+      IGate<0>::note_on(0);
+      IGate<0>::note_on(1);
+      IGate<0>::note_on(2);
     } else {
       if (m_note_number[0] == NOTE_NUMBER_INVALID) {
         m_note_number[0] = note_number;
         IOsc<0>::note_on(0, note_number);
-        IEG<0>::note_on(0);
+        IGate<0>::note_on(0);
       } else if (m_note_number[1] == NOTE_NUMBER_INVALID) {
         m_note_number[1] = note_number;
         IOsc<0>::note_on(1, note_number);
-        IEG<0>::note_on(1);
+        IGate<0>::note_on(1);
       } else {
         m_note_number[2] = note_number;
         IOsc<0>::note_on(2, note_number);
-        IEG<0>::note_on(2);
+        IGate<0>::note_on(2);
       }
     }
 
-    IEG<0>::note_on(3);
+    IGate<0>::note_on(3);
+    IEnvGen<0>::note_on();
   }
 
   INLINE static void note_off(uint8_t note_number) {
@@ -68,30 +70,33 @@ public:
     } else {
       if (m_note_number[0] == note_number) {
         m_note_number[0] = NOTE_NUMBER_INVALID;
-        IEG<0>::note_off(0);
+        IGate<0>::note_off(0);
       } else if (m_note_number[1] == note_number) {
         m_note_number[1] = NOTE_NUMBER_INVALID;
-        IEG<0>::note_off(1);
+        IGate<0>::note_off(1);
       } else if (m_note_number[2] == note_number) {
         m_note_number[2] = NOTE_NUMBER_INVALID;
-        IEG<0>::note_off(2);
+        IGate<0>::note_off(2);
       }
     }
 
     if ((m_note_number[0] == NOTE_NUMBER_INVALID) &&
         (m_note_number[1] == NOTE_NUMBER_INVALID) &&
         (m_note_number[2] == NOTE_NUMBER_INVALID)) {
-      IEG<0>::note_off(3);
+      IGate<0>::note_off(3);
+      IEnvGen<0>::note_off();
     }
   }
 
   INLINE static void all_note_off() {
     m_note_number[0] = NOTE_NUMBER_INVALID;
-    IEG<0>::note_off(0);
+    IGate<0>::note_off(0);
     m_note_number[1] = NOTE_NUMBER_INVALID;
-    IEG<0>::note_off(1);
+    IGate<0>::note_off(1);
     m_note_number[2] = NOTE_NUMBER_INVALID;
-    IEG<0>::note_off(2);
+    IGate<0>::note_off(2);
+    IGate<0>::note_off(3);
+    IEnvGen<0>::note_off();
   }
 
   INLINE static void control_change(uint8_t controller_number, uint8_t controller_value) {
@@ -119,24 +124,35 @@ public:
       IFilter<0>::set_env_amt(controller_value);
       break;
     case ENV_D_S_A:
-      IEG<0>::set_attack(controller_value);
-      IEG<0>::set_release(controller_value);
+      if (controller_value < 32) {
+        IEnvGen<0>::set_decay(controller_value << 2);
+        IEnvGen<0>::set_sustain(0);
+        IEnvGen<0>::set_attack(0);
+      } else if (controller_value < 64) {
+        IEnvGen<0>::set_decay(124);
+        IEnvGen<0>::set_sustain((controller_value - 32) << 2);
+        IEnvGen<0>::set_attack(0);
+      } else  {
+        IEnvGen<0>::set_decay(124);
+        IEnvGen<0>::set_sustain(124);
+        IEnvGen<0>::set_attack((controller_value - 64) << 1);
+      }
       break;
     }
   }
 
   INLINE static int8_t clock() {
-    uint8_t eg_output[4];
-    IEG<0>::clock();
-    eg_output[0] = IEG<0>::level<0>();
-    eg_output[1] = IEG<0>::level<1>();
-    eg_output[2] = IEG<0>::level<2>();
-    eg_output[3] = IEG<0>::level<3>();
-    int16_t osc_output    = IOsc<0>::clock(eg_output[0],
-                                           eg_output[1],
-                                           eg_output[2]);
-    int16_t filter_output = IFilter<0>::clock(osc_output, eg_output[3]);
-    int16_t amp_output    = IAmp<0>::clock(filter_output, eg_output[0]);  // TODO
+    uint8_t gate_output[4];
+    IGate<0>::clock();
+    gate_output[0] = IGate<0>::level<0>();
+    gate_output[1] = IGate<0>::level<1>();
+    gate_output[2] = IGate<0>::level<2>();
+    gate_output[3] = IGate<0>::level<3>();
+    uint8_t eg_output = IEnvGen<0>::clock();
+    int16_t osc_output    = IOsc<0>::clock(gate_output[0], gate_output[1],
+                                           gate_output[2]);
+    int16_t filter_output = IFilter<0>::clock(osc_output, eg_output);
+    int16_t amp_output    = IAmp<0>::clock(filter_output, eg_output);
     return high_sbyte(amp_output);
   }
 };
