@@ -39,13 +39,7 @@ public:
   }
 
   INLINE static void set_resonance(uint8_t controller_value) {
-    if (controller_value >= 96) {
-      m_lpf_table = g_filter_lpf_table_reso_high;
-    } else if (controller_value >= 32) {
-      m_lpf_table = g_filter_lpf_table_reso_mid;
-    } else {
-      m_lpf_table = g_filter_lpf_table_reso_low;
-    }
+    m_lpf_table = g_filter_lpf_tables[controller_value >> 3];
   }
 
   INLINE static void set_env_amt(uint8_t controller_value) {

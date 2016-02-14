@@ -87,13 +87,7 @@ public:
     }
   }
 
-  INLINE static void note_off(uint8_t osc_number) {
-    // do nothing
-  }
-
-  INLINE static int16_t clock(uint8_t amp_0,
-                              uint8_t amp_1,
-                              uint8_t amp_2) {
+  INLINE static int16_t clock(uint8_t amp_0, uint8_t amp_1, uint8_t amp_2) {
     m_phase[0] += m_freq[0];
     m_phase[1] += m_freq[1];
     m_phase[2] += m_freq[2];

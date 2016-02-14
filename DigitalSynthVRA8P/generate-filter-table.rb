@@ -41,8 +41,22 @@ def generate_filter_lpf_table(name, q)
   $file.printf("};\n\n")
 end
 
-generate_filter_lpf_table("reso_high", 8.0)
-generate_filter_lpf_table("reso_mid", 2.0 * Math.sqrt(2.0))
-generate_filter_lpf_table("reso_low", Math.sqrt(2.0))
+(0..15).each do |idx|
+  generate_filter_lpf_table(idx.to_s, Math.sqrt(2.0) ** ((idx / 3.0) - 1.0))
+end
+
+$file.printf("const uint8_t* g_filter_lpf_tables[] = {\n  ")
+(0..15).each do |idx|
+  $file.printf("g_filter_lpf_table_%-2d,", idx)
+  if idx == DATA_BYTE_MAX
+    $file.printf("\n")
+  elsif idx % 4 == 3
+    $file.printf("\n  ")
+  else
+    $file.printf(" ")
+  end
+end
+$file.printf("};\n\n")
+
 
 $file.close
