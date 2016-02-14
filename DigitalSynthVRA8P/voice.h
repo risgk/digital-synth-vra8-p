@@ -3,10 +3,13 @@
 template <uint8_t T>
 class Voice {
   static boolean m_mono;
+  static boolean m_amp_env;
   static uint8_t m_note_number[3];
 
 public:
   INLINE static void initialize() {
+    m_mono = false;
+    m_amp_env = true;
     m_note_number[0] = NOTE_NUMBER_INVALID;
     m_note_number[1] = NOTE_NUMBER_INVALID;
     m_note_number[2] = NOTE_NUMBER_INVALID;
@@ -15,7 +18,6 @@ public:
     IAmp<0>::initialize();
     IGate<0>::initialize();
     IEnvGen<0>::initialize();
-    m_mono = false;
   }
 
   INLINE static void set_mono(uint8_t controller_value) {
@@ -112,7 +114,11 @@ public:
       IOsc<0>::set_detune(controller_value);
       break;
     case AMP_GATE_ENV:
-      // todo
+      if (controller_value < 64) {
+        m_amp_env = false;
+      } else  {
+        m_amp_env = true;
+      }
       break;
     case LPF_CUTOFF:
       IFilter<0>::set_cutoff(controller_value);
@@ -147,15 +153,21 @@ public:
     gate_output[0] = IGate<0>::level<0>();
     gate_output[1] = IGate<0>::level<1>();
     gate_output[2] = IGate<0>::level<2>();
-    gate_output[3] = IGate<0>::level<3>();
-    uint8_t eg_output = IEnvGen<0>::clock();
-    int16_t osc_output    = IOsc<0>::clock(gate_output[0], gate_output[1],
-                                           gate_output[2]);
-    int16_t filter_output = IFilter<0>::clock(osc_output, eg_output);
-    int16_t amp_output    = IAmp<0>::clock(filter_output, eg_output);
+    int16_t osc_output = IOsc<0>::clock(gate_output[0], gate_output[1],
+                                        gate_output[2]);
+    uint8_t env_gen_output = IEnvGen<0>::clock();
+    int16_t filter_output = IFilter<0>::clock(osc_output, env_gen_output);
+    int16_t amp_output;
+    if (m_amp_env) {
+      amp_output = IAmp<0>::clock(filter_output, env_gen_output);
+    } else {
+      gate_output[3] = IGate<0>::level<3>();
+      amp_output = IAmp<0>::clock(filter_output, gate_output[3]);
+    }
     return high_sbyte(amp_output);
   }
 };
 
 template <uint8_t T> boolean Voice<T>::m_mono;
+template <uint8_t T> boolean Voice<T>::m_amp_env;
 template <uint8_t T> uint8_t Voice<T>::m_note_number[3];

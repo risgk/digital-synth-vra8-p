@@ -32,19 +32,11 @@ public:
 
   INLINE static void clock() {
     m_count++;
-    switch (m_count & 0x0F) {
-    case 0:
+    if ((m_count & 0x0F) == 0) {
       sub_clock<0>();
-      break;
-    case 4:
       sub_clock<1>();
-      break;
-    case 8:
       sub_clock<2>();
-      break;
-    case 12:
       sub_clock<3>();
-      break;
     }
   }
 
@@ -58,10 +50,12 @@ private:
   INLINE static void sub_clock() {
     if (m_gate[N]) {
       if (m_level[N] < 255) {
-        m_level[N] += 15;
+        m_level[N] += 17;
       }
-    } else if (m_level[N] > 0) {
-      m_level[N] -= 15;
+    } else {
+      if (m_level[N] > 0) {
+        m_level[N] -= 17;
+      }
     }
   }
 };

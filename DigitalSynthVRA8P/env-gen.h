@@ -6,7 +6,7 @@
 template <uint8_t T>
 class EnvGen {
   static const uint8_t STATE_ATTACK  = 0;
-  static const uint8_t STATE_DECAY   = 1;
+  static const uint8_t STATE_DECAY_SUSTAIN   = 1;
   static const uint8_t STATE_RELEASE = 2;
 
   static const uint8_t RELEASE_UPDATE_INTERVAL = 1;
@@ -31,11 +31,11 @@ public:
   }
 
   INLINE static void set_attack(uint8_t controller_value) {
-    m_attack_update_interval = (controller_value << 1) + 1;
+    m_attack_update_interval = controller_value + 1;
   }
 
   INLINE static void set_decay(uint8_t controller_value) {
-    m_decay_update_interval = (controller_value << 1) + 1;
+    m_decay_update_interval = controller_value + 1;
   }
 
   INLINE static void set_sustain(uint8_t controller_value) {
@@ -54,26 +54,27 @@ public:
   }
 
   INLINE static uint8_t clock() {
-    if ((m_count & 0x0F) == 0) {
+    m_count++;
+    if ((m_count & 0x03) == 0) {
       switch (m_state) {
       case STATE_ATTACK:
         m_rest--;
         if (m_rest == 0) {
           m_rest = m_attack_update_interval;
           if (m_level < 255) {
-            m_level += 3;
+            m_level += 5;
           }
           if (m_level == 255) {
-            m_state = STATE_DECAY;
+            m_state = STATE_DECAY_SUSTAIN;
           }
         }
         break;
-      case STATE_DECAY:
+      case STATE_DECAY_SUSTAIN:
         m_rest--;
         if (m_rest == 0) {
           m_rest = m_decay_update_interval;
           if (m_level > 0) {
-            m_level -= 3;
+            m_level -= 5;
           }
           if (m_level < m_sustain_level) {
             m_level = m_sustain_level;
@@ -85,7 +86,7 @@ public:
         if (m_rest == 0) {
           m_rest = RELEASE_UPDATE_INTERVAL;
           if (m_level > 0) {
-            m_level -= 3;
+            m_level -= 5;
           }
         }
         break;
