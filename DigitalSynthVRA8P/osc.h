@@ -103,9 +103,9 @@ public:
 
     // amp and mix
     int16_t result = 0;
-    result = ((wave_0_0 + wave_0_1) * (amp_0 >> 2)) +
-             ((wave_1_0 + wave_1_1) * (amp_1 >> 2)) +
-             ((wave_2_0 + wave_2_1) * (amp_2 >> 2));
+    result = ((wave_0_0 + wave_0_1) * amp_0) +
+             ((wave_1_0 + wave_1_1) * amp_1) +
+             ((wave_2_0 + wave_2_1) * amp_2);
     result >>= 1;
 
     return result;

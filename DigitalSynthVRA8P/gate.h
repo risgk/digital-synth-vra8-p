@@ -48,14 +48,10 @@ public:
 private:
   template <uint8_t N>
   INLINE static void sub_clock() {
-    if (m_gate[N]) {
-      if (m_level[N] < 252) {
-        m_level[N] += 12;
-      }
-    } else {
-      if (m_level[N] > 0) {
-        m_level[N] -= 12;
-      }
+    if (m_gate[N] && (m_level[N] < 63)) {
+      m_level[N] += 3;
+    } else if (!m_gate[N] && (m_level[N] > 0)) {
+      m_level[N] -= 3;
     }
   }
 };
