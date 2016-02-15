@@ -5,9 +5,10 @@
 
 template <uint8_t T>
 class EnvGen {
-  static const uint8_t STATE_ATTACK  = 0;
-  static const uint8_t STATE_DECAY_SUSTAIN   = 1;
-  static const uint8_t STATE_RELEASE = 2;
+  static const uint8_t STATE_ATTACK        = 0;
+  static const uint8_t STATE_DECAY_SUSTAIN = 1;
+  static const uint8_t STATE_RELEASE       = 2;
+  static const uint8_t STATE_IDLE          = 3;
 
   static const uint8_t RELEASE_UPDATE_INTERVAL = 1;
 
@@ -61,11 +62,11 @@ public:
         m_rest--;
         if (m_rest == 0) {
           m_rest = m_attack_update_interval;
-          if (m_level < 255) {
-            m_level += 5;
-          }
           if (m_level == 255) {
             m_state = STATE_DECAY_SUSTAIN;
+            m_rest = m_decay_update_interval;
+          } else {
+            m_level += 3;
           }
         }
         break;
@@ -73,11 +74,10 @@ public:
         m_rest--;
         if (m_rest == 0) {
           m_rest = m_decay_update_interval;
-          if (m_level > 0) {
-            m_level -= 5;
-          }
-          if (m_level < m_sustain_level) {
+          if (m_level <= m_sustain_level) {
             m_level = m_sustain_level;
+          } else {
+            m_level -= 3;
           }
         }
         break;
@@ -85,10 +85,15 @@ public:
         m_rest--;
         if (m_rest == 0) {
           m_rest = RELEASE_UPDATE_INTERVAL;
-          if (m_level > 0) {
-            m_level -= 5;
+          if (m_level == 0) {
+            m_state = STATE_IDLE;
+          } else {
+            m_level -= 3;
           }
         }
+        break;
+      default:  // case STATE_IDLE:
+        m_level = 0;
         break;
       }
     }
