@@ -32,7 +32,7 @@ const uint8_t   EOX                   = 0xF7;
 const uint8_t   REAL_TIME_MESSAGE_MIN = 0xF8;
 const uint8_t   ACTIVE_SENSING        = 0xFE;
 
-const uint8_t   OSC_POLY_MONO = 16;
+const uint8_t   POLY_MONO     = 16;
 const uint8_t   OSC_SAW_SQ    = 17;
 const uint8_t   OSC_DETUNE    = 18;
 const uint8_t   AMP_GATE_ENV  = 19;

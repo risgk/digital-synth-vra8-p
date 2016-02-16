@@ -103,7 +103,7 @@ public:
 
   INLINE static void control_change(uint8_t controller_number, uint8_t controller_value) {
     switch (controller_number) {
-    case OSC_POLY_MONO:
+    case POLY_MONO    :
       set_mono(controller_value);
       IOsc<0>::set_mono(controller_value);
       break;

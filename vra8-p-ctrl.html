@@ -39,7 +39,7 @@ const NOTE_OFF       = 0x80;
 const NOTE_ON        = 0x90;
 const CONTROL_CHANGE = 0xB0;
 
-const OSC_POLY_MONO = 16;
+const POLY_MONO     = 16;
 const OSC_SAW_SQ    = 17;
 const OSC_DETUNE    = 18;
 const AMP_GATE_ENV  = 19;
@@ -219,7 +219,7 @@ function onChangeControlChange(number, value) {
 function preset(number) {
   allNotesOff();
   var presetControllers = {};
-  presetControllers[OSC_POLY_MONO] = [0  , 0  , 0  , 0  , 127];
+  presetControllers[POLY_MONO    ] = [0  , 0  , 0  , 0  , 127];
   presetControllers[OSC_SAW_SQ   ] = [0  , 0  , 127, 64 , 0  ];
   presetControllers[OSC_DETUNE   ] = [0  , 32 , 64 , 64 , 32 ];
   presetControllers[AMP_GATE_ENV ] = [127, 127, 127, 127, 0  ];
@@ -342,7 +342,7 @@ function noteOff(noteNumber) {
 &nbsp;
 
 <table>
-<tr><td>OSC POLY/MONO </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<tr><td>POLY/MONO     </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
     <td>OSC SAW/MIX/SQ</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
     <td>OSC DETUNE    </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
     <td>AMP GATE/ENV  </td></tr>

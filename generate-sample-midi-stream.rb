@@ -64,7 +64,7 @@ def sound_off
 end
 
 sound_off
-control_change(OSC_POLY_MONO, 0  )
+control_change(POLY_MONO    , 0  )
 control_change(OSC_SAW_SQ   , 0  )
 control_change(OSC_DETUNE   , 64 )
 control_change(AMP_GATE_ENV , 127)

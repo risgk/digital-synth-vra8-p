@@ -28,7 +28,7 @@ public:
     ISynthCore<0>::initialize();
 
     // Preset
-    ISynthCore<0>::control_change(OSC_POLY_MONO, 0  );
+    ISynthCore<0>::control_change(POLY_MONO    , 0  );
     ISynthCore<0>::control_change(OSC_SAW_SQ   , 0  );
     ISynthCore<0>::control_change(OSC_DETUNE   , 64 );
     ISynthCore<0>::control_change(AMP_GATE_ENV , 127);
