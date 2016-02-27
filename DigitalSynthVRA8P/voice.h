@@ -162,7 +162,7 @@ public:
       amp_output = IAmp<0>::clock(filter_output, env_gen_output);
     } else {
       gate_output[3] = IGate<0>::level<3>();
-      amp_output = IAmp<0>::clock(filter_output, gate_output[3] << 2);
+      amp_output = IAmp<0>::clock(filter_output, gate_output[3] << 3);
     }
     return high_sbyte(amp_output);
   }

@@ -100,13 +100,10 @@ public:
     int8_t wave_1_1 = get_wave_level(m_wave_table[4], m_phase[1] + m_phase_detune);
     int8_t wave_2_1 = get_wave_level(m_wave_table[5], m_phase[2] + m_phase_detune);
 
-
     // amp and mix
-    int16_t result = 0;
-    result = ((wave_0_0 + wave_0_1) * amp_0) +
-             ((wave_1_0 + wave_1_1) * amp_1) +
-             ((wave_2_0 + wave_2_1) * amp_2);
-    result >>= 1;
+    int16_t result = (wave_0_0 * amp_0) + (wave_0_1 * amp_0) +
+                     (wave_1_0 * amp_1) + (wave_1_1 * amp_1) +
+                     (wave_2_0 * amp_2) + (wave_2_1 * amp_2);
 
     return result;
   }
@@ -115,13 +112,17 @@ private:
   INLINE static int8_t get_wave_level(const uint8_t* wave_table, uint16_t phase) {
     uint8_t curr_index = high_byte(phase);
     uint16_t two_data = pgm_read_word(wave_table + curr_index);
-    int8_t curr_data = low_byte(two_data);
-    int8_t next_data = high_byte(two_data);
+    uint8_t curr_data = low_byte(two_data);
+    uint8_t next_data = high_byte(two_data);
     uint8_t next_weight = low_byte(phase);
 
     // lerp
-    int8_t result = curr_data +
-                    high_sbyte(static_cast<int8_t>(next_data - curr_data) * next_weight);
+    int8_t result;
+    if (static_cast<int8_t>(curr_data) < static_cast<int8_t>(next_data)) {
+      result = curr_data + high_byte(static_cast<uint8_t>(next_data - curr_data) * next_weight);
+    } else {
+      result = curr_data - high_byte(static_cast<uint8_t>(curr_data - next_data) * next_weight);
+    }
 
     return result;
   }

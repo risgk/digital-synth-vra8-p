@@ -11,7 +11,7 @@ const uint8_t   NOTE_NUMBER_INVALID = 255;
 const double    A4_PITCH            = 440.0;
 
 const uint8_t   OSC_PHASE_RESOLUTION_BITS              = 16;
-const uint8_t   OSC_WAVE_TABLE_AMPLITUDE               = 48;
+const uint8_t   OSC_WAVE_TABLE_AMPLITUDE               = 95;
 const uint8_t   OSC_WAVE_TABLE_SAMPLES_BITS            = 8;
 const uint8_t   FILTER_TABLE_FRACTION_BITS             = 14;
 
