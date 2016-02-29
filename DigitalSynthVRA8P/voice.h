@@ -103,7 +103,7 @@ public:
 
   INLINE static void control_change(uint8_t controller_number, uint8_t controller_value) {
     switch (controller_number) {
-    case POLY_MONO    :
+    case POLY_MONO:
       set_mono(controller_value);
       IOsc<0>::set_mono(controller_value);
       break;
@@ -130,19 +130,9 @@ public:
       IFilter<0>::set_env_amt(controller_value);
       break;
     case ENV_D_S_A:
-      if (controller_value < 32) {
-        IEnvGen<0>::set_decay(controller_value << 2);
-        IEnvGen<0>::set_sustain(0);
-        IEnvGen<0>::set_attack(0);
-      } else if (controller_value < 64) {
-        IEnvGen<0>::set_decay(124);
-        IEnvGen<0>::set_sustain((controller_value - 32) << 2);
-        IEnvGen<0>::set_attack(0);
-      } else  {
-        IEnvGen<0>::set_decay(124);
-        IEnvGen<0>::set_sustain(124);
-        IEnvGen<0>::set_attack((controller_value - 64) << 1);
-      }
+      IEnvGen<0>::set_decay(controller_value);
+      IEnvGen<0>::set_sustain(0);
+      IEnvGen<0>::set_attack(0);
       break;
     }
   }
