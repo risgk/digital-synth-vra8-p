@@ -43,7 +43,7 @@ public:
   }
 
   INLINE static void set_detune(uint8_t controller_value) {
-    m_freq_detune = (controller_value >> 4) + 1;
+    m_freq_detune = (controller_value >> 3) + 1;
     if (m_mono) {
       m_freq[1] = m_freq[0] + (m_freq_detune << 1);
       m_freq[2] = m_freq[0] - (m_freq_detune << 1);
