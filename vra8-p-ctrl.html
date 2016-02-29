@@ -342,10 +342,10 @@ function noteOff(noteNumber) {
 &nbsp;
 
 <table>
-<tr><td>POLY/MONO     </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-    <td>OSC SAW/MIX/SQ</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-    <td>OSC DETUNE    </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-    <td>AMP GATE/ENV  </td></tr>
+<tr><td>UNISON (OFF/ON)  </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td>OSC WAVE (SAW/SQ)</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td>OSC DETUNE       </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td>AMP EG (OFF/ON)  </td></tr>
 <tr><td><input id="inputCC16" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(16, value)"></td>
     <td><span id="spanCC16">-1</span></td>
     <td><input id="inputCC17" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(17, value)"></td>
@@ -355,10 +355,10 @@ function noteOff(noteNumber) {
     <td><input id="inputCC19" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(19, value)"></td>
     <td><span id="spanCC19">-1</span></td></tr>
 <tr><td>&nbsp;</td></tr>
-<tr><td>LPF CUTOFF    </td><td></td>
-    <td>LPF RESONANCE </td><td></td>
-    <td>LPF ENV AMT   </td><td></td>
-    <td>ENV D/S/A     </td></tr>
+<tr><td>FILTER CUTOFF    </td><td></td>
+    <td>FILTER RESONANCE </td><td></td>
+    <td>FILTER EG AMT    </td><td></td>
+    <td>EG DECAY         </td></tr>
 <tr><td><input id="inputCC20" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(20, value)"></td>
     <td><span id="spanCC20">-1</span></td>
     <td><input id="inputCC21" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(21, value)"></td>
