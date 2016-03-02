@@ -30,7 +30,8 @@ public:
   }
 
   INLINE static void set_decay(uint8_t controller_value) {
-    m_decay_update_interval = controller_value + 1;
+    m_decay_update_interval = high_byte((controller_value << 1) *
+                                        (controller_value << 1)) + 1;
   }
 
   INLINE static void note_on() {
@@ -51,11 +52,12 @@ public:
         m_rest--;
         if (m_rest == 0) {
           m_rest = ATTACK_UPDATE_INTERVAL;
-          if (m_level == 255) {
+          if (m_level >= 248) {
+            m_level == 252;
             m_state = STATE_DECAY;
             m_rest = m_decay_update_interval;
           } else {
-            m_level += 3;
+            m_level += 4;
           }
         }
         break;
@@ -63,8 +65,10 @@ public:
         m_rest--;
         if (m_rest == 0) {
           m_rest = m_decay_update_interval;
-          if (m_level != 0) {
-            m_level -= 3;
+          if (m_level <= 4) {
+            m_level = 0;
+          } else {
+            m_level = high_byte(m_level * 252);
           }
         }
         break;
@@ -72,10 +76,11 @@ public:
         m_rest--;
         if (m_rest == 0) {
           m_rest = RELEASE_UPDATE_INTERVAL;
-          if (m_level == 0) {
+          if (m_level <= 4) {
+            m_level = 0;
             m_state = STATE_IDLE;
           } else {
-            m_level -= 3;
+            m_level -= 4;
           }
         }
         break;
