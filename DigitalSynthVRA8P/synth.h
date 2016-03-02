@@ -31,10 +31,10 @@ public:
     ISynthCore<0>::control_change(POLY_MONO    , 0  );
     ISynthCore<0>::control_change(OSC_SAW_SQ   , 0  );
     ISynthCore<0>::control_change(OSC_DETUNE   , 64 );
-    ISynthCore<0>::control_change(AMP_GATE_ENV , 127);
-    ISynthCore<0>::control_change(LPF_CUTOFF   , 127);
-    ISynthCore<0>::control_change(LPF_RESONANCE, 0  );
-    ISynthCore<0>::control_change(LPF_ENV_AMT  , 0  );
+    ISynthCore<0>::control_change(AMP_GATE_ENV , 0  );
+    ISynthCore<0>::control_change(LPF_CUTOFF   , 0  );
+    ISynthCore<0>::control_change(LPF_RESONANCE, 127);
+    ISynthCore<0>::control_change(LPF_ENV_AMT  , 127);
     ISynthCore<0>::control_change(ENV_D_S_A    , 64 );
   }
 

@@ -221,12 +221,12 @@ function preset(number) {
   var presetControllers = {};
   presetControllers[POLY_MONO    ] = [0  , 0  , 0  , 0  , 127];
   presetControllers[OSC_SAW_SQ   ] = [0  , 0  , 127, 64 , 0  ];
-  presetControllers[OSC_DETUNE   ] = [0  , 32 , 64 , 64 , 32 ];
-  presetControllers[AMP_GATE_ENV ] = [127, 127, 127, 127, 0  ];
-  presetControllers[LPF_CUTOFF   ] = [127, 64 , 64 , 127, 0  ];
-  presetControllers[LPF_RESONANCE] = [0  , 64 , 0  , 64 , 127];
-  presetControllers[LPF_ENV_AMT  ] = [0  , 64 , 64 , 0  , 127];
-  presetControllers[ENV_D_S_A    ] = [64 , 80 , 16 , 64 , 32 ];
+  presetControllers[OSC_DETUNE   ] = [0  , 64 , 64 , 64 , 32 ];
+  presetControllers[AMP_GATE_ENV ] = [0  , 0  , 127, 127, 0  ];
+  presetControllers[LPF_CUTOFF   ] = [127, 0  , 64 , 127, 0  ];
+  presetControllers[LPF_RESONANCE] = [0  , 127, 0  , 64 , 127];
+  presetControllers[LPF_ENV_AMT  ] = [0  , 127, 64 , 0  , 127];
+  presetControllers[ENV_D_S_A    ] = [127, 64 , 16 , 64 , 32 ];
 
   for (var i = CONTROLLERS_FIRST; i <= CONTROLLERS_LAST; i++) {
     onChangeControlChange(i, presetControllers[i][number]);
