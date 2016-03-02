@@ -71,7 +71,7 @@ control_change(AMP_GATE_ENV , 0  )
 control_change(LPF_CUTOFF   , 0  )
 control_change(LPF_RESONANCE, 127)
 control_change(LPF_ENV_AMT  , 127)
-control_change(ENV_D_S_A    , 64 )
+control_change(ENV_D_S_A    , 127)
 play_a(4)
 play_b(3)
 
