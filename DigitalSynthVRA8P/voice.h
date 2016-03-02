@@ -131,8 +131,6 @@ public:
       break;
     case ENV_D_S_A:
       IEnvGen<0>::set_decay(controller_value);
-      IEnvGen<0>::set_sustain(0);
-      IEnvGen<0>::set_attack(0);
       break;
     }
   }
