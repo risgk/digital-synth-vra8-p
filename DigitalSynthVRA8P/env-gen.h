@@ -68,7 +68,7 @@ public:
           if (m_level <= 4) {
             m_level = 0;
           } else {
-            m_level = high_byte(m_level * 252);
+            m_level = high_byte(m_level * 248);
           }
         }
         break;
