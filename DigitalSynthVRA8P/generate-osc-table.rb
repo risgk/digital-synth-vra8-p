@@ -64,7 +64,7 @@ def generate_osc_wave_table_square(last)
                  (1 << OSC_WAVE_TABLE_SAMPLES_BITS)) * k) / k
       end
     end
-    level *= 1 / Math.sqrt(3.0)
+    level *= 1 / 1.5
     level = (level * OSC_WAVE_TABLE_AMPLITUDE).floor.to_i
 
     level += 0x100 if level < 0
