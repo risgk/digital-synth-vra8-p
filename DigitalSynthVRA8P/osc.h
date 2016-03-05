@@ -52,23 +52,41 @@ public:
 
   INLINE static void note_on(uint8_t osc_number, uint8_t note_number) {
     if (m_mono) {
-      if (m_waveform < 96) {
+      if (m_waveform < 16) {
         m_wave_table[0] = g_osc_saw_wave_tables[note_number - NOTE_NUMBER_MIN];
+      } else if (m_waveform < 48) {
+        m_wave_table[0] = g_osc_org3_wave_tables[note_number - NOTE_NUMBER_MIN];
+      } else if (m_waveform < 80) {
+        m_wave_table[0] = g_osc_org4_wave_tables[note_number - NOTE_NUMBER_MIN];
+      } else if (m_waveform < 112) {
+        m_wave_table[0] = g_osc_org9_wave_tables[note_number - NOTE_NUMBER_MIN];
       } else {
         m_wave_table[0] = g_osc_sq_wave_tables[note_number - NOTE_NUMBER_MIN];
       }
       m_wave_table[1] = m_wave_table[0];
       m_wave_table[2] = m_wave_table[0];
       m_freq[0] = g_osc_freq_table[note_number - NOTE_NUMBER_MIN];
+      if (m_waveform >=16 && m_waveform < 112) {
+        m_freq[0] = ((m_freq[0] - 1) >> 1) + 1;
+      }
       m_freq[1] = m_freq[0] + (m_freq_detune << 1);
       m_freq[2] = m_freq[0] - (m_freq_detune << 1);
     } else {
-      if (m_waveform < 96) {
+      if (m_waveform < 16) {
         m_wave_table[osc_number] = g_osc_saw_wave_tables[note_number - NOTE_NUMBER_MIN];
+      } else if (m_waveform < 48) {
+        m_wave_table[osc_number] = g_osc_org3_wave_tables[note_number - NOTE_NUMBER_MIN];
+      } else if (m_waveform < 80) {
+        m_wave_table[osc_number] = g_osc_org4_wave_tables[note_number - NOTE_NUMBER_MIN];
+      } else if (m_waveform < 112) {
+        m_wave_table[osc_number] = g_osc_org9_wave_tables[note_number - NOTE_NUMBER_MIN];
       } else {
         m_wave_table[osc_number] = g_osc_sq_wave_tables[note_number - NOTE_NUMBER_MIN];
       }
       m_freq[osc_number] = g_osc_freq_table[note_number - NOTE_NUMBER_MIN];
+      if (m_waveform >=16 && m_waveform < 112) {
+        m_freq[osc_number] = ((m_freq[osc_number] - 1) >> 1) + 1;
+      }
     }
   }
 

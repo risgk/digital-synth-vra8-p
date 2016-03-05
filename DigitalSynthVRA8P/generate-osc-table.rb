@@ -80,6 +80,84 @@ def generate_osc_wave_table_square(last)
   $file.printf("};\n\n")
 end
 
+def generate_osc_wave_table_organ_3(last)
+  $file.printf("const uint8_t g_osc_org3_wave_table_h%d[] PROGMEM = {\n  ", last)
+  (0..(1 << OSC_WAVE_TABLE_SAMPLES_BITS)).each do |n|
+    level = 0
+    (1..last * 2).each do |k|
+    if [1, 2, 3].include?(k)
+        level += Math.sin((2.0 * Math::PI) * ((n + 0.5) /
+                 (1 << OSC_WAVE_TABLE_SAMPLES_BITS)) * (k * 2))
+      end
+    end
+    level *= 1 / Math.sqrt(3.0) / 1.5
+    level = (level * OSC_WAVE_TABLE_AMPLITUDE).floor.to_i
+
+    level += 0x100 if level < 0
+    $file.printf("0x%02X,", level)
+    if n == (1 << OSC_WAVE_TABLE_SAMPLES_BITS)
+      $file.printf("\n")
+    elsif n % 16 == 15
+      $file.printf("\n  ")
+    else
+      $file.printf(" ")
+    end
+  end
+  $file.printf("};\n\n")
+end
+
+def generate_osc_wave_table_organ_4(last)
+  $file.printf("const uint8_t g_osc_org4_wave_table_h%d[] PROGMEM = {\n  ", last)
+  (0..(1 << OSC_WAVE_TABLE_SAMPLES_BITS)).each do |n|
+    level = 0
+    (1..last * 2).each do |k|
+    if [1, 2, 3, 4].include?(k)
+        level += Math.sin((2.0 * Math::PI) * ((n + 0.5) /
+                 (1 << OSC_WAVE_TABLE_SAMPLES_BITS)) * (k * 2))
+      end
+    end
+    level *= 1 / Math.sqrt(4.0) / 1.5
+    level = (level * OSC_WAVE_TABLE_AMPLITUDE).floor.to_i
+
+    level += 0x100 if level < 0
+    $file.printf("0x%02X,", level)
+    if n == (1 << OSC_WAVE_TABLE_SAMPLES_BITS)
+      $file.printf("\n")
+    elsif n % 16 == 15
+      $file.printf("\n  ")
+    else
+      $file.printf(" ")
+    end
+  end
+  $file.printf("};\n\n")
+end
+
+def generate_osc_wave_table_organ_9(last)
+  $file.printf("const uint8_t g_osc_org9_wave_table_h%d[] PROGMEM = {\n  ", last)
+  (0..(1 << OSC_WAVE_TABLE_SAMPLES_BITS)).each do |n|
+    level = 0
+    (1..last * 2).each do |k|
+    if [1, 2, 3, 4, 6, 8, 10, 12, 16].include?(k)
+        level += Math.sin((2.0 * Math::PI) * ((n + 0.5) /
+                 (1 << OSC_WAVE_TABLE_SAMPLES_BITS)) * (k * 2))
+      end
+    end
+    level *= 1 / Math.sqrt(9.0) / 1.5
+    level = (level * OSC_WAVE_TABLE_AMPLITUDE).floor.to_i
+
+    level += 0x100 if level < 0
+    $file.printf("0x%02X,", level)
+    if n == (1 << OSC_WAVE_TABLE_SAMPLES_BITS)
+      $file.printf("\n")
+    elsif n % 16 == 15
+      $file.printf("\n  ")
+    else
+      $file.printf(" ")
+    end
+  end
+  $file.printf("};\n\n")
+end
+
 $osc_harmonics_restriction_table = []
 
 (NOTE_NUMBER_MIN..NOTE_NUMBER_MAX).each do |note_number|
@@ -89,11 +167,12 @@ end
 
 MAX_DETUNE = ((127 >> 3) + 1) * 3
 
-def last_harmonic(freq)
+def last_harmonic(freq, organ = false)
   last = (freq != 0) ? ((FREQUENCY_MAX *
                          (1 << OSC_PHASE_RESOLUTION_BITS)) /
                         ((freq + MAX_DETUNE) * SAMPLING_RATE)) : 0
 
+  last = 9 if organ && last > 9
   last = (last + 1) / 4 * 4 + 1 if last > 32
   last = last - 1 if last.even?
   last = 127 if last > 127
@@ -106,6 +185,18 @@ end
 
 $osc_harmonics_restriction_table.map { |freq| last_harmonic(freq) }.uniq.sort.reverse.each do |i|
   generate_osc_wave_table_square(i)
+end
+
+$osc_harmonics_restriction_table.map { |freq| last_harmonic(freq, true) }.uniq.sort.reverse.each do |i|
+  generate_osc_wave_table_organ_3(i)
+end
+
+$osc_harmonics_restriction_table.map { |freq| last_harmonic(freq, true) }.uniq.sort.reverse.each do |i|
+  generate_osc_wave_table_organ_4(i)
+end
+
+$osc_harmonics_restriction_table.map { |freq| last_harmonic(freq, true) }.uniq.sort.reverse.each do |i|
+  generate_osc_wave_table_organ_9(i)
 end
 
 $file.printf("const uint8_t* g_osc_saw_wave_tables[] = {\n  ")
@@ -124,6 +215,45 @@ $file.printf("};\n\n")
 $file.printf("const uint8_t* g_osc_sq_wave_tables[] = {\n  ")
 $osc_harmonics_restriction_table.each_with_index do |freq, idx|
   $file.printf("g_osc_sq_wave_table_h%-3d,", last_harmonic(freq))
+  if idx == DATA_BYTE_MAX
+    $file.printf("\n")
+  elsif idx % 4 == 3
+    $file.printf("\n  ")
+  else
+    $file.printf(" ")
+  end
+end
+$file.printf("};\n\n")
+
+$file.printf("const uint8_t* g_osc_org3_wave_tables[] = {\n  ")
+$osc_harmonics_restriction_table.each_with_index do |freq, idx|
+  $file.printf("g_osc_org3_wave_table_h%-3d,", last_harmonic(freq, true))
+  if idx == DATA_BYTE_MAX
+    $file.printf("\n")
+  elsif idx % 4 == 3
+    $file.printf("\n  ")
+  else
+    $file.printf(" ")
+  end
+end
+$file.printf("};\n\n")
+
+$file.printf("const uint8_t* g_osc_org4_wave_tables[] = {\n  ")
+$osc_harmonics_restriction_table.each_with_index do |freq, idx|
+  $file.printf("g_osc_org4_wave_table_h%-3d,", last_harmonic(freq, true))
+  if idx == DATA_BYTE_MAX
+    $file.printf("\n")
+  elsif idx % 4 == 3
+    $file.printf("\n  ")
+  else
+    $file.printf(" ")
+  end
+end
+$file.printf("};\n\n")
+
+$file.printf("const uint8_t* g_osc_org9_wave_tables[] = {\n  ")
+$osc_harmonics_restriction_table.each_with_index do |freq, idx|
+  $file.printf("g_osc_org9_wave_table_h%-3d,", last_harmonic(freq, true))
   if idx == DATA_BYTE_MAX
     $file.printf("\n")
   elsif idx % 4 == 3
