@@ -1,5 +1,7 @@
 #pragma once
 
+const double    A4_PITCH = 440.0;
+
 const uint8_t   MIDI_CH             = 0;
 const uint16_t  SERIAL_SPEED        = 38400;
 const uint16_t  SAMPLING_RATE       = 15625;
@@ -8,12 +10,11 @@ const uint8_t   BIT_DEPTH           = 8;
 const uint8_t   NOTE_NUMBER_MIN     = 24;
 const uint8_t   NOTE_NUMBER_MAX     = 84;
 const uint8_t   NOTE_NUMBER_INVALID = 255;
-const double    A4_PITCH            = 440.0;
 
-const uint8_t   OSC_PHASE_RESOLUTION_BITS              = 16;
-const uint8_t   OSC_WAVE_TABLE_AMPLITUDE               = 96;
-const uint8_t   OSC_WAVE_TABLE_SAMPLES_BITS            = 8;
-const uint8_t   FILTER_TABLE_FRACTION_BITS             = 14;
+const uint8_t   OSC_PHASE_RESOLUTION_BITS   = 16;
+const uint8_t   OSC_WAVE_TABLE_AMPLITUDE    = 96;
+const uint8_t   OSC_WAVE_TABLE_SAMPLES_BITS = 8;
+const uint8_t   FILTER_TABLE_FRACTION_BITS  = 14;
 
 const uint8_t   DATA_BYTE_MAX         = 0x7F;
 const uint8_t   STATUS_BYTE_INVALID   = 0x7F;
