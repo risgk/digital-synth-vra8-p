@@ -221,11 +221,11 @@ function preset(number) {
   var presetControllers = {};
   presetControllers[POLY_MONO    ] = [0  , 0  , 0  , 0  , 127];
   presetControllers[OSC_SAW_SQ   ] = [0  , 0  , 127, 64 , 0  ];
-  presetControllers[OSC_DETUNE   ] = [0  , 64 , 64 , 64 , 32 ];
+  presetControllers[OSC_DETUNE   ] = [0  , 32 , 32 , 32 , 16 ];
   presetControllers[AMP_GATE_ENV ] = [0  , 0  , 127, 127, 0  ];
   presetControllers[LPF_CUTOFF   ] = [127, 64 , 64 , 127, 0  ];
   presetControllers[LPF_RESONANCE] = [0  , 64 , 0  , 64 , 127];
-  presetControllers[LPF_ENV_AMT  ] = [0  , 64 , 64 , 0  , 127];
+  presetControllers[LPF_ENV_AMT  ] = [64 , 96 , 96 , 64 , 127];
   presetControllers[ENV_D_S_A    ] = [127, 64 , 16 , 64 , 32 ];
 
   for (var i = CONTROLLERS_FIRST; i <= CONTROLLERS_LAST; i++) {
@@ -343,7 +343,7 @@ function noteOff(noteNumber) {
 
 <table>
 <tr><td>UNISON (OFF/ON)      </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-    <td>OSC WAVE (SAW/ORG/SQ)</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td>OSC WAVE (S/O/P)     </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
     <td>OSC DETUNE           </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
     <td>AMP EG (OFF/ON)      </td></tr>
 <tr><td><input id="inputCC16" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(16, value)"></td>
@@ -357,7 +357,7 @@ function noteOff(noteNumber) {
 <tr><td>&nbsp;</td></tr>
 <tr><td>FILTER CUTOFF       </td><td></td>
     <td>FILTER RESONANCE    </td><td></td>
-    <td>FILTER EG AMT       </td><td></td>
+    <td>FILTER EG AMT (-/+) </td><td></td>
     <td>EG DECAY            </td></tr>
 <tr><td><input id="inputCC20" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(20, value)"></td>
     <td><span id="spanCC20">-1</span></td>
