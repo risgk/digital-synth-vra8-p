@@ -39,14 +39,14 @@ const NOTE_OFF       = 0x80;
 const NOTE_ON        = 0x90;
 const CONTROL_CHANGE = 0xB0;
 
-const POLY_MONO     = 16;
-const OSC_SAW_SQ    = 17;
+const UNISON        = 16;
+const OSC_WAVEFORM  = 17;
 const OSC_DETUNE    = 18;
-const AMP_GATE_ENV  = 19;
+const AMP_ENV       = 19;
 const LPF_CUTOFF    = 20;
 const LPF_RESONANCE = 21;
 const LPF_ENV_AMT   = 22;
-const ENV_D_S_A     = 23;
+const ENV_DECAY     = 23;
 const ALL_NOTES_OFF = 123;
 
 const CONTROLLERS_FIRST = 16;
@@ -219,14 +219,14 @@ function onChangeControlChange(number, value) {
 function preset(number) {
   allNotesOff();
   var presetControllers = {};
-  presetControllers[POLY_MONO    ] = [0  , 0  , 0  , 0  , 127];
-  presetControllers[OSC_SAW_SQ   ] = [0  , 0  , 127, 64 , 0  ];
+  presetControllers[UNISON       ] = [0  , 0  , 0  , 0  , 127];
+  presetControllers[OSC_WAVEFORM ] = [0  , 0  , 127, 64 , 0  ];
   presetControllers[OSC_DETUNE   ] = [0  , 32 , 32 , 32 , 16 ];
-  presetControllers[AMP_GATE_ENV ] = [0  , 0  , 127, 127, 0  ];
+  presetControllers[AMP_ENV      ] = [0  , 0  , 127, 127, 0  ];
   presetControllers[LPF_CUTOFF   ] = [127, 64 , 64 , 127, 0  ];
   presetControllers[LPF_RESONANCE] = [0  , 64 , 0  , 64 , 127];
   presetControllers[LPF_ENV_AMT  ] = [64 , 96 , 96 , 64 , 127];
-  presetControllers[ENV_D_S_A    ] = [127, 64 , 16 , 64 , 32 ];
+  presetControllers[ENV_DECAY    ] = [127, 64 , 16 , 64 , 32 ];
 
   for (var i = CONTROLLERS_FIRST; i <= CONTROLLERS_LAST; i++) {
     onChangeControlChange(i, presetControllers[i][number]);

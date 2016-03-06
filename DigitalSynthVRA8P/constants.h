@@ -32,12 +32,12 @@ const uint8_t   EOX                   = 0xF7;
 const uint8_t   REAL_TIME_MESSAGE_MIN = 0xF8;
 const uint8_t   ACTIVE_SENSING        = 0xFE;
 
-const uint8_t   POLY_MONO     = 16;
-const uint8_t   OSC_SAW_SQ    = 17;
+const uint8_t   UNISON        = 16;
+const uint8_t   OSC_WAVEFORM  = 17;
 const uint8_t   OSC_DETUNE    = 18;
-const uint8_t   AMP_GATE_ENV  = 19;
+const uint8_t   AMP_ENV       = 19;
 const uint8_t   LPF_CUTOFF    = 20;
 const uint8_t   LPF_RESONANCE = 21;
 const uint8_t   LPF_ENV_AMT   = 22;
-const uint8_t   ENV_D_S_A     = 23;
+const uint8_t   ENV_DECAY     = 23;
 const uint8_t   ALL_NOTES_OFF = 123;

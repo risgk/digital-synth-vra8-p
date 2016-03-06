@@ -28,14 +28,14 @@ public:
     ISynthCore<0>::initialize();
 
     // Preset
-    ISynthCore<0>::control_change(POLY_MONO    , 0  );
-    ISynthCore<0>::control_change(OSC_SAW_SQ   , 0  );
+    ISynthCore<0>::control_change(UNISON       , 0  );
+    ISynthCore<0>::control_change(OSC_WAVEFORM , 0  );
     ISynthCore<0>::control_change(OSC_DETUNE   , 32 );
-    ISynthCore<0>::control_change(AMP_GATE_ENV , 0  );
+    ISynthCore<0>::control_change(AMP_ENV      , 0  );
     ISynthCore<0>::control_change(LPF_CUTOFF   , 64 );
     ISynthCore<0>::control_change(LPF_RESONANCE, 64 );
     ISynthCore<0>::control_change(LPF_ENV_AMT  , 96 );
-    ISynthCore<0>::control_change(ENV_D_S_A    , 64 );
+    ISynthCore<0>::control_change(ENV_DECAY    , 64 );
   }
 
   INLINE static void receive_midi_byte(uint8_t b) {

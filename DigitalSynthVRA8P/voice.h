@@ -2,13 +2,13 @@
 
 template <uint8_t T>
 class Voice {
-  static boolean m_mono;
+  static boolean m_unison;
   static boolean m_amp_env;
   static uint8_t m_note_number[3];
 
 public:
   INLINE static void initialize() {
-    m_mono = false;
+    m_unison = false;
     m_amp_env = true;
     m_note_number[0] = NOTE_NUMBER_INVALID;
     m_note_number[1] = NOTE_NUMBER_INVALID;
@@ -20,12 +20,12 @@ public:
     IEnvGen<0>::initialize();
   }
 
-  INLINE static void set_mono(uint8_t controller_value) {
-    if (!m_mono && controller_value >= 64) {
-      m_mono = true;
+  INLINE static void set_unison(uint8_t controller_value) {
+    if (!m_unison && controller_value >= 64) {
+      m_unison = true;
       all_note_off();
-    } else if (m_mono && controller_value < 64) {
-      m_mono = false;
+    } else if (m_unison && controller_value < 64) {
+      m_unison = false;
       all_note_off();
     }
   }
@@ -36,7 +36,7 @@ public:
       return;
     }
 
-    if (m_mono) {
+    if (m_unison) {
       m_note_number[0] = note_number;
       IOsc<0>::note_on(0, note_number);
       IOsc<0>::note_on(1, note_number);
@@ -65,7 +65,7 @@ public:
   }
 
   INLINE static void note_off(uint8_t note_number) {
-    if (m_mono) {
+    if (m_unison) {
       if (m_note_number[0] == note_number) {
         all_note_off();
       }
@@ -103,17 +103,17 @@ public:
 
   INLINE static void control_change(uint8_t controller_number, uint8_t controller_value) {
     switch (controller_number) {
-    case POLY_MONO:
-      set_mono(controller_value);
-      IOsc<0>::set_mono(controller_value);
+    case UNISON:
+      set_unison(controller_value);
+      IOsc<0>::set_unison(controller_value);
       break;
-    case OSC_SAW_SQ:
+    case OSC_WAVEFORM:
       IOsc<0>::set_waveform(controller_value);
       break;
     case OSC_DETUNE:
       IOsc<0>::set_detune(controller_value);
       break;
-    case AMP_GATE_ENV:
+    case AMP_ENV:
       if (controller_value < 64) {
         m_amp_env = false;
       } else  {
@@ -129,7 +129,7 @@ public:
     case LPF_ENV_AMT:
       IFilter<0>::set_env_amt(controller_value);
       break;
-    case ENV_D_S_A:
+    case ENV_DECAY:
       IEnvGen<0>::set_decay(controller_value);
       break;
     }
@@ -156,6 +156,6 @@ public:
   }
 };
 
-template <uint8_t T> boolean Voice<T>::m_mono;
+template <uint8_t T> boolean Voice<T>::m_unison;
 template <uint8_t T> boolean Voice<T>::m_amp_env;
 template <uint8_t T> uint8_t Voice<T>::m_note_number[3];

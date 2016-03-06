@@ -5,7 +5,7 @@
 
 template <uint8_t T>
 class Osc {
-  static boolean        m_mono;
+  static boolean        m_unison;
   static uint8_t        m_waveform;
   static const uint8_t* m_wave_table[3];
   static uint16_t       m_freq[3];
@@ -15,7 +15,7 @@ class Osc {
 
 public:
   INLINE static void initialize() {
-    m_mono = false;
+    m_unison = false;
     m_waveform = 0;
     m_wave_table[0] = g_osc_saw_wave_tables[0];
     m_wave_table[1] = g_osc_saw_wave_tables[2];
@@ -30,11 +30,11 @@ public:
     m_phase_detune = 0;
   }
 
-  INLINE static void set_mono(uint8_t controller_value) {
+  INLINE static void set_unison(uint8_t controller_value) {
     if (controller_value >= 64) {
-      m_mono = true;
+      m_unison = true;
     } else {
-      m_mono = false;
+      m_unison = false;
     }
   }
 
@@ -44,14 +44,14 @@ public:
 
   INLINE static void set_detune(uint8_t controller_value) {
     m_freq_detune = (controller_value >> 3) + 1;
-    if (m_mono) {
+    if (m_unison) {
       m_freq[1] = m_freq[0] + (m_freq_detune << 1);
       m_freq[2] = m_freq[0] - (m_freq_detune << 1);
     }
   }
 
   INLINE static void note_on(uint8_t osc_number, uint8_t note_number) {
-    if (m_mono) {
+    if (m_unison) {
       if (m_waveform < 32) {
         m_wave_table[0] = g_osc_saw_wave_tables[note_number - NOTE_NUMBER_MIN];
       } else if (m_waveform < 96) {
@@ -123,7 +123,7 @@ private:
   }
 };
 
-template <uint8_t T> boolean         Osc<T>::m_mono;
+template <uint8_t T> boolean         Osc<T>::m_unison;
 template <uint8_t T> uint8_t         Osc<T>::m_waveform;
 template <uint8_t T> const uint8_t*  Osc<T>::m_wave_table[3];
 template <uint8_t T> uint16_t        Osc<T>::m_freq[3];
