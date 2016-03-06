@@ -1,11 +1,8 @@
 #define PROGMEM
 
-typedef signed   char  boolean;
-typedef signed   char  int8_t;
-typedef unsigned char  uint8_t;
-typedef signed   short int16_t;
-typedef unsigned short uint16_t;
-typedef unsigned int   uint32_t;
+#include <stdint.h>
+
+typedef signed char boolean;
 
 inline uint8_t pgm_read_byte(const void* addr) {
   const uint8_t* p = (const uint8_t*) addr;
