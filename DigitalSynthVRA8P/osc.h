@@ -7,6 +7,7 @@ template <uint8_t T>
 class Osc {
   static boolean        m_unison_on;
   static uint8_t        m_waveform;
+  static uint8_t        m_base_detune;
   static const uint8_t* m_wave_table[3];
   static uint16_t       m_freq[3];
   static uint8_t        m_freq_detune;
@@ -17,6 +18,7 @@ public:
   INLINE static void initialize() {
     m_unison_on = false;
     m_waveform = 0;
+    m_base_detune = 0;
     m_wave_table[0] = g_osc_saw_wave_tables[0];
     m_wave_table[1] = g_osc_saw_wave_tables[2];
     m_wave_table[2] = g_osc_saw_wave_tables[4];
@@ -39,7 +41,13 @@ public:
   }
 
   INLINE static void set_detune(uint8_t controller_value) {
-    m_freq_detune = (controller_value >> 3) + 1;
+    m_base_detune = (controller_value >> 3) + 1;
+
+    m_freq_detune = m_base_detune;
+    if (m_waveform == OSC_WAVEFORM_ORGAN) {
+      m_freq_detune = (m_freq_detune + 1) >> 1;
+    }
+
     if (m_unison_on) {
       m_freq[1] = m_freq[0] + (m_freq_detune << 1);
       m_freq[2] = m_freq[0] - (m_freq_detune << 1);
@@ -47,6 +55,11 @@ public:
   }
 
   INLINE static void note_on(uint8_t osc_number, uint8_t note_number) {
+    m_freq_detune = m_base_detune;
+    if (m_waveform == OSC_WAVEFORM_ORGAN) {
+      m_freq_detune = (m_freq_detune + 1) >> 1;
+    }
+
     if (m_unison_on) {
       m_wave_table[0] = get_wave_table(m_waveform, note_number);
       m_wave_table[1] = m_wave_table[0];
@@ -124,6 +137,7 @@ private:
 
 template <uint8_t T> boolean         Osc<T>::m_unison_on;
 template <uint8_t T> uint8_t         Osc<T>::m_waveform;
+template <uint8_t T> uint8_t         Osc<T>::m_base_detune;
 template <uint8_t T> const uint8_t*  Osc<T>::m_wave_table[3];
 template <uint8_t T> uint16_t        Osc<T>::m_freq[3];
 template <uint8_t T> uint8_t         Osc<T>::m_freq_detune;
