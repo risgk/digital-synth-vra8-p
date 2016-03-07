@@ -31,11 +31,11 @@ public:
     ISynthCore<0>::control_change(UNISON       , 0  );
     ISynthCore<0>::control_change(OSC_WAVEFORM , 0  );
     ISynthCore<0>::control_change(OSC_DETUNE   , 32 );
-    ISynthCore<0>::control_change(AMP_ENV      , 0  );
-    ISynthCore<0>::control_change(LPF_CUTOFF   , 64 );
-    ISynthCore<0>::control_change(LPF_RESONANCE, 64 );
-    ISynthCore<0>::control_change(LPF_ENV_AMT  , 96 );
-    ISynthCore<0>::control_change(ENV_DECAY    , 64 );
+    ISynthCore<0>::control_change(AMP_EG_AMT   , 0  );
+    ISynthCore<0>::control_change(FILTER_CUTOFF, 64 );
+    ISynthCore<0>::control_change(FILTER_RESO  , 64 );
+    ISynthCore<0>::control_change(FILTER_EG_AMT, 96 );
+    ISynthCore<0>::control_change(EG_DECAY     , 64 );
   }
 
   INLINE static void receive_midi_byte(uint8_t b) {

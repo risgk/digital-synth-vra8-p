@@ -42,11 +42,11 @@ const CONTROL_CHANGE = 0xB0;
 const UNISON        = 16;
 const OSC_WAVEFORM  = 17;
 const OSC_DETUNE    = 18;
-const AMP_ENV       = 19;
-const LPF_CUTOFF    = 20;
-const LPF_RESONANCE = 21;
-const LPF_ENV_AMT   = 22;
-const ENV_DECAY     = 23;
+const AMP_EG_AMT    = 19;
+const FILTER_CUTOFF = 20;
+const FILTER_RESO   = 21;
+const FILTER_EG_AMT = 22;
+const EG_DECAY      = 23;
 const ALL_NOTES_OFF = 123;
 
 const CONTROLLERS_FIRST = 16;
@@ -222,11 +222,11 @@ function preset(number) {
   presetControllers[UNISON       ] = [0  , 0  , 0  , 0  , 127];
   presetControllers[OSC_WAVEFORM ] = [0  , 0  , 127, 64 , 0  ];
   presetControllers[OSC_DETUNE   ] = [0  , 32 , 32 , 32 , 16 ];
-  presetControllers[AMP_ENV      ] = [0  , 0  , 127, 127, 0  ];
-  presetControllers[LPF_CUTOFF   ] = [127, 64 , 64 , 127, 0  ];
-  presetControllers[LPF_RESONANCE] = [0  , 64 , 0  , 64 , 127];
-  presetControllers[LPF_ENV_AMT  ] = [64 , 96 , 96 , 64 , 127];
-  presetControllers[ENV_DECAY    ] = [127, 64 , 16 , 64 , 32 ];
+  presetControllers[AMP_EG_AMT   ] = [0  , 0  , 127, 127, 0  ];
+  presetControllers[FILTER_CUTOFF] = [127, 64 , 64 , 127, 0  ];
+  presetControllers[FILTER_RESO  ] = [0  , 64 , 0  , 64 , 127];
+  presetControllers[FILTER_EG_AMT] = [64 , 96 , 96 , 64 , 127];
+  presetControllers[EG_DECAY     ] = [127, 64 , 16 , 64 , 32 ];
 
   for (var i = CONTROLLERS_FIRST; i <= CONTROLLERS_LAST; i++) {
     onChangeControlChange(i, presetControllers[i][number]);
@@ -342,10 +342,10 @@ function noteOff(noteNumber) {
 &nbsp;
 
 <table>
-<tr><td>UNISON (OFF/ON)      </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-    <td>OSC WAVE (S/O/P)     </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<tr><td>UNISON               </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td>OSC WAVEFORM         </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
     <td>OSC DETUNE           </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-    <td>AMP EG (OFF/ON)      </td></tr>
+    <td>AMP EG AMT           </td></tr>
 <tr><td><input id="inputCC16" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(16, value)"></td>
     <td><span id="spanCC16">-1</span></td>
     <td><input id="inputCC17" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(17, value)"></td>
@@ -354,10 +354,14 @@ function noteOff(noteNumber) {
     <td><span id="spanCC18">-1</span></td>
     <td><input id="inputCC19" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(19, value)"></td>
     <td><span id="spanCC19">-1</span></td></tr>
+<tr><td>(OFF/ON)             </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td>(SAW/ORGAN/SQ)       </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td>                     </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td>(MINUS/ZERO/PLUS)    </td></tr>
 <tr><td>&nbsp;</td></tr>
 <tr><td>FILTER CUTOFF       </td><td></td>
-    <td>FILTER RESONANCE    </td><td></td>
-    <td>FILTER EG AMT (-/+) </td><td></td>
+    <td>FILTER RESO         </td><td></td>
+    <td>FILTER EG AMT       </td><td></td>
     <td>EG DECAY            </td></tr>
 <tr><td><input id="inputCC20" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(20, value)"></td>
     <td><span id="spanCC20">-1</span></td>
@@ -367,7 +371,10 @@ function noteOff(noteNumber) {
     <td><span id="spanCC22">-1</span></td>
     <td><input id="inputCC23" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(23, value)"></td>
     <td><span id="spanCC23">-1</span></td></tr>
-<tr><td>&nbsp;</td></tr>
+<tr><td>                    </td><td></td>
+    <td>                    </td><td></td>
+    <td>(MINUS/ZERO/PLUS)   </td><td></td>
+    <td>                    </td></tr>
 </table>
 
 <table>

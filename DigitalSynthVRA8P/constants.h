@@ -36,11 +36,11 @@ const uint8_t   ACTIVE_SENSING        = 0xFE;
 const uint8_t   UNISON        = 16;
 const uint8_t   OSC_WAVEFORM  = 17;
 const uint8_t   OSC_DETUNE    = 18;
-const uint8_t   AMP_ENV       = 19;
-const uint8_t   LPF_CUTOFF    = 20;
-const uint8_t   LPF_RESONANCE = 21;
-const uint8_t   LPF_ENV_AMT   = 22;
-const uint8_t   ENV_DECAY     = 23;
+const uint8_t   AMP_EG_AMT    = 19;
+const uint8_t   FILTER_CUTOFF = 20;
+const uint8_t   FILTER_RESO   = 21;
+const uint8_t   FILTER_EG_AMT = 22;
+const uint8_t   EG_DECAY      = 23;
 const uint8_t   ALL_NOTES_OFF = 123;
 
 const uint8_t   OSC_WAVEFORM_SAW   = 0;

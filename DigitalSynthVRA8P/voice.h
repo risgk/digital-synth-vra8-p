@@ -133,23 +133,23 @@ public:
     case OSC_DETUNE:
       IOsc<0>::set_detune(controller_value);
       break;
-    case AMP_ENV:
+    case AMP_EG_AMT:
       if (controller_value < 64) {
         m_amp_env_on = false;
       } else  {
         m_amp_env_on = true;
       }
       break;
-    case LPF_CUTOFF:
+    case FILTER_CUTOFF:
       IFilter<0>::set_cutoff(controller_value);
       break;
-    case LPF_RESONANCE:
+    case FILTER_RESO:
       IFilter<0>::set_resonance(controller_value);
       break;
-    case LPF_ENV_AMT:
+    case FILTER_EG_AMT:
       IFilter<0>::set_env_amt(controller_value);
       break;
-    case ENV_DECAY:
+    case EG_DECAY:
       IEnvGen<0>::set_decay(controller_value);
       break;
     }
