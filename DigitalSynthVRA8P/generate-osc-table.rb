@@ -99,7 +99,7 @@ generate_osc_wave_table_arrays do |last|
 end
 
 generate_osc_wave_table_arrays(true) do |last|
-  generate_osc_wave_table("org9", last, 1.0 / 1.5 / Math.sqrt(9.0), true) do |n, k|
+  generate_osc_wave_table("org9", last, 1.0 / 1.7 / Math.sqrt(9.0), true) do |n, k|
     if [1, 2, 3, 4, 6, 8, 10, 12, 16].include?(k)
       Math.sin((2.0 * Math::PI) * ((n + 0.5) /
         (1 << OSC_WAVE_TABLE_SAMPLES_BITS)) * (k * 2))
