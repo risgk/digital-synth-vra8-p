@@ -31,7 +31,7 @@ public:
     ISynthCore<0>::control_change(UNISON       , 0  );
     ISynthCore<0>::control_change(OSC_WAVEFORM , 0  );
     ISynthCore<0>::control_change(OSC_DETUNE   , 32 );
-    ISynthCore<0>::control_change(AMP_EG_AMT   , 0  );
+    ISynthCore<0>::control_change(AMP_EG       , 0  );
     ISynthCore<0>::control_change(FILTER_CUTOFF, 64 );
     ISynthCore<0>::control_change(FILTER_RESO  , 64 );
     ISynthCore<0>::control_change(FILTER_EG_AMT, 96 );

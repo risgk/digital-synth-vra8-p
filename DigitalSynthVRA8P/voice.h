@@ -133,7 +133,7 @@ public:
     case OSC_DETUNE:
       IOsc<0>::set_detune(controller_value);
       break;
-    case AMP_EG_AMT:
+    case AMP_EG:
       if (controller_value < 64) {
         m_amp_env_on = false;
       } else  {

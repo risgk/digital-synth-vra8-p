@@ -42,7 +42,7 @@ const CONTROL_CHANGE = 0xB0;
 const UNISON        = 16;
 const OSC_WAVEFORM  = 17;
 const OSC_DETUNE    = 18;
-const AMP_EG_AMT    = 19;
+const AMP_EG        = 19;
 const FILTER_CUTOFF = 20;
 const FILTER_RESO   = 21;
 const FILTER_EG_AMT = 22;
@@ -219,14 +219,14 @@ function onChangeControlChange(number, value) {
 function preset(number) {
   allNotesOff();
   var presetControllers = {};
-  presetControllers[UNISON       ] = [0  , 0  , 0  , 0  , 127];
-  presetControllers[OSC_WAVEFORM ] = [0  , 0  , 127, 64 , 0  ];
-  presetControllers[OSC_DETUNE   ] = [0  , 32 , 32 , 32 , 16 ];
-  presetControllers[AMP_EG_AMT   ] = [0  , 0  , 127, 127, 0  ];
-  presetControllers[FILTER_CUTOFF] = [127, 64 , 64 , 127, 0  ];
-  presetControllers[FILTER_RESO  ] = [0  , 64 , 0  , 64 , 127];
-  presetControllers[FILTER_EG_AMT] = [64 , 96 , 96 , 64 , 127];
-  presetControllers[EG_DECAY     ] = [127, 64 , 16 , 64 , 32 ];
+  presetControllers[UNISON       ] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 127];
+  presetControllers[OSC_WAVEFORM ] = [0  , 0  , 127, 0  , 0  , 64 , 127, 0  ];
+  presetControllers[OSC_DETUNE   ] = [0  , 32 , 32 , 64 , 32 , 32 , 32 , 16 ];
+  presetControllers[AMP_EG       ] = [0  , 0  , 127, 0  , 0  , 0  , 0  , 0  ];
+  presetControllers[FILTER_CUTOFF] = [0  , 64 , 0  , 127, 127, 127, 127, 64 ];
+  presetControllers[FILTER_RESO  ] = [0  , 64 , 127, 64 , 0  , 0  , 0  , 64 ];
+  presetControllers[FILTER_EG_AMT] = [0  , 96 , 127, 0  , 64 , 64 , 64 , 96 ];
+  presetControllers[EG_DECAY     ] = [0  , 64 , 64 , 32 , 64 , 64 , 64 , 64 ];
 
   for (var i = CONTROLLERS_FIRST; i <= CONTROLLERS_LAST; i++) {
     onChangeControlChange(i, presetControllers[i][number]);
@@ -306,37 +306,40 @@ function noteOff(noteNumber) {
 
 <table>
 <tr><td>PRESET</td>
-    <td><input type="button" value="POLY SAW CHORD"  onclick="preset(1)"    ></td>
-    <td><input type="button" value="POLY SQ CHORD"   onclick="preset(2)"    ></td>
-    <td><input type="button" value="POLY MIX MELODY" onclick="preset(3)"    ></td>
-    <td><input type="button" value="MONO SAW MELODY" onclick="preset(4)"    ></td>
+    <td><input type="button" value="PARA SYNTH"    onclick="preset(1)"    ></td>
+    <td><input type="button" value="PARA DECAY"    onclick="preset(2)"    ></td>
+    <td><input type="button" value="PARA SOFT"     onclick="preset(3)"    ></td>
     <td>&nbsp;</td>
-    <td><input type="button" value="ALL NOTES OFF"   onclick="allNotesOff()"></td></tr>
+    <td><input type="button" value="POLY SAW"      onclick="preset(4)"    ></td>
+    <td><input type="button" value="POLY ORGAN"    onclick="preset(5)"    ></td>
+    <td><input type="button" value="POLY SQ"       onclick="preset(6)"    ></td>
+    <td>&nbsp;</td>
+    <td><input type="button" value="MONO LEAD"     onclick="preset(7)"    ></td></tr>
 </table>
 
 <table>
-<tr><td><input type="button" value="LOAD #4" onclick="loadControllers(4)"></td>
-    <td><input type="button" value="LOAD #5" onclick="loadControllers(5)"></td>
-    <td><input type="button" value="LOAD #6" onclick="loadControllers(6)"></td>
-    <td><input type="button" value="LOAD #7" onclick="loadControllers(7)"></td>
+<tr><td><input type="button" value="LOAD #4"       onclick="loadControllers(4)"></td>
+    <td><input type="button" value="LOAD #5"       onclick="loadControllers(5)"></td>
+    <td><input type="button" value="LOAD #6"       onclick="loadControllers(6)"></td>
+    <td><input type="button" value="LOAD #7"       onclick="loadControllers(7)"></td>
     <td>&nbsp;</td>
-    <td><input type="button" value="SAVE #4" onclick="saveControllers(4)"></td>
-    <td><input type="button" value="SAVE #5" onclick="saveControllers(5)"></td>
-    <td><input type="button" value="SAVE #6" onclick="saveControllers(6)"></td>
-    <td><input type="button" value="SAVE #7" onclick="saveControllers(7)"></td>
+    <td><input type="button" value="SAVE #4"       onclick="saveControllers(4)"></td>
+    <td><input type="button" value="SAVE #5"       onclick="saveControllers(5)"></td>
+    <td><input type="button" value="SAVE #6"       onclick="saveControllers(6)"></td>
+    <td><input type="button" value="SAVE #7"       onclick="saveControllers(7)"></td>
     <td>&nbsp;</td>
-    <td><input type="button" value="NEUTRAL" onclick="preset(0)"         ></td></tr>
-<tr><td><input type="button" value="LOAD #0" onclick="loadControllers(0)"></td>
-    <td><input type="button" value="LOAD #1" onclick="loadControllers(1)"></td>
-    <td><input type="button" value="LOAD #2" onclick="loadControllers(2)"></td>
-    <td><input type="button" value="LOAD #3" onclick="loadControllers(3)"></td>
+    <td><input type="button" value="ALL NOTES OFF" onclick="allNotesOff()"></td></tr>
+<tr><td><input type="button" value="LOAD #0"       onclick="loadControllers(0)"></td>
+    <td><input type="button" value="LOAD #1"       onclick="loadControllers(1)"></td>
+    <td><input type="button" value="LOAD #2"       onclick="loadControllers(2)"></td>
+    <td><input type="button" value="LOAD #3"       onclick="loadControllers(3)"></td>
     <td>&nbsp;</td>
-    <td><input type="button" value="SAVE #0" onclick="saveControllers(0)"></td>
-    <td><input type="button" value="SAVE #1" onclick="saveControllers(1)"></td>
-    <td><input type="button" value="SAVE #2" onclick="saveControllers(2)"></td>
-    <td><input type="button" value="SAVE #3" onclick="saveControllers(3)"></td>
+    <td><input type="button" value="SAVE #0"       onclick="saveControllers(0)"></td>
+    <td><input type="button" value="SAVE #1"       onclick="saveControllers(1)"></td>
+    <td><input type="button" value="SAVE #2"       onclick="saveControllers(2)"></td>
+    <td><input type="button" value="SAVE #3"       onclick="saveControllers(3)"></td>
     <td>&nbsp;</td>
-    <td><input type="button" value="RANDOM"  onclick="setRandom()"       ></td></tr>
+    <td><input type="button" value="RANDOM"        onclick="setRandom()"       ></td></tr>
 </table>
 
 &nbsp;
@@ -345,7 +348,7 @@ function noteOff(noteNumber) {
 <tr><td>UNISON               </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
     <td>OSC WAVEFORM         </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
     <td>OSC DETUNE           </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-    <td>AMP EG AMT           </td></tr>
+    <td>AMP EG               </td></tr>
 <tr><td><input id="inputCC16" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(16, value)"></td>
     <td><span id="spanCC16">-1</span></td>
     <td><input id="inputCC17" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(17, value)"></td>
@@ -357,7 +360,7 @@ function noteOff(noteNumber) {
 <tr><td>(OFF/ON)             </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
     <td>(SAW/ORGAN/SQ)       </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
     <td>                     </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-    <td>(MINUS/ZERO/PLUS)    </td></tr>
+    <td>(OFF/ON)             </td></tr>
 <tr><td>&nbsp;</td></tr>
 <tr><td>FILTER CUTOFF       </td><td></td>
     <td>FILTER RESO         </td><td></td>
