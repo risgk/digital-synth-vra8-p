@@ -220,13 +220,13 @@ function preset(number) {
   allNotesOff();
   var presetControllers = {};
   presetControllers[UNISON       ] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 127, 127];
-  presetControllers[OSC_WAVEFORM ] = [0  , 0  , 127, 0  , 0  , 64 , 127, 0  , 0  ];
-  presetControllers[OSC_DETUNE   ] = [0  , 32 , 32 , 64 , 32 , 32 , 32 , 48 , 0  ];
-  presetControllers[AMP_EG       ] = [0  , 0  , 127, 0  , 0  , 0  , 0  , 0  , 127];
-  presetControllers[FILTER_CUTOFF] = [0  , 64 , 0  , 96 , 127, 127, 127, 64 , 0  ];
-  presetControllers[FILTER_RESO  ] = [0  , 64 , 64 , 64 , 0  , 0  , 0  , 127, 127];
-  presetControllers[FILTER_EG_AMT] = [0  , 96 , 127, 16 , 64 , 64 , 64 , 96 , 127];
-  presetControllers[EG_DECAY     ] = [0  , 64 , 80 , 32 , 64 , 64 , 64 , 127, 56 ];
+  presetControllers[OSC_WAVEFORM ] = [0  , 0  , 0  , 0  , 0  , 64 , 127, 0  , 127];
+  presetControllers[OSC_DETUNE   ] = [0  , 32 , 32 , 64 , 32 , 32 , 32 , 48 , 48 ];
+  presetControllers[AMP_EG       ] = [0  , 0  , 127, 0  , 0  , 0  , 0  , 0  , 0  ];
+  presetControllers[FILTER_CUTOFF] = [0  , 64 , 0  , 96 , 127, 127, 127, 64 , 64 ];
+  presetControllers[FILTER_RESO  ] = [0  , 64 , 127, 64 , 0  , 0  , 0  , 127, 127];
+  presetControllers[FILTER_EG_AMT] = [0  , 96 , 127, 16 , 64 , 64 , 64 , 96 , 96 ];
+  presetControllers[EG_DECAY     ] = [0  , 64 , 80 , 32 , 64 , 64 , 64 , 127, 127];
 
   for (var i = CONTROLLERS_FIRST; i <= CONTROLLERS_LAST; i++) {
     onChangeControlChange(i, presetControllers[i][number]);
@@ -314,8 +314,8 @@ function noteOff(noteNumber) {
     <td><input type="button" value="ORGAN"         onclick="preset(5)"    ></td>
     <td><input type="button" value="POLY SQ"       onclick="preset(6)"    ></td>
     <td>&nbsp;</td>
-    <td><input type="button" value="MONO LEAD"     onclick="preset(7)"    ></td>
-    <td><input type="button" value="MONO BASS"     onclick="preset(8)"    ></td></tr>
+    <td><input type="button" value="SAW LEAD"      onclick="preset(7)"    ></td>
+    <td><input type="button" value="SQ LEAD"       onclick="preset(8)"    ></td></tr>
 </table>
 
 <table>
