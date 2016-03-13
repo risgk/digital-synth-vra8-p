@@ -97,29 +97,7 @@ generate_osc_wave_table_arrays do |last|
 end
 
 generate_osc_wave_table_arrays(true) do |last|
-  generate_osc_wave_table("org_3", last, 1.0 / 1.2 / Math.sqrt(3.0), true) do |n, k|
-    if [1, 2, 3].include?(k)
-      Math.sin((2.0 * Math::PI) * ((n + 0.5) /
-        (1 << OSC_WAVE_TABLE_SAMPLES_BITS)) * (k * 2))
-    else
-      0.0
-    end
-  end
-end
-
-generate_osc_wave_table_arrays(true) do |last|
-  generate_osc_wave_table("org_4", last, 1.0 / 1.3 / Math.sqrt(4.0), true) do |n, k|
-    if [1, 2, 3, 4].include?(k)
-      Math.sin((2.0 * Math::PI) * ((n + 0.5) /
-        (1 << OSC_WAVE_TABLE_SAMPLES_BITS)) * (k * 2))
-    else
-      0.0
-    end
-  end
-end
-
-generate_osc_wave_table_arrays(true) do |last|
-  generate_osc_wave_table("org_9", last, 1.0 / 1.7 / Math.sqrt(9.0), true) do |n, k|
+  generate_osc_wave_table("org9", last, 1.0 / 1.7 / Math.sqrt(9.0), true) do |n, k|
     if [1, 2, 3, 4, 6, 8, 10, 12, 16].include?(k)
       Math.sin((2.0 * Math::PI) * ((n + 0.5) /
         (1 << OSC_WAVE_TABLE_SAMPLES_BITS)) * (k * 2))
@@ -146,8 +124,6 @@ end
 
 generate_osc_wave_tables_array("saw")
 generate_osc_wave_tables_array("sq")
-generate_osc_wave_tables_array("org_3", true)
-generate_osc_wave_tables_array("org_4", true)
-generate_osc_wave_tables_array("org_9", true)
+generate_osc_wave_tables_array("org9", true)
 
 $file.close
