@@ -13,13 +13,13 @@
 - Serial MIDI In (38400 bps), PWM Audio Out (Pin 6), PWM Rate: 62500 Hz
     - We recommend adding a RC filter circuit to reduce PWM ripples
     - A cutoff frequency 10.6 kHz (R: 150 ohm, C: 100 nF) works well
-    - **CAUTION**: Click sounds may occur when you connect PWM Audio Out to amps/speakers
+    - **CAUTION**: Click sounds may occur when you connect the audio out to an amp/a speaker or reset the board
 - Sampling Rate: 15625 Hz, Bit Depth: 8 bits
 - LPF Attenuation Slope: -12 dB/oct
 - Recommending [Hairless MIDI<->Serial Bridge](http://projectgus.github.io/hairless-midiserial/) to connect PC
 - Files
-    - `DigitalSynthVRA8P.ino` is a sketch for Arduino Uno
-    - `MakeSampleWavFile.cc` is for Debugging on PC
+    - `DigitalSynthVRA8P.ino` is a sketch for Arduino/Genuino Uno
+    - `make-sample-wav-file.cc` is for Debugging on PC
         - Requiring GCC (G++) or other
         - `make-sample-wav-file-cc.bat` makes a sample WAV file (working on Windows)
     - `generate-*.rb` generate source files
@@ -43,6 +43,7 @@
     | OSC WAVEFORM  | SAW (SAWtooth) | ORGAN    | SQ (SQuare)    |                 |
     | OSC DETUNE    | 0.24 Hz        | 2.1 Hz   | 3.8 Hz         |                 |
     | AMP EG        | OFF            | (ON)     | ON             |                 |
+    +---------------+----------------+----------+----------------+-----------------+
     | FILTER CUTOFF | 0.22 kHz       | 1.2 kHz  | 7.0 kHz        | Range 4 to 124  |
     | FILTER RESO   | Q = 0.71       | Q = 1.4  | Q = 2.6        | RESOnance       |
     | FILTER EG AMT | -125 (EG 100%) | 0        | +124 (EG 100%) | Modulate CUTOFF |
