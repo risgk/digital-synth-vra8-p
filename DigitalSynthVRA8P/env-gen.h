@@ -67,6 +67,7 @@ public:
           m_rest = m_decay_update_interval;
           if (m_level <= ENV_GEN_LEVEL_A_R_STEP) {
             m_level = 0;
+            m_rest = 255;
           } else {
             m_level = high_byte(m_level * ENV_GEN_DECAY_FACTOR);
           }
