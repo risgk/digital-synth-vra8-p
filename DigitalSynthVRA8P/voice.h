@@ -36,10 +36,14 @@ public:
 
   INLINE static void set_waveform(uint8_t controller_value) {
     uint8_t waveform;
-    if (controller_value < 32) {
+    if (controller_value < 16) {
       waveform = OSC_WAVEFORM_SAW;
-    } else if (controller_value < 96) {
-      waveform = OSC_WAVEFORM_ORGAN;
+    } else if (controller_value < 48) {
+      waveform = OSC_WAVEFORM_ORG_4;
+    } else if (controller_value < 80) {
+      waveform = OSC_WAVEFORM_ORG_9;
+    } else if (controller_value < 112) {
+      waveform = OSC_WAVEFORM_ORG_3;
     } else {
       waveform = OSC_WAVEFORM_SQ;
     }

@@ -44,7 +44,9 @@ public:
     m_base_detune = (controller_value >> OSC_DETUNE_DIV_NUM_BITS) + 1;
 
     m_freq_detune = m_base_detune;
-    if (m_waveform == OSC_WAVEFORM_ORGAN) {
+    if ((m_waveform == OSC_WAVEFORM_ORG_4) ||
+        (m_waveform == OSC_WAVEFORM_ORG_9) ||
+        (m_waveform == OSC_WAVEFORM_ORG_3)) {
       m_freq_detune = (m_freq_detune + 1) >> 1;
     }
 
@@ -56,7 +58,9 @@ public:
 
   INLINE static void note_on(uint8_t osc_number, uint8_t note_number) {
     m_freq_detune = m_base_detune;
-    if (m_waveform == OSC_WAVEFORM_ORGAN) {
+    if ((m_waveform == OSC_WAVEFORM_ORG_4) ||
+        (m_waveform == OSC_WAVEFORM_ORG_9) ||
+        (m_waveform == OSC_WAVEFORM_ORG_3)) {
       m_freq_detune = (m_freq_detune + 1) >> 1;
     }
 
@@ -99,8 +103,12 @@ private:
     const uint8_t* result;
     if (waveform == OSC_WAVEFORM_SAW) {
       result = g_osc_saw_wave_tables[note_number - NOTE_NUMBER_MIN];
-    } else if (waveform == OSC_WAVEFORM_ORGAN) {
-      result = g_osc_org9_wave_tables[note_number - NOTE_NUMBER_MIN];
+    } else if (waveform == OSC_WAVEFORM_ORG_4) {
+      result = g_osc_org_4_wave_tables[note_number - NOTE_NUMBER_MIN];
+    } else if (waveform == OSC_WAVEFORM_ORG_9) {
+      result = g_osc_org_9_wave_tables[note_number - NOTE_NUMBER_MIN];
+    } else if (waveform == OSC_WAVEFORM_ORG_3) {
+      result = g_osc_org_3_wave_tables[note_number - NOTE_NUMBER_MIN];
     } else {
       result = g_osc_sq_wave_tables[note_number - NOTE_NUMBER_MIN];
     }
@@ -110,7 +118,9 @@ private:
   INLINE static uint16_t get_freq(uint8_t waveform, uint8_t note_number) {
     uint16_t result;
     result = g_osc_freq_table[note_number - NOTE_NUMBER_MIN];
-    if (waveform == OSC_WAVEFORM_ORGAN) {
+    if ((waveform == OSC_WAVEFORM_ORG_4) ||
+        (waveform == OSC_WAVEFORM_ORG_9) ||
+        (waveform == OSC_WAVEFORM_ORG_3)) {
       result = ((result + 1) >> 1) - 1;
     }
     return result;

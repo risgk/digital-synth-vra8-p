@@ -54,5 +54,7 @@ const uint8_t   EG_DECAY      = 23;
 const uint8_t   ALL_NOTES_OFF = 123;
 
 const uint8_t   OSC_WAVEFORM_SAW   = 0;
-const uint8_t   OSC_WAVEFORM_ORGAN = 64;
+const uint8_t   OSC_WAVEFORM_ORG_4 = 32;
+const uint8_t   OSC_WAVEFORM_ORG_9 = 64;
+const uint8_t   OSC_WAVEFORM_ORG_3 = 96;
 const uint8_t   OSC_WAVEFORM_SQ    = 127;
