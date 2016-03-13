@@ -1,6 +1,6 @@
 # Digital Synth VRA8-P 0.0.0
 
-- 2016-00-00 ISGK Instruments
+- 2016-03-13 ISGK Instruments
 - <https://github.com/risgk/digital-synth-vra8-p>
 
 ## Concept
@@ -9,8 +9,10 @@
 
 ## Features
 
-- Pseudo Polyphonic Synthesizer (or MIDI Sound Module)
+- 3 Voice Pseudo Polyphonic (Paraphonic) Synthesizer, MIDI Sound Module
 - Serial MIDI In (38400 bps), PWM Audio Out (Pin 6), PWM Rate: 62500 Hz
+    - We recommend adding a RC filter circuit to reduce PWM ripples
+    - A cutoff frequency 10.6 kHz (R: 150 ohm, C: 100 nF) works well
 - Sampling Rate: 15625 Hz, Bit Depth: 8 bits
 - LPF Attenuation Slope: -12 dB/oct
 - Recommending [Hairless MIDI<->Serial Bridge](http://projectgus.github.io/hairless-midiserial/) to connect PC
@@ -27,61 +29,27 @@
 - Parameter Editor (MIDI Controller) for VRA8-P, Web App
 - We recommend Google Chrome, which implements Web MIDI API
 - Recommending [loopMIDI](http://www.tobias-erichsen.de/software/loopmidi.html) (virtual loopback MIDI cable) to connect VRA8-P
-- CAUTION: Click sounds occur sometimes when you change the controllers
+- CAUTION: Click sounds may occur when you change the controllers (especially AMP EG and FILTER CUTOFF)
+- CAUTION: Low FILTER CUTOFF with high FILTER RESO can damage the speakers
 
 ## Controllers
-
-### Oscillator's
-
-    +-------------+-----------+--------------+---------------+----------------+-------------+
-    | OSC MODE    | Name      | Description  | OSC COLOR     | MOD RATE       | MOD DEPTH   |
-    +-------------+-----------+--------------+---------------+----------------+-------------+
-    | 0           | SAW       | Saw Wave     | PWM Mix       | Detune         | Multi Saws  |
-    | (0 ~ 7)     |           |              | Off/On        | 0.24 ~ 15.3 Hz | Mix         |
-    +-------------+-----------+--------------+---------------+----------------+-------------+
-    | 16          | PULSE     | Pulse Wave   | Pulse Width   | Detune         | Detuned     |
-    | (8 ~ 23)    |           |              | 50 ~ 0.4%     | 0.24 ~ 15.3 Hz | Pulse Mix   |
-    +-------------+-----------+--------------+---------------+----------------+-------------+
-    | 32          | PULSE+SAW | Pulse Wave + | Mix           | PWM Rate       | PWM Depth   |
-    | (24 ~ 39)   |           | Saw Wave     | Pulse ~ Saw   | 0.24 ~ 15.3 Hz |             |
-    +-------------+-----------+--------------+---------------+----------------+-------------+
-    | 48          | ----      | Reserved     | ----          | ----           | ----        |
-    | (40 ~ 55)   |           |              |               |                |             |
-    +-------------+-----------+--------------+---------------+----------------+-------------+
-    | 64          | ORGAN     | Organ Like   | Harmonics     | Vib. Rate      | Vib. Depth  |
-    | (56 ~ 71)   |           |              | Control       | 0.24 ~ 15.3 Hz |             |
-    +-------------+-----------+--------------+---------------+----------------+-------------+
-    | 80          | ----      | Reserved     | ----          | ----           | ----        |
-    | (72 ~ 87)   |           |              |               |                |             |
-    +-------------+-----------+--------------+---------------+----------------+-------------+
-    | 96          | BINARY    | Binary Wave  | Bits Off/On   | PWM Rate       | PWM Depth   |
-    | (88 ~ 103)  |           | (?)          | Control       | 0.24 ~ 15.3 Hz |             |
-    +-------------+-----------+--------------+---------------+----------------+-------------+
-    | 112         | ----      | Reserved     | ----          | ----           | ----        |
-    | (104 ~ 119) |           |              |               |                |             |
-    +-------------+-----------+--------------+---------------+----------------+-------------+
-    | 127         | FM        | FM Synth     | Detune        | Freq. Ratio    | Mod. Index  |
-    | (120 ~ 127) |           | (PM Synth)   | 0 ~ 15.0 Hz   | 0.5 ~ 16.0     | 0 ~ 12.6    |
-    +-------------+-----------+--------------+---------------+----------------+-------------+
-
-### Others'
 
     +----------------+-----------------+-----------------+-----------------+----------------+
     | Controller     | Value 0         | Value 64        | Value 127       | Notes          |
     +----------------+-----------------+-----------------+-----------------+----------------+
-    | LPF CUTOFF/ENV | 7.0 ~ 7.0 kHz   | 0.2 ~ 0.2 kHz   | 0.2 ~ 7.0 kHz   | Env 0 ~ 100 %  |
-    +----------------+-----------------+-----------------+-----------------+----------------+
-    | LPF RESONANCE  | Q = 0.7         | Q = 2.8         | Q = 8.0         | 3 Steps        |
-    +----------------+-----------------+-----------------+-----------------+----------------+
-    | ENV A          | 4.2 ms          | 0.14 s          | 4.2 s           |                |
-    +----------------+-----------------+-----------------+-----------------+----------------+
-    | ENV D/R        | Decay 10.0 ms   | Decay Infinite  | Decay Infinite  |                |
-    |                | Release 10.0 ms | Release 10.0 s  | Release 10.0 ms |                |
+    | UNISON         | OFF             | (ON)            | ON              |                |
+    | OSC WAVEFORM   | SAW (SAWTOOTH)  | ORGAN           | SQ (SQUARE)     |                |
+    | OSC DETUNE     | 0.24 Hz         | 2.1 Hz          | 3.8 Hz          |                |
+    | AMP EG         | OFF             | (ON)            | ON              |                |
+    | FILTER CUTOFF  | 0.22 kHz        | 1.2 kHz         | 7.0 kHz         | Range 4 ~ 124  |
+    | FILTER RESO    | Q = 0.71        | Q = 1.4         | Q = 2.6         | 17 Steps       |
+    | FILTER EG AMT  | -125 ~ 0        | 0               | 0 ~ +124        |                |
+    | EG DECAY       | 21 ms           | 1.4 s           | 5.4 s           | Decay Time     |
     +----------------+-----------------+-----------------+-----------------+----------------+
 
 ## MIDI Implementation Chart
 
-      [Experimental Synthesizer]                                      Date: 2016-00-00       
+      [Experimental Synthesizer]                                      Date: 2016-03-13       
       Model  Digital Synth VRA8-P     MIDI Implementation Chart       Version: 0.0.0         
     +-------------------------------+---------------+---------------+-----------------------+
     | Function...                   | Transmitted   | Recognized    | Remarks               |
@@ -89,7 +57,7 @@
     | Basic        Default          | x             | 1             |                       |
     | Channel      Changed          | x             | x             |                       |
     +-------------------------------+---------------+---------------+-----------------------+
-    | Mode         Default          | x             | Mode 4 (M=1)  |                       |
+    | Mode         Default          | x             | Mode 3        |                       |
     |              Messages         | x             | x             |                       |
     |              Altered          | ************* |               |                       |
     +-------------------------------+---------------+---------------+-----------------------+
@@ -104,14 +72,14 @@
     +-------------------------------+---------------+---------------+-----------------------+
     | Pitch Bend                    | x             | x             |                       |
     +-------------------------------+---------------+---------------+-----------------------+
-    | Control                    16 | x             | o             | OSC MODE              |
-    | Change                     17 | x             | o             | OSC COLOR             |
-    |                            18 | x             | o             | MOD RATE              |
-    |                            19 | x             | o             | MOD DEPTH             |
-    |                            20 | x             | o             | LPF CUTOFF/ENV        |
-    |                            21 | x             | o             | LPF RESONANCE         |
-    |                            22 | x             | o             | ENV A                 |
-    |                            23 | x             | o             | ENV D/R               |
+    | Control                    16 | x             | o             | UNISON                |
+    | Change                     17 | x             | o             | OSC WAVEFORM          |
+    |                            18 | x             | o             | OSC DETUNE            |
+    |                            19 | x             | o             | AMP EG                |
+    |                            20 | x             | o             | FILTER CUTOFF         |
+    |                            21 | x             | o             | FILTER RESO           |
+    |                            22 | x             | o             | FILTER EG AMT         |
+    |                            23 | x             | o             | EG DECAY              |
     +-------------------------------+---------------+---------------+-----------------------+
     | Program                       | x             | x             |                       |
     | Change       : True #         | ************* |               |                       |
