@@ -48,7 +48,7 @@ public:
 
   INLINE static int16_t clock(int16_t audio_input, uint8_t mod_input) {
     m_count++;
-    if ((m_count & 0x03) == 0) {
+    if ((m_count & (FILTER_CONTROL_INTERVAL - 1)) == 0) {
       int16_t temp = m_cutoff + high_sbyte(((m_mod_amt - 64) << 1) * mod_input);
       uint8_t cutoff;
       if (temp > 127) {

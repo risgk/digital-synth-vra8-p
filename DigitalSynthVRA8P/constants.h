@@ -16,6 +16,7 @@ const uint8_t   OSC_WAVE_TABLE_AMPLITUDE    = 96;
 const uint8_t   OSC_WAVE_TABLE_SAMPLES_BITS = 8;
 const uint8_t   OSC_DETUNE_DIV_NUM_BITS     = 3;
 const uint8_t   OSC_DETUNE_FREQ_MAX         = ((127 >> OSC_DETUNE_DIV_NUM_BITS) + 1) * 3;
+const uint8_t   FILTER_CONTROL_INTERVAL     = 0x04;
 const uint8_t   FILTER_TABLE_FRACTION_BITS  = 14;
 const uint8_t   GATE_CONTROL_INTERVAL       = 0x10;
 const uint8_t   GATE_LEVEL_MAX              = 30;
