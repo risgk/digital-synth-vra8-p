@@ -61,11 +61,9 @@ $osc_harmonics_restriction_table = []
   $osc_harmonics_restriction_table << freq
 end
 
-MAX_DETUNE = ((127 >> 3) + 1) * 3
-
 def last_harmonic(freq, organ = false)
   last = (freq != 0) ? ((FREQUENCY_MAX * (1 << OSC_PHASE_RESOLUTION_BITS)) /
-                        ((freq + MAX_DETUNE) * SAMPLING_RATE)) : 0
+                        ((freq + OSC_DETUNE_FREQ_MAX) * SAMPLING_RATE)) : 0
   last = 9 if organ && last > 9
   last = (last + 1) / 4 * 4 + 1 if last > 32
   last = last - 1 if last.even?

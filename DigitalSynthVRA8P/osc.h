@@ -9,9 +9,9 @@ class Osc {
   static uint8_t        m_waveform;
   static uint8_t        m_base_detune;
   static const uint8_t* m_wave_table[3];
-  static uint16_t       m_freq[3];
+  static uint16_t       m_freq_array[3];
   static uint8_t        m_freq_detune;
-  static uint16_t       m_phase[3];
+  static uint16_t       m_phase_array[3];
   static uint16_t       m_phase_detune;
 
 public:
@@ -22,13 +22,13 @@ public:
     m_wave_table[0] = g_osc_saw_wave_tables[0];
     m_wave_table[1] = g_osc_saw_wave_tables[2];
     m_wave_table[2] = g_osc_saw_wave_tables[4];
-    m_freq[0] = g_osc_freq_table[0];
-    m_freq[1] = g_osc_freq_table[2];
-    m_freq[2] = g_osc_freq_table[4];
+    m_freq_array[0] = g_osc_freq_table[0];
+    m_freq_array[1] = g_osc_freq_table[2];
+    m_freq_array[2] = g_osc_freq_table[4];
     m_freq_detune = 0;
-    m_phase[0] = 0;
-    m_phase[1] = 0;
-    m_phase[2] = 0;
+    m_phase_array[0] = 0;
+    m_phase_array[1] = 0;
+    m_phase_array[2] = 0;
     m_phase_detune = 0;
   }
 
@@ -41,7 +41,7 @@ public:
   }
 
   INLINE static void set_detune(uint8_t controller_value) {
-    m_base_detune = (controller_value >> 3) + 1;
+    m_base_detune = (controller_value >> OSC_DETUNE_DIV_NUM_BITS) + 1;
 
     m_freq_detune = m_base_detune;
     if (m_waveform == OSC_WAVEFORM_ORGAN) {
@@ -49,8 +49,8 @@ public:
     }
 
     if (m_unison_on) {
-      m_freq[1] = m_freq[0] + (m_freq_detune << 1);
-      m_freq[2] = m_freq[0] - (m_freq_detune << 1);
+      m_freq_array[1] = m_freq_array[0] + (m_freq_detune << 1);
+      m_freq_array[2] = m_freq_array[0] - (m_freq_detune << 1);
     }
   }
 
@@ -64,27 +64,27 @@ public:
       m_wave_table[0] = get_wave_table(m_waveform, note_number);
       m_wave_table[1] = m_wave_table[0];
       m_wave_table[2] = m_wave_table[0];
-      m_freq[0] = get_freq(m_waveform, note_number);
-      m_freq[1] = m_freq[0] + (m_freq_detune << 1);
-      m_freq[2] = m_freq[0] - (m_freq_detune << 1);
+      m_freq_array[0] = get_freq(m_waveform, note_number);
+      m_freq_array[1] = m_freq_array[0] + (m_freq_detune << 1);
+      m_freq_array[2] = m_freq_array[0] - (m_freq_detune << 1);
     } else {
       m_wave_table[osc_number] = get_wave_table(m_waveform, note_number);
-      m_freq[osc_number] = get_freq(m_waveform, note_number);
+      m_freq_array[osc_number] = get_freq(m_waveform, note_number);
     }
   }
 
   INLINE static int16_t clock(uint8_t amp_0, uint8_t amp_1, uint8_t amp_2) {
-    m_phase[0] += m_freq[0];
-    m_phase[1] += m_freq[1];
-    m_phase[2] += m_freq[2];
+    m_phase_array[0] += m_freq_array[0];
+    m_phase_array[1] += m_freq_array[1];
+    m_phase_array[2] += m_freq_array[2];
     m_phase_detune += m_freq_detune;
 
-    int8_t wave_0_0 = get_wave_level(m_wave_table[0], m_phase[0]);
-    int8_t wave_1_0 = get_wave_level(m_wave_table[1], m_phase[1]);
-    int8_t wave_2_0 = get_wave_level(m_wave_table[2], m_phase[2]);
-    int8_t wave_0_1 = get_wave_level(m_wave_table[0], m_phase[0] + m_phase_detune);
-    int8_t wave_1_1 = get_wave_level(m_wave_table[1], m_phase[1] + m_phase_detune);
-    int8_t wave_2_1 = get_wave_level(m_wave_table[2], m_phase[2] + m_phase_detune);
+    int8_t wave_0_0 = get_wave_level(m_wave_table[0], m_phase_array[0]);
+    int8_t wave_1_0 = get_wave_level(m_wave_table[1], m_phase_array[1]);
+    int8_t wave_2_0 = get_wave_level(m_wave_table[2], m_phase_array[2]);
+    int8_t wave_0_1 = get_wave_level(m_wave_table[0], m_phase_array[0] + m_phase_detune);
+    int8_t wave_1_1 = get_wave_level(m_wave_table[1], m_phase_array[1] + m_phase_detune);
+    int8_t wave_2_1 = get_wave_level(m_wave_table[2], m_phase_array[2] + m_phase_detune);
 
     // amp and mix
     int16_t result = (wave_0_0 * amp_0) + (wave_0_1 * amp_0) +
@@ -139,7 +139,7 @@ template <uint8_t T> boolean         Osc<T>::m_unison_on;
 template <uint8_t T> uint8_t         Osc<T>::m_waveform;
 template <uint8_t T> uint8_t         Osc<T>::m_base_detune;
 template <uint8_t T> const uint8_t*  Osc<T>::m_wave_table[3];
-template <uint8_t T> uint16_t        Osc<T>::m_freq[3];
+template <uint8_t T> uint16_t        Osc<T>::m_freq_array[3];
 template <uint8_t T> uint8_t         Osc<T>::m_freq_detune;
-template <uint8_t T> uint16_t        Osc<T>::m_phase[3];
+template <uint8_t T> uint16_t        Osc<T>::m_phase_array[3];
 template <uint8_t T> uint16_t        Osc<T>::m_phase_detune;

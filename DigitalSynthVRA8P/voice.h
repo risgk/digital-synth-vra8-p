@@ -156,21 +156,22 @@ public:
   }
 
   INLINE static int8_t clock() {
-    uint8_t gate_output[4];
+    uint8_t gate_output_array[4];
     IGate<0>::clock();
-    gate_output[0] = IGate<0>::level<0>();
-    gate_output[1] = IGate<0>::level<1>();
-    gate_output[2] = IGate<0>::level<2>();
-    int16_t osc_output = IOsc<0>::clock(gate_output[0], gate_output[1],
-                                        gate_output[2]);
+    gate_output_array[0] = IGate<0>::level<0>();
+    gate_output_array[1] = IGate<0>::level<1>();
+    gate_output_array[2] = IGate<0>::level<2>();
+    int16_t osc_output = IOsc<0>::clock(gate_output_array[0],
+                                        gate_output_array[1],
+                                        gate_output_array[2]);
     uint8_t env_gen_output = IEnvGen<0>::clock();
     int16_t filter_output = IFilter<0>::clock(osc_output, env_gen_output);
     int16_t amp_output;
     if (m_amp_env_on) {
       amp_output = IAmp<0>::clock(filter_output, env_gen_output);
     } else {
-      gate_output[3] = IGate<0>::level<3>();
-      amp_output = IAmp<0>::clock(filter_output, gate_output[3] << 3);
+      gate_output_array[3] = IGate<0>::level<3>();
+      amp_output = IAmp<0>::clock(filter_output, gate_output_array[3] << 3);
     }
     return high_sbyte(amp_output);
   }

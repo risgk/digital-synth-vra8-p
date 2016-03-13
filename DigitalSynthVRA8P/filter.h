@@ -18,7 +18,7 @@ class Filter {
   static int16_t        m_y_1;
   static int16_t        m_y_2;
   static uint8_t        m_cutoff;
-  static uint8_t        m_cutoff_mod_amt;
+  static uint8_t        m_mod_amt;
 
   static const uint8_t AUDIO_FRACTION_BITS = 14;
 
@@ -43,13 +43,13 @@ public:
   }
 
   INLINE static void set_env_amt(uint8_t controller_value) {
-    m_cutoff_mod_amt = controller_value;
+    m_mod_amt = controller_value;
   }
 
-  INLINE static int16_t clock(int16_t audio_input, uint8_t cutoff_mod) {
+  INLINE static int16_t clock(int16_t audio_input, uint8_t mod_input) {
     m_count++;
     if ((m_count & 0x03) == 0) {
-      int16_t temp = m_cutoff + high_sbyte(((m_cutoff_mod_amt - 64) << 1) * cutoff_mod);
+      int16_t temp = m_cutoff + high_sbyte(((m_mod_amt - 64) << 1) * mod_input);
       uint8_t cutoff;
       if (temp > 127) {
         cutoff = 127;
@@ -101,4 +101,4 @@ template <uint8_t T> int16_t        Filter<T>::m_x_2;
 template <uint8_t T> int16_t        Filter<T>::m_y_1;
 template <uint8_t T> int16_t        Filter<T>::m_y_2;
 template <uint8_t T> uint8_t        Filter<T>::m_cutoff;
-template <uint8_t T> uint8_t        Filter<T>::m_cutoff_mod_amt;
+template <uint8_t T> uint8_t        Filter<T>::m_mod_amt;

@@ -14,7 +14,16 @@ const uint8_t   NOTE_NUMBER_INVALID = 255;
 const uint8_t   OSC_PHASE_RESOLUTION_BITS   = 16;
 const uint8_t   OSC_WAVE_TABLE_AMPLITUDE    = 96;
 const uint8_t   OSC_WAVE_TABLE_SAMPLES_BITS = 8;
+const uint8_t   OSC_DETUNE_DIV_NUM_BITS     = 3;
+const uint8_t   OSC_DETUNE_FREQ_MAX         = ((127 >> OSC_DETUNE_DIV_NUM_BITS) + 1) * 3;
 const uint8_t   FILTER_TABLE_FRACTION_BITS  = 14;
+const uint8_t   GATE_CONTROL_INTERVAL       = 0x10;
+const uint8_t   GATE_LEVEL_MAX              = 30;
+const uint8_t   GATE_LEVEL_STEP             = 2;
+const uint8_t   ENV_GEN_CONTROL_INTERVAL    = 0x04;
+const uint8_t   ENV_GEN_LEVEL_MAX           = 252;
+const uint8_t   ENV_GEN_LEVEL_A_R_STEP      = 4;
+const uint8_t   ENV_GEN_DECAY_FACTOR        = 248;
 
 const uint8_t   DATA_BYTE_MAX         = 0x7F;
 const uint8_t   STATUS_BYTE_INVALID   = 0x7F;

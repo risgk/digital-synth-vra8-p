@@ -46,18 +46,18 @@ public:
 
   INLINE static uint8_t clock() {
     m_count++;
-    if ((m_count & 0x03) == 0) {
+    if ((m_count & (ENV_GEN_CONTROL_INTERVAL - 1)) == 0) {
       switch (m_state) {
       case STATE_ATTACK:
         m_rest--;
         if (m_rest == 0) {
           m_rest = ATTACK_UPDATE_INTERVAL;
-          if (m_level >= 248) {
-            m_level == 252;
+          if (m_level >= ENV_GEN_LEVEL_MAX - ENV_GEN_LEVEL_A_R_STEP) {
+            m_level == ENV_GEN_LEVEL_MAX;
             m_state = STATE_DECAY;
             m_rest = m_decay_update_interval;
           } else {
-            m_level += 4;
+            m_level += ENV_GEN_LEVEL_A_R_STEP;
           }
         }
         break;
@@ -65,10 +65,10 @@ public:
         m_rest--;
         if (m_rest == 0) {
           m_rest = m_decay_update_interval;
-          if (m_level <= 4) {
+          if (m_level <= ENV_GEN_LEVEL_A_R_STEP) {
             m_level = 0;
           } else {
-            m_level = high_byte(m_level * 248);
+            m_level = high_byte(m_level * ENV_GEN_DECAY_FACTOR);
           }
         }
         break;
@@ -76,11 +76,11 @@ public:
         m_rest--;
         if (m_rest == 0) {
           m_rest = RELEASE_UPDATE_INTERVAL;
-          if (m_level <= 4) {
+          if (m_level <= ENV_GEN_LEVEL_A_R_STEP) {
             m_level = 0;
             m_state = STATE_IDLE;
           } else {
-            m_level -= 4;
+            m_level -= ENV_GEN_LEVEL_A_R_STEP;
           }
         }
         break;
