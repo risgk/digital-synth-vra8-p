@@ -5,6 +5,7 @@
 #include "audio-out.h"
 
 void setup() {
+  noInterrupts();
   Synth<0>::initialize();
   SerialIn<0>::open();
   AudioOut<0>::open();
