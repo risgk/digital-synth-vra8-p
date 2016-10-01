@@ -1,4 +1,4 @@
-# Digital Synth VRA8-P 1.0.1
+# Digital Synth VRA8-Px 0.0.0
 
 - 2016-09-22 ISGK Instruments
 - <https://github.com/risgk/digital-synth-vra8-p>
@@ -25,12 +25,12 @@
     - `generate-*.rb` generate source files
         - Requiring a Ruby execution environment
 
-## VRA8-P CTRL
+## VRA8-Px CTRL
 
-- Parameter Editor (MIDI Controller) for VRA8-P, Web App
+- Parameter Editor (MIDI Controller) for VRA8-Px, Web App
 - We recommend Google Chrome, which implements Web MIDI API
-- VRA8-P CTRL includes PRESET programs
-- Recommending [loopMIDI](http://www.tobias-erichsen.de/software/loopmidi.html) (virtual loopback MIDI cable) to connect VRA8-P
+- VRA8-Px CTRL includes PRESET programs
+- Recommending [loopMIDI](http://www.tobias-erichsen.de/software/loopmidi.html) (virtual loopback MIDI cable) to connect VRA8-Px
 - **CAUTION**: Click sounds may occur when you change the controllers (especially AMP EG and FILTER CUTOFF)
 - **CAUTION**: Low FILTER CUTOFF with high FILTER RESO can damage the speakers
 
@@ -53,7 +53,7 @@
 ## MIDI Implementation Chart
 
       [Experimental Synthesizer]                                      Date: 2016-09-22       
-      Model  Digital Synth VRA8-P     MIDI Implementation Chart       Version: 1.0.1         
+      Model  Digital Synth VRA8-Px    MIDI Implementation Chart       Version: 0.0.0         
     +-------------------------------+---------------+---------------+-----------------------+
     | Function...                   | Transmitted   | Recognized    | Remarks               |
     +-------------------------------+---------------+---------------+-----------------------+
