@@ -1,4 +1,4 @@
-require_relative 'common'
+require_relative 'constants'
 
 $file = File.open("filter-table.h", "w")
 

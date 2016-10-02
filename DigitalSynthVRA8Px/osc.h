@@ -7,12 +7,12 @@ template <uint8_t T>
 class Osc {
   static boolean        m_unison_on;
   static uint8_t        m_waveform;
-  static uint8_t        m_base_detune;
+  static uint16_t       m_base_detune;
   static const uint8_t* m_wave_table[3];
-  static uint16_t       m_freq_array[3];
-  static uint8_t        m_freq_detune;
-  static uint16_t       m_phase_array[3];
-  static uint16_t       m_phase_detune;
+  static __uint24       m_freq_array[3];
+  static uint16_t       m_freq_detune;
+  static __uint24       m_phase_array[3];
+  static __uint24       m_phase_detune;
 
 public:
   INLINE static void initialize() {
@@ -41,7 +41,7 @@ public:
   }
 
   INLINE static void set_detune(uint8_t controller_value) {
-    m_base_detune = (controller_value >> OSC_DETUNE_DIV_NUM_BITS) + 1;
+    m_base_detune = ((uint16_t) controller_value << OSC_DETUNE_MUL_NUM_BITS) + 255;
 
     m_freq_detune = m_base_detune;
     if (m_waveform == OSC_WAVEFORM_ORGAN) {
@@ -107,8 +107,8 @@ private:
     return result;
   }
 
-  INLINE static uint16_t get_freq(uint8_t waveform, uint8_t note_number) {
-    uint16_t result;
+  INLINE static __uint24 get_freq(uint8_t waveform, uint8_t note_number) {
+    __uint24 result;
     result = g_osc_freq_table[note_number - NOTE_NUMBER_MIN];
     if (waveform == OSC_WAVEFORM_ORGAN) {
       result = ((result + 1) >> 1) - 1;
@@ -116,12 +116,12 @@ private:
     return result;
   }
 
-  INLINE static int8_t get_wave_level(const uint8_t* wave_table, uint16_t phase) {
-    uint8_t curr_index = high_byte(phase);
-    uint16_t two_data = pgm_read_word(wave_table + curr_index);
+  INLINE static int8_t get_wave_level(const uint8_t* wave_table, __uint24 phase) {
+    uint8_t curr_index = hhigh_byte(phase);
+    uint8_t next_weight = high_byte(phase);
+    __uint24 two_data = pgm_read_word(wave_table + curr_index);
     uint8_t curr_data = low_byte(two_data);
     uint8_t next_data = high_byte(two_data);
-    uint8_t next_weight = low_byte(phase);
 
     // lerp
     int8_t result;
@@ -137,9 +137,9 @@ private:
 
 template <uint8_t T> boolean         Osc<T>::m_unison_on;
 template <uint8_t T> uint8_t         Osc<T>::m_waveform;
-template <uint8_t T> uint8_t         Osc<T>::m_base_detune;
+template <uint8_t T> uint16_t        Osc<T>::m_base_detune;
 template <uint8_t T> const uint8_t*  Osc<T>::m_wave_table[3];
-template <uint8_t T> uint16_t        Osc<T>::m_freq_array[3];
-template <uint8_t T> uint8_t         Osc<T>::m_freq_detune;
-template <uint8_t T> uint16_t        Osc<T>::m_phase_array[3];
-template <uint8_t T> uint16_t        Osc<T>::m_phase_detune;
+template <uint8_t T> __uint24        Osc<T>::m_freq_array[3];
+template <uint8_t T> uint16_t        Osc<T>::m_freq_detune;
+template <uint8_t T> __uint24        Osc<T>::m_phase_array[3];
+template <uint8_t T> __uint24        Osc<T>::m_phase_detune;
