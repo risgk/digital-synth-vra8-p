@@ -6,6 +6,7 @@ class Voice {
   static uint8_t m_waveform;
   static boolean m_amp_env_on;
   static uint8_t m_note_number[3];
+  static uint8_t m_output_error;
 
 public:
   INLINE static void initialize() {
@@ -15,6 +16,7 @@ public:
     m_note_number[0] = NOTE_NUMBER_INVALID;
     m_note_number[1] = NOTE_NUMBER_INVALID;
     m_note_number[2] = NOTE_NUMBER_INVALID;
+    m_output_error = 0;
     IOsc<0>::initialize();
     IFilter<0>::initialize();
     IAmp<0>::initialize();
@@ -173,7 +175,11 @@ public:
       gate_output_array[3] = IGate<0>::level<3>();
       amp_output = IAmp<0>::clock(filter_output, gate_output_array[3] << 3);
     }
-    return high_sbyte(amp_output);
+
+    // error diffusion
+    int16_t output = amp_output + m_output_error;
+    m_output_error = low_byte(output);
+    return high_sbyte(output);
   }
 };
 
@@ -181,3 +187,4 @@ template <uint8_t T> boolean Voice<T>::m_unison_on;
 template <uint8_t T> uint8_t Voice<T>::m_waveform;
 template <uint8_t T> boolean Voice<T>::m_amp_env_on;
 template <uint8_t T> uint8_t Voice<T>::m_note_number[3];
+template <uint8_t T> uint8_t Voice<T>::m_output_error;
