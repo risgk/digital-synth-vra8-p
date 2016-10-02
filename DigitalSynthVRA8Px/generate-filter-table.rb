@@ -32,7 +32,7 @@ def generate_filter_lpf_table(name, q)
     $file.printf("0x%02x, 0x%02x, 0x%02x,", b_2_over_a_0_low, b_2_over_a_0_high, a_1_over_a_0_high)
     if i == DATA_BYTE_MAX
       $file.printf("\n")
-    elsif i % 4 == 3
+    elsif i % 4 == (4 - 1)
       $file.printf("\n  ")
     else
       $file.printf(" ")
@@ -42,7 +42,7 @@ def generate_filter_lpf_table(name, q)
 end
 
 (0..15).each do |idx|
-  generate_filter_lpf_table(idx.to_s, Math.sqrt(2.0) ** ((idx / 4.0) - 1.0))
+  generate_filter_lpf_table(idx.to_s, Math.sqrt(2.0) ** ((idx / 2.5) - 1.0))
 end
 
 $file.printf("const uint8_t* g_filter_lpf_tables[] = {\n  ")

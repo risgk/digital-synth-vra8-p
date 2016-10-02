@@ -173,7 +173,7 @@ public:
       amp_output = IAmp<0>::clock(filter_output, env_gen_output);
     } else {
       gate_output_array[3] = IGate<0>::level<3>();
-      amp_output = IAmp<0>::clock(filter_output, gate_output_array[3] << 3);
+      amp_output = IAmp<0>::clock(filter_output, gate_output_array[3] << 4);
     }
 
     // error diffusion
