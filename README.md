@@ -40,14 +40,14 @@
     | Controller    | Value 0        | Value 64 | Value 127      | Notes           |
     +---------------+----------------+----------+----------------+-----------------+
     | UNISON        | OFF            | (ON)     | ON             | 3 Voice UNISON  |
-    | OSC WAVEFORM  | SAW (SAWtooth) | ORGAN    | SQ (SQuare)    |                 |
-    | OSC DETUNE    | 0.24 Hz        | 2.1 Hz   | 3.8 Hz         |                 |
-    | AMP EG        | OFF            | (ON)     | ON             |                 |
+    | WAVEFORM      | SAW (SAWtooth) | ORGAN    | SQ (SQuare)    |                 |
+    | DETUNE        | 0.24 Hz        | 2.1 Hz   | 3.8 Hz         |                 |
+    | AMP EG AMT    | OFF            | (ON)     | ON             |                 |
     +---------------+----------------+----------+----------------+-----------------+
-    | FILTER CUTOFF | 0.22 kHz       | 1.2 kHz  | 7.0 kHz        | Range 4 to 124  |
-    | FILTER RESO   | Q = 0.71       | Q = 1.4  | Q = 2.6        | RESOnance       |
+    | CUTOFF        | 0.22 kHz       | 1.2 kHz  | 7.0 kHz        | Range 4 to 124  |
+    | RESONANCE     | Q = 0.71       | Q = 1.4  | Q = 2.6        | RESOnance       |
     | FILTER EG AMT | -125 (EG 100%) | 0        | +124 (EG 100%) | Modulate CUTOFF |
-    | EG DECAY      | 21 ms          | 1.4 s    | 5.4 s          | DECAY Time      |
+    | DECAY         | 21 ms          | 1.4 s    | 5.4 s          | DECAY Time      |
     +---------------+----------------+----------+----------------+-----------------+
 
 ## MIDI Implementation Chart
@@ -76,13 +76,13 @@
     | Pitch Bend                    | x             | x             |                       |
     +-------------------------------+---------------+---------------+-----------------------+
     | Control                    16 | x             | o             | UNISON                |
-    | Change                     17 | x             | o             | OSC WAVEFORM          |
-    |                            18 | x             | o             | OSC DETUNE            |
-    |                            19 | x             | o             | AMP EG                |
-    |                            20 | x             | o             | FILTER CUTOFF         |
-    |                            21 | x             | o             | FILTER RESO           |
+    | Change                     17 | x             | o             | WAVEFORM              |
+    |                            18 | x             | o             | DETUNE                |
+    |                            19 | x             | o             | AMP EG AMT            |
+    |                            20 | x             | o             | CUTOFF                |
+    |                            21 | x             | o             | RESONANCE             |
     |                            22 | x             | o             | FILTER EG AMT         |
-    |                            23 | x             | o             | EG DECAY              |
+    |                            23 | x             | o             | DECAY                 |
     +-------------------------------+---------------+---------------+-----------------------+
     | Program                       | x             | x             |                       |
     | Change       : True #         | ************* |               |                       |
