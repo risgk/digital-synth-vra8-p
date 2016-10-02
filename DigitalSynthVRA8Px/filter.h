@@ -17,6 +17,7 @@ class Filter {
   static int16_t        m_x_2;
   static int16_t        m_y_1;
   static int16_t        m_y_2;
+  static uint8_t        m_cutoff_current;
   static uint8_t        m_cutoff;
   static uint8_t        m_mod_amt;
 
@@ -29,6 +30,7 @@ public:
     m_x_2 = 0;
     m_y_1 = 0;
     m_y_2 = 0;
+    m_cutoff_current = 127;
     set_cutoff(127);
     set_resonance(0);
     set_env_amt(0);
@@ -49,17 +51,26 @@ public:
   INLINE static int16_t clock(int16_t audio_input, uint8_t mod_input) {
     m_count++;
     if ((m_count & (FILTER_CONTROL_INTERVAL - 1)) == 0) {
-      int16_t temp = m_cutoff + high_sbyte(((m_mod_amt - 64) << 1) * mod_input);
-      uint8_t cutoff;
-      if (temp > 127) {
-        cutoff = 127;
-      } else if (temp < 0) {
-        cutoff = 0;
+      int16_t cutoff_candidate = m_cutoff +
+                                 high_sbyte(((m_mod_amt - 64) << 1) * mod_input);
+      uint8_t cutoff_target;
+      if (cutoff_candidate > 127) {
+        cutoff_target = 127;
+      } else if (cutoff_candidate < 0) {
+        cutoff_target = 0;
       } else {
-        cutoff = temp;
+        cutoff_target = cutoff_candidate;
       }
 
-      const uint8_t* p = m_lpf_table + (cutoff * 3);
+      if (m_cutoff_current + FILTER_CUTOFF_THROUGH_RATE < cutoff_target) {
+        m_cutoff_current += FILTER_CUTOFF_THROUGH_RATE;
+      } else if (m_cutoff_current > cutoff_target + FILTER_CUTOFF_THROUGH_RATE) {
+        m_cutoff_current -= FILTER_CUTOFF_THROUGH_RATE;
+      } else {
+        m_cutoff_current = cutoff_target;
+      }
+
+      const uint8_t* p = m_lpf_table + (m_cutoff_current * 3);
       m_b_2_over_a_0_low  = pgm_read_byte(p++);
       m_b_2_over_a_0_high = pgm_read_byte(p++);
       m_a_1_over_a_0_high = pgm_read_byte(p);
@@ -100,5 +111,6 @@ template <uint8_t T> int16_t        Filter<T>::m_x_1;
 template <uint8_t T> int16_t        Filter<T>::m_x_2;
 template <uint8_t T> int16_t        Filter<T>::m_y_1;
 template <uint8_t T> int16_t        Filter<T>::m_y_2;
+template <uint8_t T> uint8_t        Filter<T>::m_cutoff_current;
 template <uint8_t T> uint8_t        Filter<T>::m_cutoff;
 template <uint8_t T> uint8_t        Filter<T>::m_mod_amt;

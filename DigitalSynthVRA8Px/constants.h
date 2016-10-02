@@ -18,6 +18,7 @@ const uint8_t   OSC_DETUNE_MUL_NUM_BITS     = 4;
 const uint16_t  OSC_DETUNE_FREQ_MAX         = ((252 << OSC_DETUNE_MUL_NUM_BITS) + 255) * 3;
 const uint8_t   FILTER_CONTROL_INTERVAL     = 0x04;
 const uint8_t   FILTER_TABLE_FRACTION_BITS  = 14;
+const uint8_t   FILTER_CUTOFF_THROUGH_RATE  = 1;
 const uint8_t   GATE_CONTROL_INTERVAL       = 0x10;
 const uint8_t   GATE_LEVEL_MAX              = 15;
 const uint8_t   GATE_LEVEL_STEP             = 1;
