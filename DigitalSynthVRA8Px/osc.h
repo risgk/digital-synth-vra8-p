@@ -41,7 +41,9 @@ public:
   }
 
   INLINE static void set_detune(uint8_t controller_value) {
-    m_base_detune = ((uint16_t) controller_value << OSC_DETUNE_MUL_NUM_BITS) + 255;
+    m_base_detune = ((uint16_t) high_byte((controller_value << 1) *
+                                          (controller_value << 1)) <<
+                     OSC_DETUNE_MUL_NUM_BITS) + 255;
 
     m_freq_detune = m_base_detune;
     if (m_waveform == OSC_WAVEFORM_ORGAN) {
