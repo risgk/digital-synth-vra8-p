@@ -3,6 +3,7 @@
 #include <stdint.h>
 
 typedef signed char boolean;
+typedef uint32_t __uint24;
 
 inline uint8_t pgm_read_byte(const void* addr) {
   const uint8_t* p = (const uint8_t*) addr;
