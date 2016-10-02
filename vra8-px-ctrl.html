@@ -221,10 +221,10 @@ function preset(number) {
   var presetControllers = {};
   presetControllers[UNISON       ] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 127, 127];
   presetControllers[OSC_WAVEFORM ] = [0  , 0  , 0  , 0  , 0  , 64 , 127, 0  , 127];
-  presetControllers[OSC_DETUNE   ] = [0  , 32 , 32 , 64 , 32 , 32 , 32 , 48 , 48 ];
+  presetControllers[OSC_DETUNE   ] = [0  , 64 , 64 , 96 , 64 , 64 , 64 , 80 , 80 ];
   presetControllers[AMP_EG       ] = [0  , 0  , 127, 0  , 0  , 0  , 0  , 0  , 0  ];
   presetControllers[FILTER_CUTOFF] = [0  , 64 , 0  , 96 , 127, 127, 127, 64 , 64 ];
-  presetControllers[FILTER_RESO  ] = [0  , 64 , 127, 64 , 0  , 0  , 0  , 127, 127];
+  presetControllers[FILTER_RESO  ] = [0  , 64 , 64 , 64 , 0  , 0  , 0  , 127, 127];
   presetControllers[FILTER_EG_AMT] = [0  , 96 , 127, 16 , 64 , 64 , 64 , 96 , 96 ];
   presetControllers[EG_DECAY     ] = [0  , 64 , 64 , 32 , 64 , 64 , 64 , 127, 127];
 
@@ -358,8 +358,8 @@ function noteOff(noteNumber) {
     <td><span id="spanCC18">-1</span></td>
     <td><input id="inputCC19" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(19, value)"></td>
     <td><span id="spanCC19">-1</span></td></tr>
-<tr><td>&nbsp;                </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-    <td>&nbsp;                </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<tr><td>(OFF/ON)              </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td>(SAW/ORGAN/SQ)        </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
     <td>&nbsp;                </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
     <td>&nbsp;                </td></tr>
 <tr><td>&nbsp;</td></tr>
@@ -377,7 +377,7 @@ function noteOff(noteNumber) {
     <td><span id="spanCC23">-1</span></td></tr>
 <tr><td>&nbsp;                </td><td></td>
     <td>&nbsp;                </td><td></td>
-    <td>&nbsp;                </td><td></td>
+    <td>(MINUS/ZERO/PLUS)     </td><td></td>
     <td>&nbsp;                </td></tr>
 </table>
 

@@ -1,4 +1,4 @@
-require_relative 'DigitalSynthVRA8Px/common'
+require_relative 'DigitalSynthVRA8Px/constants'
 
 $file = File.open("sample-midi-stream.bin", "wb")
 
@@ -66,7 +66,7 @@ end
 sound_off
 control_change(UNISON       , 0  )
 control_change(OSC_WAVEFORM , 0  )
-control_change(OSC_DETUNE   , 32 )
+control_change(OSC_DETUNE   , 64 )
 control_change(AMP_EG       , 0  )
 control_change(FILTER_CUTOFF, 64 )
 control_change(FILTER_RESO  , 64 )
