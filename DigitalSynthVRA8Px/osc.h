@@ -89,9 +89,10 @@ public:
     int8_t wave_2_1 = get_wave_level(m_wave_table[2], m_phase_array[2] + m_phase_detune);
 
     // amp and mix
-    int16_t result = (wave_0_0 * amp_0) + (wave_0_1 * amp_0) +
-                     (wave_1_0 * amp_1) + (wave_1_1 * amp_1) +
-                     (wave_2_0 * amp_2) + (wave_2_1 * amp_2);
+    int16_t result = (wave_0_0 * (amp_0 + (amp_0 >> 1))) + (wave_0_1 * amp_0) +
+                     (wave_1_0 * (amp_1 + (amp_1 >> 1))) + (wave_1_1 * amp_1) +
+                     (wave_2_0 * (amp_2 + (amp_2 >> 1))) + (wave_2_1 * amp_2);
+    result >>= 1;
 
     return result;
   }

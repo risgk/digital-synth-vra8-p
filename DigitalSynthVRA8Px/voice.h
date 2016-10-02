@@ -166,7 +166,7 @@ public:
     uint8_t env_gen_output = IEnvGen<0>::clock();
     int16_t filter_output = IFilter<0>::clock(osc_output, env_gen_output);
     uint8_t gain_control = high_byte((env_gen_output * m_amp_env_amt) +
-                                     ((gate_output_array[3] << 4) *
+                                     ((gate_output_array[3] << 3) *
                                       (254 - m_amp_env_amt)));
     int16_t amp_output = IAmp<0>::clock(filter_output, gain_control);
 
