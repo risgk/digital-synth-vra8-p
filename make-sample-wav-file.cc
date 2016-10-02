@@ -16,9 +16,9 @@ inline uint16_t pgm_read_word(const void* addr) {
 }
 
 #include <stdio.h>
-#include "./DigitalSynthVRA8P/common.h"
-#include "./DigitalSynthVRA8P/synth.h"
-#include "./DigitalSynthVRA8P/wav-file-out.h"
+#include "./DigitalSynthVRA8Px/common.h"
+#include "./DigitalSynthVRA8Px/synth.h"
+#include "./DigitalSynthVRA8Px/wav-file-out.h"
 
 const uint16_t RECORDING_SEC = 60;
 
