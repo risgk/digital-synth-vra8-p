@@ -44,9 +44,9 @@ public:
 
   INLINE static void set_waveform(uint8_t controller_value) {
     uint8_t waveform;
-    if (controller_value < 32) {
+    if (controller_value < 48) {
       waveform = OSC_WAVEFORM_SAW;
-    } else if (controller_value < 96) {
+    } else if (controller_value < 80) {
       waveform = OSC_WAVEFORM_ORGAN;
     } else {
       waveform = OSC_WAVEFORM_SQ;
@@ -56,6 +56,14 @@ public:
       m_waveform = waveform;
       all_note_off();
       IOsc<0>::set_waveform(m_waveform);
+    }
+
+    if (controller_value < 32) {
+      IOsc<0>::set_sub((31 - controller_value) << 2);
+    } else if (controller_value >= 96) {
+      IOsc<0>::set_sub((controller_value - 96) << 2);
+    } else {
+      IOsc<0>::set_sub(0);
     }
   }
 
