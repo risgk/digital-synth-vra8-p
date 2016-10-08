@@ -26,7 +26,7 @@ class Filter {
 
 public:
   INLINE static void initialize() {
-    m_count = FILTER_CONTROL_INTERVAL - 1;
+    m_count = 0;
     m_x_1 = 0;
     m_x_2 = 0;
     m_y_1 = 0;
@@ -35,6 +35,7 @@ public:
     set_cutoff(127);
     set_resonance(0);
     set_env_amt(0);
+    update_coefs(0);
   }
 
   INLINE static void set_cutoff(uint8_t controller_value) {
@@ -52,31 +53,7 @@ public:
   INLINE static int16_t clock(int16_t audio_input, uint8_t mod_input) {
     m_count++;
     if ((m_count & (FILTER_CONTROL_INTERVAL - 1)) == 0) {
-      int16_t cutoff_candidate = m_cutoff +
-                                 high_sbyte(((m_mod_amt - 64) << 1) * mod_input);
-      uint8_t cutoff_target;
-      if (cutoff_candidate > 127) {
-        cutoff_target = 127;
-      } else if (cutoff_candidate < 0) {
-        cutoff_target = 0;
-      } else {
-        cutoff_target = cutoff_candidate;
-      }
-
-      if (m_cutoff_current + FILTER_CUTOFF_THROUGH_RATE < cutoff_target) {
-        m_cutoff_current += FILTER_CUTOFF_THROUGH_RATE;
-      } else if (m_cutoff_current > cutoff_target + FILTER_CUTOFF_THROUGH_RATE) {
-        m_cutoff_current -= FILTER_CUTOFF_THROUGH_RATE;
-      } else {
-        m_cutoff_current = cutoff_target;
-      }
-
-      const uint8_t* p = m_lpf_table + (m_cutoff_current << 2);
-      uint32_t four_data = pgm_read_dword(p);
-      m_b_2_over_a_0_low  = (four_data >>  0) & 0xFF;
-      m_b_2_over_a_0_high = (four_data >>  8) & 0xFF;
-      m_a_1_over_a_0_low  = (four_data >> 16) & 0xFF;
-      m_a_1_over_a_0_high = (four_data >> 24) & 0xFF;
+      update_coefs(mod_input);
     }
 
     int16_t b_2_over_a_0 = m_b_2_over_a_0_low | (m_b_2_over_a_0_high << 8);
@@ -103,6 +80,34 @@ public:
     m_y_1 = y_0;
 
     return y_0 << (16 - AUDIO_FRACTION_BITS);
+  }
+
+  INLINE static void update_coefs(uint8_t mod_input) {
+    int16_t cutoff_candidate = m_cutoff +
+                               high_sbyte(((m_mod_amt - 64) << 1) * mod_input);
+    uint8_t cutoff_target;
+    if (cutoff_candidate > 127) {
+      cutoff_target = 127;
+    } else if (cutoff_candidate < 0) {
+      cutoff_target = 0;
+    } else {
+      cutoff_target = cutoff_candidate;
+    }
+
+    if (m_cutoff_current + FILTER_CUTOFF_THROUGH_RATE < cutoff_target) {
+      m_cutoff_current += FILTER_CUTOFF_THROUGH_RATE;
+    } else if (m_cutoff_current > cutoff_target + FILTER_CUTOFF_THROUGH_RATE) {
+      m_cutoff_current -= FILTER_CUTOFF_THROUGH_RATE;
+    } else {
+      m_cutoff_current = cutoff_target;
+    }
+
+    const uint8_t* p = m_lpf_table + (m_cutoff_current << 2);
+    uint32_t four_data = pgm_read_dword(p);
+    m_b_2_over_a_0_low  = (four_data >>  0) & 0xFF;
+    m_b_2_over_a_0_high = (four_data >>  8) & 0xFF;
+    m_a_1_over_a_0_low  = (four_data >> 16) & 0xFF;
+    m_a_1_over_a_0_high = (four_data >> 24) & 0xFF;
   }
 };
 
