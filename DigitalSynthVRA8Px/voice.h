@@ -25,14 +25,20 @@ public:
   }
 
   INLINE static void set_unison(uint8_t controller_value) {
-    if (!m_unison_on && (controller_value >= 64)) {
-      m_unison_on = true;
-      all_note_off();
-      IOsc<0>::set_unison(m_unison_on);
-    } else if (m_unison_on && (controller_value < 64)) {
-      m_unison_on = false;
-      all_note_off();
-      IOsc<0>::set_unison(m_unison_on);
+    if (controller_value >= 64) {
+      IOsc<0>::set_mix(127 - controller_value);
+      if (!m_unison_on) {
+        m_unison_on = true;
+        all_note_off();
+        IOsc<0>::set_unison(m_unison_on);
+      }
+    } else {
+      IOsc<0>::set_mix(controller_value);
+      if (m_unison_on) {
+        m_unison_on = false;
+        all_note_off();
+        IOsc<0>::set_unison(m_unison_on);
+      }
     }
   }
 

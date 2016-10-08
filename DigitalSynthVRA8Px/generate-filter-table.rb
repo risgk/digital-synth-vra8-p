@@ -42,7 +42,7 @@ def generate_filter_lpf_table(name, q)
 end
 
 (0..15).each do |idx|
-  generate_filter_lpf_table(idx.to_s, Math.sqrt(2.0) ** ((idx / 2.5) - 1.0))
+  generate_filter_lpf_table(idx.to_s, Math.sqrt(2.0) ** ((idx / 3.0) - 1.0))
 end
 
 $file.printf("const uint8_t* g_filter_lpf_tables[] = {\n  ")

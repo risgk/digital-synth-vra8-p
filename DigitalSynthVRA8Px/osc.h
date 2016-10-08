@@ -2,10 +2,17 @@
 
 #include "common.h"
 #include "osc-table.h"
+#include "mul-q.h"
+#include <math.h>
+
+static const uint8_t OSC_MIX_TABLE_LENGTH = 64 + 1;  // odd number
 
 template <uint8_t T>
 class Osc {
   static boolean        m_unison_on;
+  static uint8_t        m_mix_main;
+  static uint8_t        m_mix_detune;
+  static uint8_t        m_mix_table[OSC_MIX_TABLE_LENGTH];
   static uint8_t        m_waveform;
   static uint16_t       m_base_detune;
   static const uint8_t* m_wave_table[3];
@@ -17,6 +24,11 @@ class Osc {
 public:
   INLINE static void initialize() {
     m_unison_on = false;
+    m_mix_main   = m_mix_table[(OSC_MIX_TABLE_LENGTH - 1) >> 1];
+    m_mix_detune = m_mix_table[(OSC_MIX_TABLE_LENGTH - 1) >> 1];
+    for (uint8_t i = 0; i < OSC_MIX_TABLE_LENGTH; i++) {
+      m_mix_table[i] = (uint8_t) (sqrtf((float) i / (OSC_MIX_TABLE_LENGTH - 1)) * 255);
+    }
     m_waveform = 0;
     m_base_detune = 0;
     m_wave_table[0] = g_osc_saw_wave_tables[0];
@@ -34,6 +46,16 @@ public:
 
   INLINE static void set_unison(boolean unison_on) {
     m_unison_on = unison_on;
+  }
+
+  INLINE static void set_mix(uint8_t mix) {
+    if (mix < (OSC_MIX_TABLE_LENGTH - 1) >> 1) {
+      m_mix_main   = m_mix_table[((OSC_MIX_TABLE_LENGTH - 1) >> 1) + mix];
+      m_mix_detune = m_mix_table[((OSC_MIX_TABLE_LENGTH - 1) >> 1) - mix];
+    } else {
+      m_mix_main   = m_mix_table[OSC_MIX_TABLE_LENGTH - 1];
+      m_mix_detune = m_mix_table[0];
+    }
   }
 
   INLINE static void set_waveform(uint8_t waveform) {
@@ -81,18 +103,21 @@ public:
     m_phase_array[2] += m_freq_array[2];
     m_phase_detune += m_freq_detune;
 
-    int8_t wave_0_0 = get_wave_level(m_wave_table[0], m_phase_array[0]);
-    int8_t wave_1_0 = get_wave_level(m_wave_table[1], m_phase_array[1]);
-    int8_t wave_2_0 = get_wave_level(m_wave_table[2], m_phase_array[2]);
-    int8_t wave_0_1 = get_wave_level(m_wave_table[0], m_phase_array[0] + m_phase_detune);
-    int8_t wave_1_1 = get_wave_level(m_wave_table[1], m_phase_array[1] + m_phase_detune);
-    int8_t wave_2_1 = get_wave_level(m_wave_table[2], m_phase_array[2] + m_phase_detune);
+    int8_t wave_0_main   = get_wave_level(m_wave_table[0], m_phase_array[0]);
+    int8_t wave_1_main   = get_wave_level(m_wave_table[1], m_phase_array[1]);
+    int8_t wave_2_main   = get_wave_level(m_wave_table[2], m_phase_array[2]);
+    int8_t wave_0_detune = get_wave_level(m_wave_table[0], m_phase_array[0] + m_phase_detune);
+    int8_t wave_1_detune = get_wave_level(m_wave_table[1], m_phase_array[1] + m_phase_detune);
+    int8_t wave_2_detune = get_wave_level(m_wave_table[2], m_phase_array[2] + m_phase_detune);
 
     // amp and mix
-    int16_t result = (wave_0_0 * (amp_0 + (amp_0 >> 1))) + (wave_0_1 * amp_0) +
-                     (wave_1_0 * (amp_1 + (amp_1 >> 1))) + (wave_1_1 * amp_1) +
-                     (wave_2_0 * (amp_2 + (amp_2 >> 1))) + (wave_2_1 * amp_2);
-    result >>= 1;
+    int16_t level_main   = mul_q15_q8((wave_0_main   * amp_0) +
+                                      (wave_1_main   * amp_1) +
+                                      (wave_2_main   * amp_2), m_mix_main);
+    int16_t level_detune = mul_q15_q8((wave_0_detune * amp_0) +
+                                      (wave_1_detune * amp_1) +
+                                      (wave_2_detune * amp_2), m_mix_detune);
+    int16_t result = level_main + level_detune;
 
     return result;
   }
@@ -139,6 +164,9 @@ private:
 };
 
 template <uint8_t T> boolean         Osc<T>::m_unison_on;
+template <uint8_t T> uint8_t         Osc<T>::m_mix_main;
+template <uint8_t T> uint8_t         Osc<T>::m_mix_detune;
+template <uint8_t T> uint8_t         Osc<T>::m_mix_table[OSC_MIX_TABLE_LENGTH];
 template <uint8_t T> uint8_t         Osc<T>::m_waveform;
 template <uint8_t T> uint16_t        Osc<T>::m_base_detune;
 template <uint8_t T> const uint8_t*  Osc<T>::m_wave_table[3];
