@@ -158,7 +158,7 @@ private:
   INLINE static int8_t get_wave_level(const uint8_t* wave_table, __uint24 phase) {
     uint8_t curr_index = hhigh_byte(phase);
     uint8_t next_weight = high_byte(phase);
-    __uint24 two_data = pgm_read_word(wave_table + curr_index);
+    uint16_t two_data = pgm_read_word(wave_table + curr_index);
     uint8_t curr_data = low_byte(two_data);
     uint8_t next_data = high_byte(two_data);
 

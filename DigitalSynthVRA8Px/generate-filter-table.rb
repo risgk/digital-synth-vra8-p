@@ -21,15 +21,16 @@ def generate_filter_lpf_table(name, q)
     a_1 = (-2.0) * Math.cos(w_0)
 
     b_2_over_a_0 = ((b_2 / a_0) * (1 << FILTER_TABLE_FRACTION_BITS)).floor.to_i
+    b_2_over_a_0 += 0x10000 if b_2_over_a_0 < 0
     b_2_over_a_0_low = b_2_over_a_0 & 0xFF
     b_2_over_a_0_high = b_2_over_a_0 >> 8
     a_1_over_a_0 = ((a_1 / a_0) * (1 << FILTER_TABLE_FRACTION_BITS)).floor.to_i
+    a_1_over_a_0 += 0x10000 if a_1_over_a_0 < 0
+    a_1_over_a_0_low = a_1_over_a_0 & 0xFF
     a_1_over_a_0_high = a_1_over_a_0 >> 8
 
-    b_2_over_a_0_low += 0x100 if b_2_over_a_0_low < 0
-    b_2_over_a_0_high += 0x100 if b_2_over_a_0_high < 0
-    a_1_over_a_0_high += 0x100 if a_1_over_a_0_high < 0
-    $file.printf("0x%02x, 0x%02x, 0x%02x,", b_2_over_a_0_low, b_2_over_a_0_high, a_1_over_a_0_high)
+    $file.printf("0x%02x, 0x%02x, 0x%02x, 0x%02x,", b_2_over_a_0_low, b_2_over_a_0_high, 
+                                                    a_1_over_a_0_low, a_1_over_a_0_high)
     if i == DATA_BYTE_MAX
       $file.printf("\n")
     elsif i % 4 == (4 - 1)
