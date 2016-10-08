@@ -69,7 +69,7 @@ public:
   INLINE static void set_detune(uint8_t controller_value) {
     m_freq_detune = ((uint16_t) high_byte((controller_value << 1) *
                                           (controller_value << 1)) <<
-                     OSC_DETUNE_MUL_NUM_BITS) + 64;
+                     OSC_DETUNE_MUL_NUM_BITS) + OSC_DETUNE_FREQ_MIN;
 
     if (m_unison_on) {
       m_freq_array[1] = m_freq_array[0] + (m_freq_detune << 1);
