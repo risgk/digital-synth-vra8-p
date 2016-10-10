@@ -14,7 +14,7 @@ class Osc {
   static uint8_t        m_mix_detune;
   static uint8_t        m_mix_table[OSC_MIX_TABLE_LENGTH];
   static uint8_t        m_waveform;
-  static uint8_t        m_sub;
+  static uint8_t        m_mix_sub;
   static const uint8_t* m_wave_table[3];
   static __uint24       m_freq_array[3];
   static uint16_t       m_freq_detune;
@@ -30,7 +30,7 @@ public:
       m_mix_table[i] = (uint8_t) (sqrtf((float) i / (OSC_MIX_TABLE_LENGTH - 1)) * 255);
     }
     m_waveform = OSC_WAVEFORM_SAW;
-    m_sub = 0;
+    m_mix_sub = 0;
     m_wave_table[0] = g_osc_saw_wave_tables[0];
     m_wave_table[1] = g_osc_saw_wave_tables[2];
     m_wave_table[2] = g_osc_saw_wave_tables[4];
@@ -48,10 +48,10 @@ public:
     m_unison_on = unison_on;
   }
 
-  INLINE static void set_mix(uint8_t mix) {
-    if (mix < (OSC_MIX_TABLE_LENGTH - 1) >> 1) {
-      m_mix_main   = m_mix_table[((OSC_MIX_TABLE_LENGTH - 1) >> 1) + mix];
-      m_mix_detune = m_mix_table[((OSC_MIX_TABLE_LENGTH - 1) >> 1) - mix];
+  INLINE static void set_mix(uint8_t controller_value) {
+    if (controller_value < OSC_MIX_TABLE_LENGTH - 1) {
+      m_mix_main   = m_mix_table[((OSC_MIX_TABLE_LENGTH - 1) >> 1) + (controller_value >> 1)];
+      m_mix_detune = m_mix_table[((OSC_MIX_TABLE_LENGTH - 1) >> 1) - (controller_value >> 1)];
     } else {
       m_mix_main   = m_mix_table[OSC_MIX_TABLE_LENGTH - 1];
       m_mix_detune = m_mix_table[0];
@@ -63,7 +63,7 @@ public:
   }
 
   INLINE static void set_sub(uint8_t controller_value) {
-    m_sub = controller_value << 1;
+    m_mix_sub = m_mix_table[controller_value >> 1];
   }
 
   INLINE static void set_detune(uint8_t controller_value) {
@@ -134,7 +134,7 @@ public:
                                         (wave_2_detune * amp_2), m_mix_detune);
       int16_t level_sub    = mul_q15_q8((wave_0_sub    * amp_0) +
                                         (wave_1_sub    * amp_1) +
-                                        (wave_2_sub    * amp_2), m_sub);
+                                        (wave_2_sub    * amp_2), m_mix_sub);
 
       result = level_main + level_detune + level_sub;
     }
@@ -188,7 +188,7 @@ template <uint8_t T> uint8_t         Osc<T>::m_mix_main;
 template <uint8_t T> uint8_t         Osc<T>::m_mix_detune;
 template <uint8_t T> uint8_t         Osc<T>::m_mix_table[OSC_MIX_TABLE_LENGTH];
 template <uint8_t T> uint8_t         Osc<T>::m_waveform;
-template <uint8_t T> uint8_t         Osc<T>::m_sub;
+template <uint8_t T> uint8_t         Osc<T>::m_mix_sub;
 template <uint8_t T> const uint8_t*  Osc<T>::m_wave_table[3];
 template <uint8_t T> __uint24        Osc<T>::m_freq_array[3];
 template <uint8_t T> uint16_t        Osc<T>::m_freq_detune;
