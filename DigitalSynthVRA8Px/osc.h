@@ -27,7 +27,8 @@ public:
     m_mix_main   = m_mix_table[(OSC_MIX_TABLE_LENGTH - 1) >> 1];
     m_mix_detune = m_mix_table[(OSC_MIX_TABLE_LENGTH - 1) >> 1];
     for (uint8_t i = 0; i < OSC_MIX_TABLE_LENGTH; i++) {
-      m_mix_table[i] = (uint8_t) (sqrtf((float) i / (OSC_MIX_TABLE_LENGTH - 1)) * 255);
+      m_mix_table[i] = static_cast<uint8_t>(sqrtf(static_cast<float>(i) /
+                                                  (OSC_MIX_TABLE_LENGTH - 1)) * 255);
     }
     m_waveform = OSC_WAVEFORM_SAW;
     m_mix_sub = 0;
@@ -67,8 +68,8 @@ public:
   }
 
   INLINE static void set_detune(uint8_t controller_value) {
-    m_freq_detune = ((uint16_t) high_byte((controller_value << 1) *
-                                          (controller_value << 1)) <<
+    m_freq_detune = (static_cast<uint16_t>(high_byte((controller_value << 1) *
+                                           (controller_value << 1))) <<
                      OSC_DETUNE_MUL_NUM_BITS) + OSC_DETUNE_FREQ_MIN;
 
     if (m_unison_on) {
