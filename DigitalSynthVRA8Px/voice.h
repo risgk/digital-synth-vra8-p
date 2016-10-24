@@ -6,6 +6,7 @@ class Voice {
   static uint8_t m_waveform;
   static uint8_t m_amp_env_amt;
   static uint8_t m_note_number[3];
+  static uint8_t m_velocity[1];
   static uint8_t m_output_error;
 
 public:
@@ -16,6 +17,7 @@ public:
     m_note_number[0] = NOTE_NUMBER_INVALID;
     m_note_number[1] = NOTE_NUMBER_INVALID;
     m_note_number[2] = NOTE_NUMBER_INVALID;
+    m_velocity[0] = 127;
     m_output_error = 0;
     IOsc<0>::initialize();
     IFilter<0>::initialize();
@@ -34,8 +36,8 @@ public:
           m_note_number[1] = NOTE_NUMBER_INVALID;
           m_note_number[2] = NOTE_NUMBER_INVALID;
           IOsc<0>::note_on(0, m_note_number[0]);
-          IGate<0>::note_on(1);
-          IGate<0>::note_on(2);
+          IGate<0>::note_on(1, m_velocity[0]);
+          IGate<0>::note_on(2, m_velocity[0]);
         } else {
           all_note_off();
         }
@@ -89,7 +91,7 @@ public:
     }
   }
 
-  INLINE static void note_on(uint8_t note_number) {
+  INLINE static void note_on(uint8_t note_number, uint8_t velocity) {
     if ((note_number < NOTE_NUMBER_MIN) ||
         (note_number > NOTE_NUMBER_MAX)) {
       return;
@@ -100,26 +102,28 @@ public:
       m_note_number[1] = NOTE_NUMBER_INVALID;
       m_note_number[2] = NOTE_NUMBER_INVALID;
       IOsc<0>::note_on(0, note_number);
-      IGate<0>::note_on(0);
-      IGate<0>::note_on(1);
-      IGate<0>::note_on(2);
+      IGate<0>::note_on(0, velocity);
+      IGate<0>::note_on(1, velocity);
+      IGate<0>::note_on(2, velocity);
+      m_velocity[0] = velocity;
     } else {
       if (m_note_number[0] == NOTE_NUMBER_INVALID) {
         m_note_number[0] = note_number;
         IOsc<0>::note_on(0, note_number);
-        IGate<0>::note_on(0);
+        IGate<0>::note_on(0, velocity);
+        m_velocity[0] = velocity;
       } else if (m_note_number[1] == NOTE_NUMBER_INVALID) {
         m_note_number[1] = note_number;
         IOsc<0>::note_on(1, note_number);
-        IGate<0>::note_on(1);
+        IGate<0>::note_on(1, velocity);
       } else {
         m_note_number[2] = note_number;
         IOsc<0>::note_on(2, note_number);
-        IGate<0>::note_on(2);
+        IGate<0>::note_on(2, velocity);
       }
     }
 
-    IGate<0>::note_on(3);
+    IGate<0>::note_on(3, 127);
     IEnvGen<0>::note_on();
   }
 
@@ -217,4 +221,5 @@ template <uint8_t T> boolean Voice<T>::m_unison_on;
 template <uint8_t T> uint8_t Voice<T>::m_waveform;
 template <uint8_t T> uint8_t Voice<T>::m_amp_env_amt;
 template <uint8_t T> uint8_t Voice<T>::m_note_number[3];
+template <uint8_t T> uint8_t Voice<T>::m_velocity[1];
 template <uint8_t T> uint8_t Voice<T>::m_output_error;

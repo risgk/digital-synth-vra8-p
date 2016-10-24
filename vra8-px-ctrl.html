@@ -274,7 +274,7 @@ function saveControllers(number) {
 
 function noteOn(noteNumber) {
   if (midiOutput) {
-    midiOutput.send([(NOTE_ON | MIDI_CH), noteNumber + transpose, 64]);
+    midiOutput.send([(NOTE_ON | MIDI_CH), noteNumber + transpose, 127]);
     sleep(2);
   }
 }
