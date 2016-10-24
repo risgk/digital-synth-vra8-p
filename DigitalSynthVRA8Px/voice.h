@@ -54,8 +54,16 @@ public:
 
     if (m_waveform != waveform) {
       m_waveform = waveform;
-      all_note_off();
       IOsc<0>::set_waveform(m_waveform);
+      if (m_note_number[0] != NOTE_NUMBER_INVALID) {
+        IOsc<0>::note_on(0, m_note_number[0]);
+      }
+      if (m_note_number[1] != NOTE_NUMBER_INVALID) {
+        IOsc<0>::note_on(1, m_note_number[1]);
+      }
+      if (m_note_number[2] != NOTE_NUMBER_INVALID) {
+        IOsc<0>::note_on(2, m_note_number[2]);
+      }
     }
 
     if (controller_value < 32) {
