@@ -29,15 +29,29 @@ public:
       IOsc<0>::set_mix((127 - controller_value) << 1);
       if (!m_unison_on) {
         m_unison_on = true;
-        all_note_off();
         IOsc<0>::set_unison(m_unison_on);
+        if (m_note_number[0] != NOTE_NUMBER_INVALID) {
+          m_note_number[1] = NOTE_NUMBER_INVALID;
+          m_note_number[2] = NOTE_NUMBER_INVALID;
+          IOsc<0>::note_on(0, m_note_number[0]);
+          IGate<0>::note_on(1);
+          IGate<0>::note_on(2);
+        } else {
+          all_note_off();
+        }
       }
     } else {
       IOsc<0>::set_mix(controller_value << 1);
       if (m_unison_on) {
         m_unison_on = false;
-        all_note_off();
         IOsc<0>::set_unison(m_unison_on);
+        if (m_note_number[0] != NOTE_NUMBER_INVALID) {
+          IOsc<0>::note_on(0, m_note_number[0]);
+          IGate<0>::note_off(1);
+          IGate<0>::note_off(2);
+        } else {
+          all_note_off();
+        }
       }
     }
   }
@@ -83,9 +97,9 @@ public:
 
     if (m_unison_on) {
       m_note_number[0] = note_number;
+      m_note_number[1] = NOTE_NUMBER_INVALID;
+      m_note_number[2] = NOTE_NUMBER_INVALID;
       IOsc<0>::note_on(0, note_number);
-      IOsc<0>::note_on(1, note_number);
-      IOsc<0>::note_on(2, note_number);
       IGate<0>::note_on(0);
       IGate<0>::note_on(1);
       IGate<0>::note_on(2);
