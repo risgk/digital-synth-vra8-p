@@ -9,15 +9,12 @@ static const uint8_t OSC_MIX_TABLE_LENGTH = 64 + 1;  // odd number
 
 template <uint8_t T>
 class Osc {
-  static uint8_t        m_count;
   static boolean        m_unison_on;
   static uint8_t        m_mix_main;
   static uint8_t        m_mix_detune;
   static uint8_t        m_mix_table[OSC_MIX_TABLE_LENGTH];
   static uint8_t        m_waveform;
   static uint8_t        m_mix_sub;
-  static uint8_t        m_detune;
-  static uint8_t        m_mod_amt;
   static const uint8_t* m_wave_table[3];
   static __uint24       m_freq_array[3];
   static uint16_t       m_freq_detune;
@@ -26,7 +23,6 @@ class Osc {
 
 public:
   INLINE static void initialize() {
-    m_count = 0;
     m_unison_on = false;
     m_mix_main   = m_mix_table[(OSC_MIX_TABLE_LENGTH - 1) >> 1];
     m_mix_detune = m_mix_table[(OSC_MIX_TABLE_LENGTH - 1) >> 1];
@@ -36,8 +32,6 @@ public:
     }
     m_waveform = OSC_WAVEFORM_SAW;
     m_mix_sub = 0;
-    m_detune = 0;
-    m_mod_amt = 0;
     m_wave_table[0] = g_osc_saw_wave_tables[0];
     m_wave_table[1] = g_osc_saw_wave_tables[2];
     m_wave_table[2] = g_osc_saw_wave_tables[4];
@@ -74,11 +68,14 @@ public:
   }
 
   INLINE static void set_detune(uint8_t controller_value) {
-    m_detune = controller_value;
-  }
+    m_freq_detune = (static_cast<uint16_t>(high_byte((controller_value << 1) *
+                                           (controller_value << 1))) <<
+                     OSC_DETUNE_MUL_NUM_BITS) + OSC_DETUNE_FREQ_MIN;
 
-  INLINE static void set_env_amt(uint8_t controller_value) {
-    m_mod_amt = controller_value;
+    if (m_unison_on) {
+      m_freq_array[1] = m_freq_array[0] + (m_freq_detune << 1);
+      m_freq_array[2] = m_freq_array[0] - (m_freq_detune << 1);
+    }
   }
 
   INLINE static void note_on(uint8_t osc_number, uint8_t note_number) {
@@ -95,12 +92,7 @@ public:
     }
   }
 
-  INLINE static int16_t clock(uint8_t amp_0, uint8_t amp_1, uint8_t amp_2, uint8_t mod_input) {
-    m_count++;
-    if (m_count == 0) {
-      update_detune(mod_input);
-    }
-
+  INLINE static int16_t clock(uint8_t amp_0, uint8_t amp_1, uint8_t amp_2) {
     m_phase_array[0] += m_freq_array[0];
     m_phase_array[1] += m_freq_array[1];
     m_phase_array[2] += m_freq_array[2];
@@ -190,39 +182,14 @@ private:
     level -= 0x4000;
     return high_sbyte(level << 1);
   }
-
-  INLINE static void update_detune(uint8_t mod_input) {
-    int16_t detune_candidate = m_detune +
-                               high_sbyte(((m_mod_amt - 64) << 1) * mod_input);
-    uint8_t detune;
-    if (detune_candidate > 127) {
-      detune = 127;
-    } else if (detune_candidate < 0) {
-      detune = 0;
-    } else {
-      detune = detune_candidate;
-    }
-
-    m_freq_detune = (static_cast<uint16_t>(high_byte((detune << 1) *
-                                           (detune << 1))) <<
-                     OSC_DETUNE_MUL_NUM_BITS) + OSC_DETUNE_FREQ_MIN;
-
-    if (m_unison_on) {
-      m_freq_array[1] = m_freq_array[0] + (m_freq_detune << 1);
-      m_freq_array[2] = m_freq_array[0] - (m_freq_detune << 1);
-    }
-  }
 };
 
-template <uint8_t T> uint8_t         Osc<T>::m_count;
 template <uint8_t T> boolean         Osc<T>::m_unison_on;
 template <uint8_t T> uint8_t         Osc<T>::m_mix_main;
 template <uint8_t T> uint8_t         Osc<T>::m_mix_detune;
 template <uint8_t T> uint8_t         Osc<T>::m_mix_table[OSC_MIX_TABLE_LENGTH];
 template <uint8_t T> uint8_t         Osc<T>::m_waveform;
 template <uint8_t T> uint8_t         Osc<T>::m_mix_sub;
-template <uint8_t T> uint8_t         Osc<T>::m_detune;
-template <uint8_t T> uint8_t         Osc<T>::m_mod_amt;
 template <uint8_t T> const uint8_t*  Osc<T>::m_wave_table[3];
 template <uint8_t T> __uint24        Osc<T>::m_freq_array[3];
 template <uint8_t T> uint16_t        Osc<T>::m_freq_detune;
