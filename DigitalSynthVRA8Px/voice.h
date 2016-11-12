@@ -175,9 +175,6 @@ public:
     case OSC_DETUNE:
       IOsc<0>::set_detune(controller_value);
       break;
-    case AMP_EG:
-      m_amp_env_amt = controller_value << 1;
-      break;
     case FILTER_CUTOFF:
       IFilter<0>::set_cutoff(controller_value);
       break;
@@ -189,6 +186,9 @@ public:
       break;
     case EG_DECAY:
       IEnvGen<0>::set_decay(controller_value);
+      break;
+    case AMP_EG:
+      m_amp_env_amt = controller_value << 1;
       break;
     }
   }

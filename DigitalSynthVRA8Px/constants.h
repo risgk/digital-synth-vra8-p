@@ -48,11 +48,15 @@ const uint8_t   ACTIVE_SENSING        = 0xFE;
 const uint8_t   UNISON        = 16;
 const uint8_t   OSC_WAVEFORM  = 17;
 const uint8_t   OSC_DETUNE    = 18;
-const uint8_t   AMP_EG        = 19;
+const uint8_t   OSC_EG_AMT    = 19;
 const uint8_t   FILTER_CUTOFF = 20;
 const uint8_t   FILTER_RESO   = 21;
 const uint8_t   FILTER_EG_AMT = 22;
 const uint8_t   EG_DECAY      = 23;
+const uint8_t   NO_VELOCITY   = 24;
+const uint8_t   NO_AFTERTOUCH = 25;
+const uint8_t   CC26_DUMMY    = 26;
+const uint8_t   AMP_EG        = 27;
 const uint8_t   ALL_NOTES_OFF = 123;
 
 const uint8_t   OSC_WAVEFORM_SAW   = 0;
