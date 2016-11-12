@@ -175,6 +175,9 @@ public:
     case OSC_DETUNE:
       IOsc<0>::set_detune(controller_value);
       break;
+    case OSC_EG_AMT:
+      IOsc<0>::set_env_amt(controller_value);
+      break;
     case FILTER_CUTOFF:
       IFilter<0>::set_cutoff(controller_value);
       break;
@@ -200,10 +203,11 @@ public:
     gate_output_array[1] = IGate<0>::level<1>();
     gate_output_array[2] = IGate<0>::level<2>();
     gate_output_array[3] = IGate<0>::level<3>();
+    uint8_t env_gen_output = IEnvGen<0>::clock();
     int16_t osc_output = IOsc<0>::clock(gate_output_array[0],
                                         gate_output_array[1],
-                                        gate_output_array[2]);
-    uint8_t env_gen_output = IEnvGen<0>::clock();
+                                        gate_output_array[2],
+                                        env_gen_output);
     int16_t filter_output = IFilter<0>::clock(osc_output, env_gen_output);
     uint8_t gain_control = high_byte((env_gen_output * m_amp_env_amt) +
                                      ((gate_output_array[3] << 3) *
