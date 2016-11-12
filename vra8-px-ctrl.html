@@ -125,7 +125,8 @@ function onChangeTranspose(value) {
 <script>
 var midi        = null;
 var midiInputs  = null;
-var midiInput   = null;
+var midiInput1  = null;
+var midiInput2  = null;
 var midiOutputs = null;
 var midiOutput  = null;
 
@@ -170,11 +171,16 @@ function onMIDISuccess(midiAccess) {
     midiOutputs.push(o.value)
   }
 
-  var selectInputPort = document.getElementById("selectInputPort");
+  var selectInputPort1 = document.getElementById("selectInputPort1");
   for (var i = 0; i < midiInputs.length; i++) {
-    selectInputPort.appendChild(new Option(midiInputs[i].name))
+    selectInputPort1.appendChild(new Option(midiInputs[i].name))
   }
-  onChangeInputPort();
+  onChangeInputPort1();
+  var selectInputPort2 = document.getElementById("selectInputPort2");
+  for (var i = 0; i < midiInputs.length; i++) {
+    selectInputPort2.appendChild(new Option(midiInputs[i].name))
+  }
+  onChangeInputPort2();
   var selectOutputPort = document.getElementById("selectOutputPort");
   for (var i = 0; i < midiOutputs.length; i++) {
     selectOutputPort.appendChild(new Option(midiOutputs[i].name))
@@ -186,11 +192,19 @@ function onMIDIFailure(msg) {
   console.log("Failed to get MIDI access - " + msg);
 }
 
-function onChangeInputPort(){
-  var selectInputPort = document.getElementById("selectInputPort");
-  midiInput = midiInputs[selectInputPort.selectedIndex];
-  if (midiInput) {
-    midiInput.onmidimessage = onMIDIMessage;
+function onChangeInputPort1(){
+  var selectInputPort = document.getElementById("selectInputPort1");
+  midiInput1 = midiInputs[selectInputPort.selectedIndex];
+  if (midiInput1) {
+    midiInput1.onmidimessage = onMIDIMessage;
+  }
+}
+
+function onChangeInputPort2(){
+  var selectInputPort = document.getElementById("selectInputPort2");
+  midiInput2 = midiInputs[selectInputPort.selectedIndex];
+  if (midiInput2) {
+    midiInput2.onmidimessage = onMIDIMessage;
   }
 }
 
@@ -301,14 +315,16 @@ function noteOff(noteNumber) {
 </table>
 
 <table>
-<tr><td>MIDI IN</td>
-    <td colspan="2"><select id="selectInputPort" size="1" onchange="onChangeInputPort()"></select></td>
+<tr><td>MIDI IN 1</td>
+    <td colspan="2"><select id="selectInputPort1" size="1" onchange="onChangeInputPort1()"></select></td>
     <td>&nbsp;</td>
     <td>MIDI OUT</td>
     <td colspan="2"><select id="selectOutputPort" size="1" onchange="onChangeOutputPort()"></select></td>
     <td>&nbsp;</td>
     <td>KBD TRANSPOSE</td>
     <td><input id="inputTranspose" type="range" min="-24" max="12" step="12" oninput="onChangeTranspose(value)" ></td><td><span id="spanTranspose" >-1</span></td></tr>
+<tr><td>MIDI IN 2</td>
+    <td colspan="2"><select id="selectInputPort2" size="1" onchange="onChangeInputPort2()"></select></td></tr>
 </table>
 
 <table>
