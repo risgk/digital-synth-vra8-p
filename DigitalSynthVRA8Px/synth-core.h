@@ -1,3 +1,6 @@
+// refs https://www.midi.org/specifications/item/the-midi-1-0-specification
+// refs http://amei.or.jp/midistandardcommittee/MIDIspcj.html
+
 #pragma once
 
 #include "common.h"
@@ -83,14 +86,7 @@ public:
   }
 
   INLINE static void control_change(uint8_t controller_number, uint8_t controller_value) {
-    switch (controller_number) {
-    case ALL_NOTES_OFF:
-      IVoice<0>::all_note_off();
-      break;
-    default:
-      IVoice<0>::control_change(controller_number, controller_value);
-      break;
-    }
+    IVoice<0>::control_change(controller_number, controller_value);
   }
 
   INLINE static int8_t clock() {

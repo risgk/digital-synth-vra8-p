@@ -60,6 +60,10 @@ const uint8_t   CC25_DUMMY    = 25;
 const uint8_t   CC26_DUMMY    = 26;
 const uint8_t   CC27_DUMMY    = 27;
 const uint8_t   ALL_NOTES_OFF = 123;
+const uint8_t   OMNI_MODE_OFF = 124;
+const uint8_t   OMNI_MODE_ON  = 125;
+const uint8_t   MONO_MODE_ON  = 126;
+const uint8_t   POLY_MODE_ON  = 127;
 
 const uint8_t   OSC_WAVEFORM_SAW   = 0;
 const uint8_t   OSC_WAVEFORM_ORGAN = 64;

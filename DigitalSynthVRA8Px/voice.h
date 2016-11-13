@@ -206,6 +206,13 @@ public:
     case VELOCITY_SENS:
       m_velocity_sensitivity = controller_value;
       break;
+    case ALL_NOTES_OFF:
+    case OMNI_MODE_OFF:
+    case OMNI_MODE_ON:
+    case MONO_MODE_ON:
+    case POLY_MODE_ON:
+      all_note_off();
+      break;
     }
   }
 
