@@ -82,6 +82,7 @@ public:
     return y_0 << (16 - AUDIO_FRACTION_BITS);
   }
 
+private:
   INLINE static void update_coefs(uint8_t mod_input) {
     int16_t cutoff_candidate = m_cutoff +
                                high_sbyte(((m_mod_amt - 64) << 1) * mod_input);
@@ -94,12 +95,10 @@ public:
       cutoff_target = cutoff_candidate;
     }
 
-    if (m_cutoff_current + FILTER_CUTOFF_THROUGH_RATE < cutoff_target) {
+    if (m_cutoff_current < cutoff_target) {
       m_cutoff_current += FILTER_CUTOFF_THROUGH_RATE;
-    } else if (m_cutoff_current > cutoff_target + FILTER_CUTOFF_THROUGH_RATE) {
+    } else if (m_cutoff_current > cutoff_target) {
       m_cutoff_current -= FILTER_CUTOFF_THROUGH_RATE;
-    } else {
-      m_cutoff_current = cutoff_target;
     }
 
     const uint8_t* p = m_lpf_table + (m_cutoff_current << 2);

@@ -2,23 +2,29 @@
 
 template <uint8_t T>
 class Voice {
+  static uint8_t m_count;
   static boolean m_unison_on;
   static uint8_t m_waveform;
-  static uint8_t m_amp_env_amt;
+  static uint8_t m_amp_env_amt_current;
+  static uint8_t m_amp_env_amt_target;
   static uint8_t m_note_number[3];
   static uint8_t m_velocity[1];
   static uint8_t m_output_error;
+  static uint8_t m_velocity_sensitivity;
 
 public:
   INLINE static void initialize() {
+    m_count = 0;
     m_unison_on = false;
     m_waveform = OSC_WAVEFORM_SAW;
-    m_amp_env_amt = 127 << 1;
+    m_amp_env_amt_current = 0;
+    m_amp_env_amt_target = 0;
     m_note_number[0] = NOTE_NUMBER_INVALID;
     m_note_number[1] = NOTE_NUMBER_INVALID;
     m_note_number[2] = NOTE_NUMBER_INVALID;
     m_velocity[0] = 127;
     m_output_error = 0;
+    m_velocity_sensitivity = 127;
     IOsc<0>::initialize();
     IFilter<0>::initialize();
     IAmp<0>::initialize();
@@ -97,29 +103,32 @@ public:
       return;
     }
 
+    uint8_t v = high_byte((velocity + 1) * (m_velocity_sensitivity << 1)) +
+                          (127 - m_velocity_sensitivity);
+
     if (m_unison_on) {
       m_note_number[0] = note_number;
       m_note_number[1] = NOTE_NUMBER_INVALID;
       m_note_number[2] = NOTE_NUMBER_INVALID;
       IOsc<0>::note_on(0, note_number);
-      IGate<0>::note_on(0, velocity);
-      IGate<0>::note_on(1, velocity);
-      IGate<0>::note_on(2, velocity);
-      m_velocity[0] = velocity;
+      IGate<0>::note_on(0, v);
+      IGate<0>::note_on(1, v);
+      IGate<0>::note_on(2, v);
+      m_velocity[0] = v;
     } else {
       if (m_note_number[0] == NOTE_NUMBER_INVALID) {
         m_note_number[0] = note_number;
         IOsc<0>::note_on(0, note_number);
-        IGate<0>::note_on(0, velocity);
-        m_velocity[0] = velocity;
+        IGate<0>::note_on(0, v);
+        m_velocity[0] = v;
       } else if (m_note_number[1] == NOTE_NUMBER_INVALID) {
         m_note_number[1] = note_number;
         IOsc<0>::note_on(1, note_number);
-        IGate<0>::note_on(1, velocity);
+        IGate<0>::note_on(1, v);
       } else {
         m_note_number[2] = note_number;
         IOsc<0>::note_on(2, note_number);
-        IGate<0>::note_on(2, velocity);
+        IGate<0>::note_on(2, v);
       }
     }
 
@@ -188,12 +197,24 @@ public:
       IEnvGen<0>::set_decay(controller_value);
       break;
     case AMP_EG:
-      m_amp_env_amt = controller_value << 1;
+      if (controller_value < 64) {
+        m_amp_env_amt_target = 0;
+      } else {
+        m_amp_env_amt_target = AMP_ENV_AMT_MAX;
+      }
+      break;
+    case VELOCITY_SENS:
+      m_velocity_sensitivity = controller_value;
       break;
     }
   }
 
   INLINE static int8_t clock() {
+    m_count++;
+    if (m_count == 0) {
+      update_amp_env_amt();
+    }
+
     uint8_t gate_output_array[4];
     IGate<0>::clock();
     gate_output_array[0] = IGate<0>::level<0>();
@@ -205,9 +226,9 @@ public:
                                         gate_output_array[2]);
     uint8_t env_gen_output = IEnvGen<0>::clock();
     int16_t filter_output = IFilter<0>::clock(osc_output, env_gen_output);
-    uint8_t gain_control = high_byte((env_gen_output * m_amp_env_amt) +
+    uint8_t gain_control = high_byte((env_gen_output * m_amp_env_amt_current) +
                                      ((gate_output_array[3] << 3) *
-                                      (254 - m_amp_env_amt)));
+                                      (AMP_ENV_AMT_MAX - m_amp_env_amt_current)));
     int16_t amp_output = IAmp<0>::clock(filter_output, gain_control);
 
     // error diffusion
@@ -215,11 +236,23 @@ public:
     m_output_error = low_byte(output);
     return high_sbyte(output);
   }
+
+private:
+  INLINE static void update_amp_env_amt() {
+    if (m_amp_env_amt_current < m_amp_env_amt_target) {
+      m_amp_env_amt_current += AMP_ENV_AMT_STEP;
+    } else if (m_amp_env_amt_current > m_amp_env_amt_target) {
+      m_amp_env_amt_current -= AMP_ENV_AMT_STEP;
+    }
+  }
 };
 
+template <uint8_t T> uint8_t Voice<T>::m_count;
 template <uint8_t T> boolean Voice<T>::m_unison_on;
 template <uint8_t T> uint8_t Voice<T>::m_waveform;
-template <uint8_t T> uint8_t Voice<T>::m_amp_env_amt;
+template <uint8_t T> uint8_t Voice<T>::m_amp_env_amt_current;
+template <uint8_t T> uint8_t Voice<T>::m_amp_env_amt_target;
 template <uint8_t T> uint8_t Voice<T>::m_note_number[3];
 template <uint8_t T> uint8_t Voice<T>::m_velocity[1];
 template <uint8_t T> uint8_t Voice<T>::m_output_error;
+template <uint8_t T> uint8_t Voice<T>::m_velocity_sensitivity;

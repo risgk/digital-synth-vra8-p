@@ -64,18 +64,18 @@ def sound_off
 end
 
 sound_off
-control_change(UNISON       , 0  )
+control_change(UNISON       , 16 )
 control_change(OSC_WAVEFORM , 0  )
 control_change(OSC_DETUNE   , 64 )
-control_change(OSC_EG_AMT   , 96 )
+control_change(AMP_EG       , 0  )
 control_change(FILTER_CUTOFF, 64 )
-control_change(FILTER_RESO  , 127)
+control_change(FILTER_RESO  , 64 )
 control_change(FILTER_EG_AMT, 96 )
 control_change(EG_DECAY     , 64 )
-control_change(NO_VELOCITY  , 0  )
-control_change(NO_AFTERTOUCH, 0  )
+control_change(VELOCITY_SENS, 0  )
+control_change(CC25_DUMMY   , 0  )
 control_change(CC26_DUMMY   , 0  )
-control_change(AMP_EG       , 0  )
+control_change(CC27_DUMMY   , 0  )
 play_a(4)
 play_b(3)
 
