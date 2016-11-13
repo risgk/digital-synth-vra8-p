@@ -142,7 +142,7 @@ public:
       result = level_main + level_detune + level_sub;
     }
 
-    return (result << 1);
+    return result;
   }
 
 private:
