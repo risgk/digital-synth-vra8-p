@@ -237,8 +237,8 @@ function onChangeControlChange(number, value) {
 function preset(number) {
   allNotesOff();
   var presetControllers = {};
-  presetControllers[UNISON       ] = [0  , 16 , 16 , 16 , 16 , 16 , 16 , 112, 112];
-  presetControllers[OSC_WAVEFORM ] = [0  , 0  , 0  , 0  , 0  , 64 , 127, 0  , 127];
+  presetControllers[UNISON       ] = [0  , 16 , 16 , 16 , 16 , 16 , 16 , 80 , 112];
+  presetControllers[OSC_WAVEFORM ] = [0  , 16 , 16 , 16 , 16 , 64 , 112, 16 , 112];
   presetControllers[OSC_DETUNE   ] = [0  , 64 , 64 , 96 , 64 , 64 , 64 , 64 , 64 ];
   presetControllers[AMP_EG       ] = [0  , 0  , 127, 0  , 0  , 0  , 0  , 0  , 0  ];
   presetControllers[FILTER_CUTOFF] = [0  , 64 , 0  , 96 , 127, 127, 127, 64 , 64 ];
@@ -337,7 +337,7 @@ function noteOff(noteNumber) {
     <td><input type="button" value="ORGAN"         onclick="preset(5)"    ></td>
     <td><input type="button" value="POLY SQ"       onclick="preset(6)"    ></td>
     <td>&nbsp;</td>
-    <td><input type="button" value="SAW LEAD"      onclick="preset(7)"    ></td>
+    <td><input type="button" value="PWM LEAD"      onclick="preset(7)"    ></td>
     <td><input type="button" value="SQ LEAD"       onclick="preset(8)"    ></td></tr>
 </table>
 
