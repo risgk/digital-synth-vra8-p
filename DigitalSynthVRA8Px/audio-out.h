@@ -4,8 +4,6 @@
 
 #include "common.h"
 
-//#define DEBUG
-
 template <uint8_t T>
 class AudioOut {
   static const int SPEAKER_PIN = 6;   // PD6 (OC0A)
@@ -27,9 +25,7 @@ public:
     TCCR1A = 0x03;
     TCCR1B = 0x09;
 
-    // For DEBUG
     m_count = 0;
-    UCSR0B |= _BV(TXEN0);
   }
 
   INLINE static void write(int8_t level) {

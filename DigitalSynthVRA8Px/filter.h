@@ -96,9 +96,9 @@ private:
     }
 
     if (m_cutoff_current < cutoff_target) {
-      m_cutoff_current += FILTER_CUTOFF_THROUGH_RATE;
+      m_cutoff_current++;
     } else if (m_cutoff_current > cutoff_target) {
-      m_cutoff_current -= FILTER_CUTOFF_THROUGH_RATE;
+      m_cutoff_current--;
     }
 
     const uint8_t* p = m_lpf_table + (m_cutoff_current << 2);
