@@ -32,10 +32,11 @@ public:
 #if defined(DEBUG)
     // Output Channel Pressure
     m_count++;
-    if (m_count == 0x80) {
+    if (m_count == 0x7F) {
       UDR0 = 0xDF;
-    } else if (m_count == 0) {
+    } else if (m_count == 0xFF) {
       UDR0 = TCNT1 >> 3;
+      m_count = 0;
     }
 #endif
     if (TIFR1 & _BV(TOV1)) {

@@ -26,7 +26,7 @@ class Filter {
 
 public:
   INLINE static void initialize() {
-    m_count = 0;
+    m_count = 3;
     m_x_1 = 0;
     m_x_2 = 0;
     m_y_1 = 0;

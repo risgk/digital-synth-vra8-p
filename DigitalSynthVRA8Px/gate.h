@@ -19,7 +19,7 @@ public:
     m_current_array[1] = 0;
     m_current_array[2] = 0;
     m_current_array[3] = 0;
-    m_count = 0;
+    m_count = 2;
   }
 
   INLINE static void note_on(uint8_t eg_number, uint8_t velocity) {
