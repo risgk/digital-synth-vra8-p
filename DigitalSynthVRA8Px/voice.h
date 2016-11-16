@@ -14,7 +14,7 @@ class Voice {
 
 public:
   INLINE static void initialize() {
-    m_count = 1;
+    m_count = 3;
     m_unison_on = false;
     m_waveform = OSC_WAVEFORM_SAW;
     m_amp_env_amt_current = 0;
