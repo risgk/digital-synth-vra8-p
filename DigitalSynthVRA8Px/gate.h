@@ -23,8 +23,11 @@ public:
   }
 
   INLINE static void note_on(uint8_t eg_number, uint8_t velocity) {
-    m_target_array[eg_number] = (high_byte((velocity << 1) *
-                                           (velocity << 1)) >> 2) + 1;
+    uint8_t target = high_byte((velocity << 1) * (velocity << 1)) >> 2;
+    if (target == 0) {
+      target = 1;
+    }
+    m_target_array[eg_number] = target;
   }
 
   INLINE static void note_off(uint8_t eg_number) {

@@ -14,7 +14,7 @@ class Voice {
 
 public:
   INLINE static void initialize() {
-    m_count = 3;
+    m_count = 0;
     m_unison_on = false;
     m_waveform = OSC_WAVEFORM_SAW;
     m_amp_env_amt_current = 0;
@@ -234,7 +234,7 @@ public:
     uint8_t env_gen_output = IEnvGen<0>::clock();
     int16_t filter_output = IFilter<0>::clock(osc_output, env_gen_output);
     uint8_t gain_control = high_byte((env_gen_output * m_amp_env_amt_current) +
-                                     ((gate_output_array[3] << 3) *
+                                     ((gate_output_array[3] << 2) *
                                       (AMP_ENV_AMT_MAX - m_amp_env_amt_current)));
     int16_t amp_output = IAmp<0>::clock(filter_output, gain_control);
 

@@ -26,7 +26,7 @@ class Filter {
 
 public:
   INLINE static void initialize() {
-    m_count = 0;
+    m_count = 2;
     m_x_1 = 0;
     m_x_2 = 0;
     m_y_1 = 0;
@@ -95,10 +95,12 @@ private:
       cutoff_target = cutoff_candidate;
     }
 
-    if (m_cutoff_current < cutoff_target) {
-      m_cutoff_current++;
-    } else if (m_cutoff_current > cutoff_target) {
-      m_cutoff_current--;
+    if (m_cutoff_current + FILTER_CUTOFF_THROUGH_RATE < cutoff_target) {
+      m_cutoff_current += FILTER_CUTOFF_THROUGH_RATE;
+    } else if (m_cutoff_current > cutoff_target + FILTER_CUTOFF_THROUGH_RATE) {
+      m_cutoff_current -= FILTER_CUTOFF_THROUGH_RATE;
+    } else {
+      m_cutoff_current = cutoff_target;
     }
 
     const uint8_t* p = m_lpf_table + (m_cutoff_current << 2);
