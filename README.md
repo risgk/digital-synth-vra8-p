@@ -7,6 +7,13 @@
 
 - 3 Voice Pseudo Polyphonic Synthesizer for Arduino Uno
 - A Variant of Digital Synth VRA8-P <https://github.com/risgk/digital-synth-vra8-p>
+- New Features
+    - 24-bit Phase Variables
+    - 16-bit Signal Processing
+    - 8-bit Audio Output with Error Diffusion
+    - Add Sub Oscillators
+    - Changeable Osc 2 (Detune) Level
+    - Resonance with Q = 11.3 (Max)
 
 ## Features
 
@@ -41,19 +48,19 @@
     +---------------+----------------+----------+----------------+----------------------+
     | Controller    | Value 0        | Value 64 | Value 127      | Notes                |
     +---------------+----------------+----------+----------------+----------------------+
-    | UNISON/MIX    | OFF            | ON       | ON             | 3 Voice UNISON       |
-    |               | +100%          | -100%    | +100%          | Detune MIX Level     |
-    | WAVEFORM/SUB  | SAWtooth       | ORGAN    | SQuare         | WAVEFORM             |
-    |               | 100%           | (0%)     | 100%           | SUB Osc Mix Level    |
+    | UNISON/MIX    | OFF            | ON       | ON             | 3 Voice Unison       |
+    |               | +100%          | -100%    | +100%          | Osc 2 (Detune) Level |
+    | WAVEFORM/SUB  | Sawtooth       | Organ    | Square         | Waveform             |
+    |               | 100%           | (0%)     | 100%           | Sub Osc Level        |
     | DETUNE        | 0.06 Hz        | 1.0 Hz   | 3.8 Hz         |                      |
     | AMP EG        | OFF            | ON       | ON             |                      |
     +---------------+----------------+----------+----------------+----------------------+
     | CUTOFF        | 0.22 kHz       | 1.2 kHz  | 7.0 kHz        | Range 4 to 124       |
-    | RESONANCE     | Q = 0.7        | Q = 4.0  | Q = 16.0       |                      |
+    | RESONANCE     | Q = 0.7        | Q = 2.8  | Q = 11.3       |                      |
     | CUTOFF EG AMT | -126 (EG 100%) | 0        | +125 (EG 100%) | Modulate CUTOFF      |
-    | EG DECAY      | 34 ms          | 2.2 s    | 8.7 s          | EG DECAY Time        |
+    | EG DECAY      | 34 ms          | 2.2 s    | 8.7 s          | Decay Time           |
     +---------------+----------------+----------+----------------+----------------------+
-    | VELOCITY SENS | 0%             | 50.4%    | 100%           | VELOCITY SENSitivity |
+    | VELOCITY SENS | 0%             | 50.4%    | 100%           | Velocity Sensitivity |
     +---------------+----------------+----------+----------------+----------------------+
 
 ## MIDI Implementation Chart
