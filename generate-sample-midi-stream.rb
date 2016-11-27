@@ -64,7 +64,7 @@ def sound_off
 end
 
 sound_off
-control_change(UNISON       , 16 )
+control_change(UNISON       , 8  )
 control_change(OSC_WAVEFORM , 16 )
 control_change(OSC_DETUNE   , 64 )
 control_change(AMP_EG       , 0  )

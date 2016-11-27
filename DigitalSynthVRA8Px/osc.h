@@ -5,7 +5,7 @@
 #include "mul-q.h"
 #include <math.h>
 
-static const uint8_t OSC_MIX_TABLE_LENGTH = 62 + 1;  // odd number
+static const uint8_t OSC_MIX_TABLE_LENGTH = 32 + 1;  // odd number
 
 template <uint8_t T>
 class Osc {
@@ -52,12 +52,18 @@ public:
   INLINE static void set_mix(uint8_t controller_value) {
     uint8_t c = controller_value >> 1;
     const uint8_t L = (OSC_MIX_TABLE_LENGTH - 1) >> 1;
-    if (c < 32) {
+    if (c < 16) {
       m_mix_main   = +m_mix_table[L + c];
       m_mix_detune = +m_mix_table[L - c];
+    } else if (c < 32) {
+      m_mix_main   = +m_mix_table[L + 16];
+      m_mix_detune = +m_mix_table[L - 16];
+    } else if (c < 48) {
+      m_mix_main   = +m_mix_table[L + (48 - c)];
+      m_mix_detune = -m_mix_table[L - (48 - c)];
     } else {
-      m_mix_main   = +m_mix_table[L + (62 - (c - 1))];
-      m_mix_detune = -m_mix_table[L - (62 - (c - 1))];
+      m_mix_main   = +m_mix_table[L];
+      m_mix_detune = -m_mix_table[L];
     }
   }
 
@@ -66,7 +72,7 @@ public:
   }
 
   INLINE static void set_sub(uint8_t controller_value) {
-    m_mix_sub = +m_mix_table[controller_value >> 1];
+    m_mix_sub = m_mix_table[controller_value >> 2];
   }
 
   INLINE static void set_detune(uint8_t controller_value) {
