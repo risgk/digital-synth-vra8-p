@@ -7,13 +7,16 @@
 
 - 3 Voice Pseudo Polyphonic Synthesizer for Arduino Uno
 - A Variant of Digital Synth VRA8-P <https://github.com/risgk/digital-synth-vra8-p>
-- New Features
-    - 24-bit Phase Variables
-    - 16-bit Signal Processing
-    - 8-bit Audio Output with Error Diffusion
-    - Add Sub Oscillators
-    - Changeable Osc 2 (Detune) Level
-    - Resonance with Q = 11.3 (Max)
+
+# Major New Features
+
+- Phase Resolution: 24 bit
+- Internal Signal Processing: 16 bit
+- Audio Output (8 bit) with Error Diffusion
+- Sub Oscillators (Triangle Wave)
+- Changeable Osc 2 (Detune) Level
+- Resonance with Q = 11.3 (Max)
+- Velocity Sensitivity
 
 ## Features
 
@@ -24,7 +27,7 @@
     - **CAUTION**: Click sounds may occur when you connect the audio out to an amp/a speaker or reset the board
     - **CAUTION**: The Arduino PWM audio output is a unipolar LINE OUT
         - Please connect this to a power amp/a headphone amp (not to a speaker/a headphone directly)
-- Sampling Rate: 15625 Hz, Bit Depth: 8 bits
+- Sampling Rate: 15625 Hz, Bit Depth: 8 bit
 - LPF Attenuation Slope: -12 dB/oct
 - Recommending [Hairless MIDI<->Serial Bridge](http://projectgus.github.io/hairless-midiserial/) to connect PC
 - Files
@@ -34,6 +37,7 @@
         - `make-sample-wav-file-cc.bat` makes a sample WAV file (working on Windows)
     - `generate-*.rb` generate source files
         - Requiring a Ruby execution environment
+- **CAUTION**: Use Arduino IDE 1.6.8 or later
 
 ## VRA8-Px CTRL
 
