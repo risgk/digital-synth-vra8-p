@@ -43,7 +43,7 @@ public:
   }
 
   INLINE static void set_resonance(uint8_t controller_value) {
-    m_lpf_table = g_filter_lpf_tables[controller_value >> 3];
+    m_lpf_table = g_filter_lpf_tables[(controller_value + 4) >> 3];
   }
 
   INLINE static void set_env_amt(uint8_t controller_value) {
