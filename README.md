@@ -8,7 +8,7 @@
 - 3 Voice Pseudo Polyphonic Synthesizer for Arduino Uno
 - A Variant of Digital Synth VRA8-P <https://github.com/risgk/digital-synth-vra8-p>
 
-# Major New Features
+## Major New Features
 
 - Phase Resolution: 24 bit
 - Internal Signal Processing: 16 bit
