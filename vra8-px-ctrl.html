@@ -49,7 +49,7 @@ const FILTER_EG_AMT = 22;
 const EG_DECAY      = 23;
 const VELOCITY_SENS = 24;
 const CC25_DUMMY    = 25;
-const CC26_DUMMY    = 26;
+const DETUNE_EG_AMT = 26;
 const CC27_DUMMY    = 27;
 const ALL_NOTES_OFF = 123;
 
@@ -247,7 +247,7 @@ function preset(number) {
   presetControllers[EG_DECAY     ] = [0  , 64 , 64 , 32 , 64 , 64 , 64 , 127, 127];
   presetControllers[VELOCITY_SENS] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  ];
   presetControllers[CC25_DUMMY   ] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  ];
-  presetControllers[CC26_DUMMY   ] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  ];
+  presetControllers[DETUNE_EG_AMT] = [0  , 64 , 64 , 64 , 64 , 64 , 64 , 64 , 64 ];
   presetControllers[CC27_DUMMY   ] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  ];
   for (var i = CONTROLLERS_FIRST; i <= CONTROLLERS_LAST; i++) {
     onChangeControlChange(i, presetControllers[i][number]);
@@ -311,7 +311,7 @@ function noteOff(noteNumber) {
 <body>
 
 <table>
-<tr><td><strong>VRA8-Px CTRL 1.0.0</strong>&nbsp;&nbsp;Digital Synth VRA8-Px Controller (<a href="https://github.com/risgk/digital-synth-vra8-p/tree/vra8-px">View on GitHub</a>), We recommend Google Chrome</td></tr>
+<tr><td><strong>VRA8-Px CTRL 1.x.0</strong>&nbsp;&nbsp;Digital Synth VRA8-Px Controller (<a href="https://github.com/risgk/digital-synth-vra8-p/tree/vra8-px">View on GitHub</a>), We recommend Google Chrome</td></tr>
 </table>
 
 <table>
@@ -393,14 +393,14 @@ function noteOff(noteNumber) {
     <td><span id="spanCC23">-1</span></td></tr>
 <tr><td>VELOCITY SENS         </td><td></td>
     <td>                      </td><td></td>
-    <td>                      </td><td></td>
+    <td>DETUNE EG AMT         </td><td></td>
     <td>                      </td></tr>
 <tr><td><input id="inputCC24" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(24, value)"></td>
     <td><span id="spanCC24">-1</span></td>
     <td><input id="inputCC25" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(25, value)" style="visibility:hidden"></td>
     <td><span id="spanCC25" style="visibility:hidden">-1</span></td>
-    <td><input id="inputCC26" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(26, value)" style="visibility:hidden"></td>
-    <td><span id="spanCC26" style="visibility:hidden">-1</span></td>
+    <td><input id="inputCC26" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(26, value)"></td>
+    <td><span id="spanCC26">-1</span></td>
     <td><input id="inputCC27" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(27, value)" style="visibility:hidden"></td>
     <td><span id="spanCC27" style="visibility:hidden">-1</span></td>
 </table>

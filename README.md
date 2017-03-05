@@ -1,6 +1,6 @@
-# Digital Synth VRA8-Px 1.0.0
+# Digital Synth VRA8-Px 1.x.0
 
-- 2016-11-27 ISGK Instruments
+- 2017-03-05 ISGK Instruments
 - <https://github.com/risgk/digital-synth-vra8-p/tree/vra8-px>
 
 ## Concept
@@ -57,6 +57,7 @@
     | WAVEFORM/SUB  | 16   | Sawtooth       | Organ    | Square         | Waveform             |
     |               |      | 100%           | (0%)     | 100%           | Sub Osc Level        |
     | DETUNE        | 64   | 0.06 Hz        | 1.0 Hz   | 3.8 Hz         |                      |
+    | DETUNE EG AMT | 0    | -126 (EG 100%) | 0        | +125 (EG 100%) | Modulates DETUNE     |
     | AMP EG        | 0    | OFF            | ON       | ON             |                      |
     +---------------+------+----------------+----------+----------------+----------------------+
     | CUTOFF        | 64   | 0.22 kHz       | 1.2 kHz  | 7.0 kHz        | Range 4 to 124       |
@@ -69,8 +70,8 @@
 
 ## MIDI Implementation Chart
 
-      [Experimental Synthesizer]                                      Date: 2016-11-27       
-      Model  Digital Synth VRA8-Px    MIDI Implementation Chart       Version: 1.0.0         
+      [Experimental Synthesizer]                                      Date: 2017-03-05       
+      Model  Digital Synth VRA8-Px    MIDI Implementation Chart       Version: 1.x.0         
     +-------------------------------+---------------+---------------+-----------------------+
     | Function...                   | Transmitted   | Recognized    | Remarks               |
     +-------------------------------+---------------+---------------+-----------------------+
@@ -101,6 +102,7 @@
     |                            22 | x             | o             | CUTOFF EG AMT         |
     |                            23 | x             | o             | EG DECAY              |
     |                            24 | x             | o             | VELOCITY SENS         |
+    |                            26 | x             | o             | DETUNE EG AMT         |
     +-------------------------------+---------------+---------------+-----------------------+
     | Program                       | x             | x             |                       |
     | Change       : True #         | ************* |               |                       |

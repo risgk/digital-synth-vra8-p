@@ -206,6 +206,9 @@ public:
     case VELOCITY_SENS:
       m_velocity_sensitivity = controller_value;
       break;
+    case DETUNE_EG_AMT:
+      IOsc<0>::set_detune_env_amt(controller_value);
+      break;
     case ALL_NOTES_OFF:
     case OMNI_MODE_OFF:
     case OMNI_MODE_ON:
@@ -228,10 +231,11 @@ public:
     gate_output_array[1] = IGate<0>::level<1>();
     gate_output_array[2] = IGate<0>::level<2>();
     gate_output_array[3] = IGate<0>::level<3>();
+    uint8_t env_gen_output = IEnvGen<0>::clock();
     int16_t osc_output = IOsc<0>::clock(gate_output_array[0],
                                         gate_output_array[1],
-                                        gate_output_array[2]);
-    uint8_t env_gen_output = IEnvGen<0>::clock();
+                                        gate_output_array[2],
+                                        env_gen_output);
     int16_t filter_output = IFilter<0>::clock(osc_output, env_gen_output);
     uint8_t gain_control = high_byte((env_gen_output * m_amp_env_amt_current) +
                                      ((gate_output_array[3] << 2) *
