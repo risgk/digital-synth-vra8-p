@@ -52,10 +52,12 @@ public:
 private:
   template <uint8_t N>
   INLINE static void update_level() {
-    if (m_current_array[N] < m_target_array[N]) {
-      m_current_array[N]++;
-    } else if (m_current_array[N] > m_target_array[N]) {
-      m_current_array[N]--;
+    if (m_current_array[N] + GATE_LEVEL_STEP < m_target_array[N]) {
+      m_current_array[N] += GATE_LEVEL_STEP;
+    } else if (m_current_array[N] > m_target_array[N] + GATE_LEVEL_STEP) {
+      m_current_array[N] -= GATE_LEVEL_STEP;
+    } else {
+      m_current_array[N] = m_target_array[N];
     }
   }
 };
