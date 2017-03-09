@@ -26,7 +26,7 @@ class Osc {
 
 public:
   INLINE static void initialize() {
-    m_count = 0;
+    m_count = 128;
     m_unison_on = false;
     m_mix_main   = m_mix_table[(OSC_MIX_TABLE_LENGTH - 1) >> 1];
     m_mix_detune = m_mix_table[(OSC_MIX_TABLE_LENGTH - 1) >> 1];
