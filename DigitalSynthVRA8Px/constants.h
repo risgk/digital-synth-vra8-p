@@ -21,7 +21,6 @@ const uint8_t   FILTER_CONTROL_INTERVAL     = 0x04;
 const uint8_t   FILTER_CUTOFF_THROUGH_RATE  = 8;
 const uint8_t   FILTER_TABLE_FRACTION_BITS  = 14;
 const uint8_t   GATE_CONTROL_INTERVAL       = 0x04;
-const uint8_t   GATE_LEVEL_MAX              = 60;
 const uint8_t   GATE_LEVEL_STEP             = 4;
 const uint8_t   ENV_GEN_CONTROL_INTERVAL    = 0x04;
 const uint16_t  ENV_GEN_LEVEL_MAX           = 0xFFFF;
