@@ -1,5 +1,4 @@
-//#define DEBUG
-
+#include "Arduino.h"
 #include "common.h"
 #include "synth.h"
 #include "serial-in.h"
