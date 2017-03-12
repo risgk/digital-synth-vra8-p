@@ -8,7 +8,12 @@
 - 3 Voice Pseudo Polyphonic Synthesizer for Arduino Uno
 - A Variant of Digital Synth VRA8-P <https://github.com/risgk/digital-synth-vra8-p>
 
-## Major New Features
+## v1.2 New Features
+
+- Cutoff Velocity Sensitivity
+- Detune EG Amount
+
+## v1.0 New Features
 
 - Phase Resolution: 24 bit
 - Internal Signal Processing: 16 bit
@@ -62,7 +67,7 @@
     +---------------+------+----------------+----------+----------------+-----------------------------+
     | CUTOFF        | 64   | 0.22 kHz       | 1.2 kHz  | 7.0 kHz        | Range 4 to 124              |
     | RESONANCE     | 64   | Q = 0.7        | Q = 2.8  | Q = 11.3       |                             |
-    | CUTOFF EG AMT | 96   | -126 (EG 100%) | 0        | +125 (EG 100%) | Modulate CUTOFF             |
+    | CUTOFF EG AMT | 96   | -126 (EG 100%) | 0        | +125 (EG 100%) | Modulates CUTOFF            |
     | EG DECAY      | 64   | 34 ms          | 2.2 s    | 8.7 s          | Decay Time                  |
     +---------------+------+----------------+----------+----------------+-----------------------------+
     | VELOCITY SENS | 0    | 0%             | 50.4%    | 100%           | Gain Velocity Sensitivity   |
