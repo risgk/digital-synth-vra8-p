@@ -1,6 +1,3 @@
-// refs https://www.midi.org/specifications/item/the-midi-1-0-specification
-// refs http://amei.or.jp/midistandardcommittee/MIDIspcj.html
-
 #pragma once
 
 #include "common.h"
@@ -34,7 +31,7 @@ public:
           note_off(m_first_data);
           m_first_data = DATA_BYTE_INVALID;
         } else {
-          note_on(m_first_data, b);
+          note_on(m_first_data);
           m_first_data = DATA_BYTE_INVALID;
         }
       } else if (m_running_status == (NOTE_OFF | MIDI_CH)) {
@@ -86,7 +83,14 @@ public:
   }
 
   INLINE static void control_change(uint8_t controller_number, uint8_t controller_value) {
-    IVoice<0>::control_change(controller_number, controller_value);
+    switch (controller_number) {
+    case ALL_NOTES_OFF:
+      IVoice<0>::all_note_off();
+      break;
+    default:
+      IVoice<0>::control_change(controller_number, controller_value);
+      break;
+    }
   }
 
   INLINE static int8_t clock() {
@@ -110,8 +114,8 @@ private:
     return b <= DATA_BYTE_MAX;
   }
 
-  INLINE static void note_on(uint8_t note_number, uint8_t velocity) {
-    IVoice<0>::note_on(note_number, velocity);
+  INLINE static void note_on(uint8_t note_number) {
+    IVoice<0>::note_on(note_number);
   }
 
   INLINE static void note_off(uint8_t note_number) {
