@@ -75,7 +75,7 @@ control_change(EG_DECAY     , 64 )
 control_change(VELOCITY_SENS, 0  )
 control_change(CC25_DUMMY   , 0  )
 control_change(CC26_DUMMY   , 0  )
-control_change(DETUNE_EG_AMT, 64 )
+control_change(DETUNE_EG_AMT, 48 )
 play_a(4)
 play_b(3)
 
