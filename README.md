@@ -1,6 +1,6 @@
-# Digital Synth VRA8-Px 1.0.0
+# Digital Synth VRA8-Px 1.2.0
 
-- 2016-11-27 ISGK Instruments
+- 2017-03-12 ISGK Instruments
 - <https://github.com/risgk/digital-synth-vra8-p/tree/vra8-px>
 
 ## Concept
@@ -8,7 +8,12 @@
 - 3 Voice Pseudo Polyphonic Synthesizer for Arduino Uno
 - A Variant of Digital Synth VRA8-P <https://github.com/risgk/digital-synth-vra8-p>
 
-# Major New Features
+## v1.2 New Features
+
+- Cutoff Velocity Sensitivity
+- Detune EG Amount
+
+## v1.0 New Features
 
 - Phase Resolution: 24 bit
 - Internal Signal Processing: 16 bit
@@ -37,7 +42,7 @@
         - `make-sample-wav-file-cc.bat` makes a sample WAV file (working on Windows)
     - `generate-*.rb` generate source files
         - Requiring a Ruby execution environment
-- **CAUTION**: Use Arduino IDE 1.6.8 or later
+- **CAUTION**: Use Arduino IDE 1.8.1 or later
 
 ## VRA8-Px CTRL
 
@@ -49,28 +54,30 @@
 
 ## Controllers
 
-    +---------------+------+----------------+----------+----------------+----------------------+
-    | Controller    | Init | Value 0        | Value 64 | Value 127      | Notes                |
-    +---------------+------+----------------+----------+----------------+----------------------+
-    | UNISON/MIX    | 8    | OFF            | ON       | ON             | 3 Voice Unison       |
-    |               |      | +100%          | -100%    | +100%          | Osc 2 (Detune) Level |
-    | WAVEFORM/SUB  | 16   | Sawtooth       | Organ    | Square         | Waveform             |
-    |               |      | 100%           | (0%)     | 100%           | Sub Osc Level        |
-    | DETUNE        | 64   | 0.06 Hz        | 1.0 Hz   | 3.8 Hz         |                      |
-    | AMP EG        | 0    | OFF            | ON       | ON             |                      |
-    +---------------+------+----------------+----------+----------------+----------------------+
-    | CUTOFF        | 64   | 0.22 kHz       | 1.2 kHz  | 7.0 kHz        | Range 4 to 124       |
-    | RESONANCE     | 64   | Q = 0.7        | Q = 2.8  | Q = 11.3       |                      |
-    | CUTOFF EG AMT | 96   | -126 (EG 100%) | 0        | +125 (EG 100%) | Modulate CUTOFF      |
-    | EG DECAY      | 64   | 34 ms          | 2.2 s    | 8.7 s          | Decay Time           |
-    +---------------+------+----------------+----------+----------------+----------------------+
-    | VELOCITY SENS | 0    | 0%             | 50.4%    | 100%           | Velocity Sensitivity |
-    +---------------+------+----------------+----------+----------------+----------------------+
+    +---------------+------+----------------+----------+----------------+-----------------------------+
+    | Controller    | Init | Value 0        | Value 64 | Value 127      | Notes                       |
+    +---------------+------+----------------+----------+----------------+-----------------------------+
+    | UNISON/MIX    | 8    | OFF            | ON       | ON             | 3 Voice Unison              |
+    |               |      | +100%          | -100%    | +100%          | Osc 2 (Detune) Level        |
+    | WAVEFORM/SUB  | 16   | Sawtooth       | Organ    | Square         | Waveform                    |
+    |               |      | 100%           | (0%)     | 100%           | Sub Osc Level               |
+    | DETUNE        | 64   | 0.06 Hz        | 1.0 Hz   | 3.8 Hz         |                             |
+    | DETUNE EG AMT | 0    | -126 (EG 100%) | 0        | +125 (EG 100%) | Modulates DETUNE            |
+    | AMP EG        | 0    | OFF            | ON       | ON             |                             |
+    +---------------+------+----------------+----------+----------------+-----------------------------+
+    | CUTOFF        | 64   | 0.22 kHz       | 1.2 kHz  | 7.0 kHz        | Range 4 to 124              |
+    | RESONANCE     | 64   | Q = 0.7        | Q = 2.8  | Q = 11.3       |                             |
+    | CUTOFF EG AMT | 96   | -126 (EG 100%) | 0        | +125 (EG 100%) | Modulates CUTOFF            |
+    | EG DECAY      | 64   | 34 ms          | 2.2 s    | 8.7 s          | Decay Time                  |
+    +---------------+------+----------------+----------+----------------+-----------------------------+
+    | VELOCITY SENS | 0    | 0%             | 50.4%    | 100%           | Gain Velocity Sensitivity   |
+    | CUTOFF V SENS | 127  | 0%             | 50.4%    | 100%           | Cutoff Velocity Sensitivity |
+    +---------------+------+----------------+----------+----------------+-----------------------------+
 
 ## MIDI Implementation Chart
 
-      [Experimental Synthesizer]                                      Date: 2016-11-27       
-      Model  Digital Synth VRA8-Px    MIDI Implementation Chart       Version: 1.0.0         
+      [Experimental Synthesizer]                                      Date: 2017-03-12       
+      Model  Digital Synth VRA8-Px    MIDI Implementation Chart       Version: 1.2.0         
     +-------------------------------+---------------+---------------+-----------------------+
     | Function...                   | Transmitted   | Recognized    | Remarks               |
     +-------------------------------+---------------+---------------+-----------------------+
@@ -101,6 +108,8 @@
     |                            22 | x             | o             | CUTOFF EG AMT         |
     |                            23 | x             | o             | EG DECAY              |
     |                            24 | x             | o             | VELOCITY SENS         |
+    |                            25 | x             | o             | CUTOFF V SENS         |
+    |                            27 | x             | o             | DETUNE EG AMT         |
     +-------------------------------+---------------+---------------+-----------------------+
     | Program                       | x             | x             |                       |
     | Change       : True #         | ************* |               |                       |

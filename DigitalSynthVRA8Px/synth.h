@@ -37,9 +37,9 @@ public:
     ISynthCore<0>::control_change(FILTER_EG_AMT, 96 );
     ISynthCore<0>::control_change(EG_DECAY     , 64 );
     ISynthCore<0>::control_change(VELOCITY_SENS, 0  );
-    ISynthCore<0>::control_change(CC25_DUMMY   , 0  );
+    ISynthCore<0>::control_change(CUTOFF_V_SENS, 127);
     ISynthCore<0>::control_change(CC26_DUMMY   , 0  );
-    ISynthCore<0>::control_change(CC27_DUMMY   , 0  );
+    ISynthCore<0>::control_change(DETUNE_EG_AMT, 48 );
   }
 
   INLINE static void receive_midi_byte(uint8_t b) {

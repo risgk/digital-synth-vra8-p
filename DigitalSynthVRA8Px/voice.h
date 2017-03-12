@@ -11,6 +11,7 @@ class Voice {
   static uint8_t m_velocity[1];
   static uint8_t m_output_error;
   static uint8_t m_velocity_sensitivity;
+  static uint8_t m_cutoff_velocity_sensitivity;
 
 public:
   INLINE static void initialize() {
@@ -24,7 +25,8 @@ public:
     m_note_number[2] = NOTE_NUMBER_INVALID;
     m_velocity[0] = 127;
     m_output_error = 0;
-    m_velocity_sensitivity = 127;
+    m_velocity_sensitivity = 0;
+    m_cutoff_velocity_sensitivity = 0;
     IOsc<0>::initialize();
     IFilter<0>::initialize();
     IAmp<0>::initialize();
@@ -105,6 +107,8 @@ public:
 
     uint8_t v = high_byte((velocity + 1) * (m_velocity_sensitivity << 1)) +
                           (127 - m_velocity_sensitivity);
+    uint8_t cutoff_v = high_sbyte(static_cast<int8_t>(velocity - 64) *
+                                  (m_cutoff_velocity_sensitivity << 1)) + 64;
 
     if (m_unison_on) {
       m_note_number[0] = note_number;
@@ -134,6 +138,7 @@ public:
 
     IGate<0>::note_on(3, 127);
     IEnvGen<0>::note_on();
+    IFilter<0>::note_on(cutoff_v);
   }
 
   INLINE static void note_off(uint8_t note_number) {
@@ -206,6 +211,12 @@ public:
     case VELOCITY_SENS:
       m_velocity_sensitivity = controller_value;
       break;
+    case CUTOFF_V_SENS:
+      m_cutoff_velocity_sensitivity = controller_value;
+      break;
+    case DETUNE_EG_AMT:
+      IOsc<0>::set_detune_env_amt(controller_value);
+      break;
     case ALL_NOTES_OFF:
     case OMNI_MODE_OFF:
     case OMNI_MODE_ON:
@@ -228,10 +239,11 @@ public:
     gate_output_array[1] = IGate<0>::level<1>();
     gate_output_array[2] = IGate<0>::level<2>();
     gate_output_array[3] = IGate<0>::level<3>();
+    uint8_t env_gen_output = IEnvGen<0>::clock();
     int16_t osc_output = IOsc<0>::clock(gate_output_array[0],
                                         gate_output_array[1],
-                                        gate_output_array[2]);
-    uint8_t env_gen_output = IEnvGen<0>::clock();
+                                        gate_output_array[2],
+                                        env_gen_output);
     int16_t filter_output = IFilter<0>::clock(osc_output, env_gen_output);
     uint8_t gain_control = high_byte((env_gen_output * m_amp_env_amt_current) +
                                      ((gate_output_array[3] << 2) *
@@ -263,3 +275,4 @@ template <uint8_t T> uint8_t Voice<T>::m_note_number[3];
 template <uint8_t T> uint8_t Voice<T>::m_velocity[1];
 template <uint8_t T> uint8_t Voice<T>::m_output_error;
 template <uint8_t T> uint8_t Voice<T>::m_velocity_sensitivity;
+template <uint8_t T> uint8_t Voice<T>::m_cutoff_velocity_sensitivity;

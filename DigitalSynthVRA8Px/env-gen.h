@@ -53,7 +53,7 @@ public:
         if (m_rest == 0) {
           m_rest = ATTACK_UPDATE_INTERVAL;
           if (m_level >= ENV_GEN_LEVEL_MAX - ENV_GEN_LEVEL_A_R_STEP) {
-            m_level == ENV_GEN_LEVEL_MAX;
+            m_level = ENV_GEN_LEVEL_MAX;
             m_state = STATE_DECAY;
             m_rest = m_decay_update_interval;
           } else {
