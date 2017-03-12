@@ -237,18 +237,18 @@ function onChangeControlChange(number, value) {
 function preset(number) {
   allNotesOff();
   var presetControllers = {};
-  presetControllers[UNISON       ] = [0  , 8  , 8  , 40 , 8  , 8  , 8  , 71 , 127];
-  presetControllers[OSC_WAVEFORM ] = [0  , 16 , 16 , 16 , 32 , 64 , 96 , 0  , 127];
-  presetControllers[OSC_DETUNE   ] = [0  , 64 , 64 , 80 , 64 , 64 , 64 , 64 , 64 ];
-  presetControllers[AMP_EG       ] = [0  , 0  , 127, 0  , 0  , 0  , 0  , 0  , 0  ];
-  presetControllers[FILTER_CUTOFF] = [0  , 64 , 0  , 96 , 127, 127, 127, 64 , 64 ];
-  presetControllers[FILTER_RESO  ] = [0  , 64 , 64 , 64 , 0  , 0  , 0  , 127, 127];
-  presetControllers[FILTER_EG_AMT] = [0  , 96 , 127, 16 , 64 , 64 , 64 , 96 , 96 ];
-  presetControllers[EG_DECAY     ] = [0  , 64 , 64 , 32 , 64 , 64 , 64 , 127, 127];
-  presetControllers[VELOCITY_SENS] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  ];
-  presetControllers[CUTOFF_V_SENS] = [0  , 127, 127, 127, 0  , 0  , 0  , 127, 127];
-  presetControllers[CC26_DUMMY   ] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  ];
-  presetControllers[DETUNE_EG_AMT] = [0  , 48 , 48 , 48 , 64 , 64 , 64 , 48 , 48 ];
+  presetControllers[UNISON       ] = [0  , 8  , 8  , 40 , 0  , 0  , 0  , 71 , 127, 119];
+  presetControllers[OSC_WAVEFORM ] = [0  , 16 , 16 , 16 , 32 , 64 , 96 , 0  , 127, 0  ];
+  presetControllers[OSC_DETUNE   ] = [0  , 64 , 64 , 80 , 64 , 64 , 64 , 64 , 64 , 32 ];
+  presetControllers[AMP_EG       ] = [0  , 0  , 127, 0  , 0  , 0  , 0  , 0  , 0  , 127];
+  presetControllers[FILTER_CUTOFF] = [0  , 64 , 0  , 96 , 127, 127, 127, 64 , 64 , 0  ];
+  presetControllers[FILTER_RESO  ] = [0  , 64 , 64 , 64 , 0  , 0  , 0  , 64 , 64 , 127];
+  presetControllers[FILTER_EG_AMT] = [0  , 96 , 127, 16 , 64 , 64 , 64 , 96 , 96 , 96 ];
+  presetControllers[EG_DECAY     ] = [0  , 64 , 64 , 32 , 64 , 64 , 64 , 32 , 127, 48 ];
+  presetControllers[VELOCITY_SENS] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  ];
+  presetControllers[CUTOFF_V_SENS] = [0  , 127, 127, 127, 0  , 0  , 0  , 127, 127, 127];
+  presetControllers[CC26_DUMMY   ] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  ];
+  presetControllers[DETUNE_EG_AMT] = [0  , 48 , 48 , 48 , 64 , 64 , 64 , 48 , 48 , 48 ];
   for (var i = CONTROLLERS_FIRST; i <= CONTROLLERS_LAST; i++) {
     onChangeControlChange(i, presetControllers[i][number]);
   }
@@ -338,7 +338,8 @@ function noteOff(noteNumber) {
     <td><input type="button" value="POLY SQ"       onclick="preset(6)"    ></td>
     <td>&nbsp;</td>
     <td><input type="button" value="PWM LEAD"      onclick="preset(7)"    ></td>
-    <td><input type="button" value="SQ LEAD"       onclick="preset(8)"    ></td></tr>
+    <td><input type="button" value="SQ LEAD"       onclick="preset(8)"    ></td>
+    <td><input type="button" value="BASS"          onclick="preset(9)"    ></td></tr>
 </table>
 
 <table>
