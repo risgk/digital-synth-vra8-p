@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
 <meta charset="utf-8">
-<title>VRA8-P CTRL</title>
+<title>VRA8-Px CTRL</title>
 <style>
 * {
   font-size: 12px;
@@ -12,25 +12,25 @@ td {
   text-align: left;
 }
 td.key {
-  color: lightseagreen;
+  color: darkseagreen;
   text-align: center;
   width: 46px;
-  height: 60px;
-  border: 1px solid lightseagreen;
+  height: 46px;
+  border: 1px solid darkseagreen;
 }
 td.keyb {
   color: white;
-  background-color: lightseagreen;
+  background-color: darkseagreen;
   text-align: center;
   width: 46px;
-  height: 60px;
-  border: 1px solid lightseagreen;
+  height: 46px;
+  border: 1px solid darkseagreen;
 }
 td.keyh {
   text-align: center;
   width: 20px;
-  height: 60px;
-  border: 1px solid lightseagreen;
+  height: 46px;
+  border: 1px solid darkseagreen;
 }
 </style>
 <script>
@@ -47,10 +47,14 @@ const FILTER_CUTOFF = 20;
 const FILTER_RESO   = 21;
 const FILTER_EG_AMT = 22;
 const EG_DECAY      = 23;
+const VELOCITY_SENS = 24;
+const CUTOFF_V_SENS = 25;
+const CC26_DUMMY    = 26;
+const DETUNE_EG_AMT = 27;
 const ALL_NOTES_OFF = 123;
 
 const CONTROLLERS_FIRST = 16;
-const CONTROLLERS_LAST  = 23;
+const CONTROLLERS_LAST  = 27;
 </script>
 <script>
 var transpose = 0;
@@ -121,7 +125,8 @@ function onChangeTranspose(value) {
 <script>
 var midi        = null;
 var midiInputs  = null;
-var midiInput   = null;
+var midiInput1  = null;
+var midiInput2  = null;
 var midiOutputs = null;
 var midiOutput  = null;
 
@@ -166,11 +171,16 @@ function onMIDISuccess(midiAccess) {
     midiOutputs.push(o.value)
   }
 
-  var selectInputPort = document.getElementById("selectInputPort");
+  var selectInputPort1 = document.getElementById("selectInputPort1");
   for (var i = 0; i < midiInputs.length; i++) {
-    selectInputPort.appendChild(new Option(midiInputs[i].name))
+    selectInputPort1.appendChild(new Option(midiInputs[i].name))
   }
-  onChangeInputPort();
+  onChangeInputPort1();
+  var selectInputPort2 = document.getElementById("selectInputPort2");
+  for (var i = 0; i < midiInputs.length; i++) {
+    selectInputPort2.appendChild(new Option(midiInputs[i].name))
+  }
+  onChangeInputPort2();
   var selectOutputPort = document.getElementById("selectOutputPort");
   for (var i = 0; i < midiOutputs.length; i++) {
     selectOutputPort.appendChild(new Option(midiOutputs[i].name))
@@ -182,11 +192,19 @@ function onMIDIFailure(msg) {
   console.log("Failed to get MIDI access - " + msg);
 }
 
-function onChangeInputPort(){
-  var selectInputPort = document.getElementById("selectInputPort");
-  midiInput = midiInputs[selectInputPort.selectedIndex];
-  if (midiInput) {
-    midiInput.onmidimessage = onMIDIMessage;
+function onChangeInputPort1(){
+  var selectInputPort = document.getElementById("selectInputPort1");
+  midiInput1 = midiInputs[selectInputPort.selectedIndex];
+  if (midiInput1) {
+    midiInput1.onmidimessage = onMIDIMessage;
+  }
+}
+
+function onChangeInputPort2(){
+  var selectInputPort = document.getElementById("selectInputPort2");
+  midiInput2 = midiInputs[selectInputPort.selectedIndex];
+  if (midiInput2) {
+    midiInput2.onmidimessage = onMIDIMessage;
   }
 }
 
@@ -219,15 +237,18 @@ function onChangeControlChange(number, value) {
 function preset(number) {
   allNotesOff();
   var presetControllers = {};
-  presetControllers[UNISON       ] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 127, 127];
-  presetControllers[OSC_WAVEFORM ] = [0  , 0  , 0  , 0  , 0  , 64 , 127, 0  , 127];
-  presetControllers[OSC_DETUNE   ] = [0  , 32 , 32 , 64 , 32 , 32 , 32 , 48 , 48 ];
-  presetControllers[AMP_EG       ] = [0  , 0  , 127, 0  , 0  , 0  , 0  , 0  , 0  ];
-  presetControllers[FILTER_CUTOFF] = [0  , 64 , 0  , 96 , 127, 127, 127, 64 , 64 ];
-  presetControllers[FILTER_RESO  ] = [0  , 64 , 127, 64 , 0  , 0  , 0  , 127, 127];
-  presetControllers[FILTER_EG_AMT] = [0  , 96 , 127, 16 , 64 , 64 , 64 , 96 , 96 ];
-  presetControllers[EG_DECAY     ] = [0  , 64 , 64 , 32 , 64 , 64 , 64 , 127, 127];
-
+  presetControllers[UNISON       ] = [0  , 8  , 8  , 40 , 0  , 0  , 0  , 71 , 127, 119];
+  presetControllers[OSC_WAVEFORM ] = [0  , 16 , 16 , 16 , 32 , 64 , 96 , 0  , 127, 0  ];
+  presetControllers[OSC_DETUNE   ] = [0  , 64 , 64 , 80 , 64 , 64 , 64 , 64 , 64 , 32 ];
+  presetControllers[AMP_EG       ] = [0  , 0  , 127, 0  , 0  , 0  , 0  , 0  , 0  , 127];
+  presetControllers[FILTER_CUTOFF] = [0  , 64 , 0  , 96 , 127, 127, 127, 64 , 64 , 0  ];
+  presetControllers[FILTER_RESO  ] = [0  , 64 , 64 , 64 , 0  , 0  , 0  , 64 , 64 , 127];
+  presetControllers[FILTER_EG_AMT] = [0  , 96 , 127, 16 , 64 , 64 , 64 , 96 , 96 , 96 ];
+  presetControllers[EG_DECAY     ] = [0  , 64 , 64 , 32 , 64 , 64 , 64 , 32 , 127, 48 ];
+  presetControllers[VELOCITY_SENS] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  ];
+  presetControllers[CUTOFF_V_SENS] = [0  , 127, 127, 127, 0  , 0  , 0  , 127, 127, 127];
+  presetControllers[CC26_DUMMY   ] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  ];
+  presetControllers[DETUNE_EG_AMT] = [0  , 48 , 48 , 48 , 64 , 64 , 64 , 48 , 48 , 48 ];
   for (var i = CONTROLLERS_FIRST; i <= CONTROLLERS_LAST; i++) {
     onChangeControlChange(i, presetControllers[i][number]);
   }
@@ -274,14 +295,14 @@ function saveControllers(number) {
 
 function noteOn(noteNumber) {
   if (midiOutput) {
-    midiOutput.send([(NOTE_ON | MIDI_CH), noteNumber + transpose, 64]);
+    midiOutput.send([(NOTE_ON | MIDI_CH), noteNumber + transpose, 127]);
     sleep(2);
   }
 }
 
 function noteOff(noteNumber) {
   if (midiOutput) {
-    midiOutput.send([(NOTE_OFF | MIDI_CH), noteNumber + transpose, 0]);
+    midiOutput.send([(NOTE_OFF | MIDI_CH), noteNumber + transpose, 64]);
     sleep(2);
   }
 }
@@ -290,15 +311,17 @@ function noteOff(noteNumber) {
 <body>
 
 <table>
-<tr><td><strong>VRA8-P CTRL 1.0.1</strong>&nbsp;&nbsp;Digital Synth VRA8-P Controller (<a href="https://github.com/risgk/digital-synth-vra8-p">View on GitHub</a>), We recommend Google Chrome</td></tr>
+<tr><td><strong>VRA8-Px CTRL 1.2.0</strong>&nbsp;&nbsp;Digital Synth VRA8-Px Controller (<a href="https://github.com/risgk/digital-synth-vra8-p/tree/vra8-px">View on GitHub</a>), We recommend Google Chrome</td></tr>
 </table>
 
 <table>
-<tr><td>MIDI IN</td>
-    <td colspan="2"><select id="selectInputPort" size="1" onchange="onChangeInputPort()"></select></td>
+<tr><td>MIDI IN 1</td>
+    <td colspan="2"><select id="selectInputPort1" size="1" onchange="onChangeInputPort1()"></select></td>
     <td>&nbsp;</td>
     <td>MIDI OUT</td>
-    <td colspan="2"><select id="selectOutputPort" size="1" onchange="onChangeOutputPort()"></select></td>
+    <td colspan="2"><select id="selectOutputPort" size="1" onchange="onChangeOutputPort()"></select></td></tr>
+<tr><td>MIDI IN 2</td>
+    <td colspan="2"><select id="selectInputPort2" size="1" onchange="onChangeInputPort2()"></select></td>
     <td>&nbsp;</td>
     <td>KBD TRANSPOSE</td>
     <td><input id="inputTranspose" type="range" min="-24" max="12" step="12" oninput="onChangeTranspose(value)" ></td><td><span id="spanTranspose" >-1</span></td></tr>
@@ -314,8 +337,9 @@ function noteOff(noteNumber) {
     <td><input type="button" value="ORGAN"         onclick="preset(5)"    ></td>
     <td><input type="button" value="POLY SQ"       onclick="preset(6)"    ></td>
     <td>&nbsp;</td>
-    <td><input type="button" value="SAW LEAD"      onclick="preset(7)"    ></td>
-    <td><input type="button" value="SQ LEAD"       onclick="preset(8)"    ></td></tr>
+    <td><input type="button" value="PWM LEAD"      onclick="preset(7)"    ></td>
+    <td><input type="button" value="SQ LEAD"       onclick="preset(8)"    ></td>
+    <td><input type="button" value="BASS"          onclick="preset(9)"    ></td></tr>
 </table>
 
 <table>
@@ -343,13 +367,15 @@ function noteOff(noteNumber) {
     <td><input type="button" value="RANDOM"        onclick="setRandom()"       ></td></tr>
 </table>
 
-&nbsp;
-
 <table>
-<tr><td>UNISON               </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-    <td>OSC WAVEFORM         </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-    <td>OSC DETUNE           </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-    <td>AMP EG               </td></tr>
+<tr><td>&nbsp;</td><td></td>
+    <td>&nbsp;</td><td></td>
+    <td>&nbsp;</td><td></td>
+    <td>&nbsp;</td></tr>
+<tr><td>UNISON/MIX            </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td>WAVEFORM/SUB          </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td>DETUNE                </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td>AMP EG                </td></tr>
 <tr><td><input id="inputCC16" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(16, value)"></td>
     <td><span id="spanCC16">-1</span></td>
     <td><input id="inputCC17" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(17, value)"></td>
@@ -358,15 +384,10 @@ function noteOff(noteNumber) {
     <td><span id="spanCC18">-1</span></td>
     <td><input id="inputCC19" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(19, value)"></td>
     <td><span id="spanCC19">-1</span></td></tr>
-<tr><td>(OFF/ON)             </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-    <td>(SAW/ORGAN/SQ)       </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-    <td>                     </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-    <td>(OFF/ON)             </td></tr>
-<tr><td>&nbsp;</td></tr>
-<tr><td>FILTER CUTOFF       </td><td></td>
-    <td>FILTER RESO         </td><td></td>
-    <td>FILTER EG AMT       </td><td></td>
-    <td>EG DECAY            </td></tr>
+<tr><td>CUTOFF                </td><td></td>
+    <td>RESONANCE             </td><td></td>
+    <td>CUTOFF EG AMT         </td><td></td>
+    <td>EG DECAY              </td></tr>
 <tr><td><input id="inputCC20" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(20, value)"></td>
     <td><span id="spanCC20">-1</span></td>
     <td><input id="inputCC21" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(21, value)"></td>
@@ -375,10 +396,22 @@ function noteOff(noteNumber) {
     <td><span id="spanCC22">-1</span></td>
     <td><input id="inputCC23" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(23, value)"></td>
     <td><span id="spanCC23">-1</span></td></tr>
-<tr><td>                    </td><td></td>
-    <td>                    </td><td></td>
-    <td>(MINUS/ZERO/PLUS)   </td><td></td>
-    <td>                    </td></tr>
+<tr><td>VELOCITY SENS         </td><td></td>
+    <td>CUTOFF V SENS         </td><td></td>
+    <td>                      </td><td></td>
+    <td>DETUNE EG AMT         </td></tr>
+<tr><td><input id="inputCC24" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(24, value)"></td>
+    <td><span id="spanCC24">-1</span></td>
+    <td><input id="inputCC25" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(25, value)"></td>
+    <td><span id="spanCC25">-1</span></td>
+    <td><input id="inputCC26" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(26, value)" style="visibility:hidden"></td>
+    <td><span id="spanCC26" style="visibility:hidden">-1</span></td>
+    <td><input id="inputCC27" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(27, value)"></td>
+    <td><span id="spanCC27">-1</span></td>
+<tr><td>&nbsp;</td><td></td>
+    <td>&nbsp;</td><td></td>
+    <td>&nbsp;</td><td></td>
+    <td>&nbsp;</td></tr>
 </table>
 
 <table>

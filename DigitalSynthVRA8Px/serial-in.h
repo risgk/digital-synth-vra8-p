@@ -7,7 +7,7 @@ class SerialIn {
 public:
   INLINE static void open() {
     UBRR0 = (1000000 / SERIAL_SPEED) - 1;
-    UCSR0B = _BV(RXEN0);
+    UCSR0B = _BV(RXEN0) | _BV(TXEN0);
   }
 
   INLINE static boolean available() {

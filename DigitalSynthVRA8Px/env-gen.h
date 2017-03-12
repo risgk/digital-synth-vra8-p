@@ -13,18 +13,18 @@ class EnvGen {
   static const uint8_t ATTACK_UPDATE_INTERVAL  = 1;
   static const uint8_t RELEASE_UPDATE_INTERVAL = 1;
 
-  static uint8_t m_state;
-  static uint8_t m_level;
-  static uint8_t m_count;
-  static uint8_t m_attack_update_interval;
-  static uint8_t m_decay_update_interval;
-  static uint8_t m_rest;
+  static uint8_t  m_state;
+  static uint16_t m_level;
+  static uint8_t  m_count;
+  static uint8_t  m_attack_update_interval;
+  static uint8_t  m_decay_update_interval;
+  static uint8_t  m_rest;
 
 public:
   INLINE static void initialize() {
     m_state = STATE_RELEASE;
     m_level = 0;
-    m_count = 0;
+    m_count = 3;
     m_decay_update_interval = 1;
     m_rest = RELEASE_UPDATE_INTERVAL;
   }
@@ -53,7 +53,7 @@ public:
         if (m_rest == 0) {
           m_rest = ATTACK_UPDATE_INTERVAL;
           if (m_level >= ENV_GEN_LEVEL_MAX - ENV_GEN_LEVEL_A_R_STEP) {
-            m_level == ENV_GEN_LEVEL_MAX;
+            m_level = ENV_GEN_LEVEL_MAX;
             m_state = STATE_DECAY;
             m_rest = m_decay_update_interval;
           } else {
@@ -69,7 +69,7 @@ public:
             m_level = 0;
             m_rest = 255;
           } else {
-            m_level = high_byte(m_level * ENV_GEN_DECAY_FACTOR);
+            m_level = mul_q16_q8(m_level, ENV_GEN_DECAY_FACTOR);
           }
         }
         break;
@@ -91,12 +91,12 @@ public:
       }
     }
 
-    return m_level;
+    return high_byte(m_level);
   }
 };
 
-template <uint8_t T> uint8_t EnvGen<T>::m_count;
-template <uint8_t T> uint8_t EnvGen<T>::m_state;
-template <uint8_t T> uint8_t EnvGen<T>::m_level;
-template <uint8_t T> uint8_t EnvGen<T>::m_decay_update_interval;
-template <uint8_t T> uint8_t EnvGen<T>::m_rest;
+template <uint8_t T> uint8_t  EnvGen<T>::m_count;
+template <uint8_t T> uint8_t  EnvGen<T>::m_state;
+template <uint8_t T> uint16_t EnvGen<T>::m_level;
+template <uint8_t T> uint8_t  EnvGen<T>::m_decay_update_interval;
+template <uint8_t T> uint8_t  EnvGen<T>::m_rest;

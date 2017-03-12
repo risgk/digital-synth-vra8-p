@@ -1,4 +1,4 @@
-require_relative 'common'
+require_relative 'constants'
 
 $file = File.open("osc-table.h", "w")
 
@@ -7,12 +7,12 @@ $file.printf("#pragma once\n\n")
 def freq_from_note_number(note_number)
   cent = (note_number * 100.0) - 6900.0
   hz = A4_PITCH * (2.0 ** (cent / 1200.0))
-  freq = (hz * (1 << OSC_PHASE_RESOLUTION_BITS) / SAMPLING_RATE).floor.to_i
+  freq = (hz * (1 << OSC_PHASE_RESOLUTION_BITS) / SAMPLING_RATE / 2).floor.to_i
   freq = freq + 1 if freq.even?
   freq
 end
 
-$file.printf("const uint16_t g_osc_freq_table[] = {\n  ")
+$file.printf("const __uint24 g_osc_freq_table[] = {\n  ")
 (NOTE_NUMBER_MIN..NOTE_NUMBER_MAX).each do |note_number|
   if (note_number < NOTE_NUMBER_MIN) || (note_number > NOTE_NUMBER_MAX)
     freq = 0
@@ -20,10 +20,10 @@ $file.printf("const uint16_t g_osc_freq_table[] = {\n  ")
     freq = freq_from_note_number(note_number)
   end
 
-  $file.printf("0x%04X,", freq)
+  $file.printf("0x%06X,", freq)
   if note_number == DATA_BYTE_MAX
     $file.printf("\n")
-  elsif note_number % 12 == 11
+  elsif note_number % 6 == (6 - 1)
     $file.printf("\n  ")
   else
     $file.printf(" ")
@@ -57,16 +57,14 @@ end
 $osc_harmonics_restriction_table = []
 
 (NOTE_NUMBER_MIN..NOTE_NUMBER_MAX).each do |note_number|
-  freq = freq_from_note_number(note_number)
+  freq = freq_from_note_number((note_number / 3) * 3)
   $osc_harmonics_restriction_table << freq
 end
 
 def last_harmonic(freq, organ = false)
   last = (freq != 0) ? ((FREQUENCY_MAX * (1 << OSC_PHASE_RESOLUTION_BITS)) /
-                        ((freq + OSC_DETUNE_FREQ_MAX) * SAMPLING_RATE)) : 0
-  last = 9 if organ && last > 9
-  last = (last + 1) / 4 * 4 + 1 if last > 32
-  last = last - 1 if last.even?
+                        ((freq + OSC_DETUNE_FREQ_MAX) * 2 * SAMPLING_RATE)) : 0
+  last = 8 if organ && last > 8
   last = 127 if last > 127
   last
 end
@@ -113,7 +111,7 @@ def generate_osc_wave_tables_array(name, organ = false)
     $file.printf("g_osc_#{name}_wave_table_h%-3d,", last_harmonic(freq, organ))
     if idx == DATA_BYTE_MAX
       $file.printf("\n")
-    elsif idx % 4 == 3
+    elsif idx % 3 == (3 - 1)
       $file.printf("\n  ")
     else
       $file.printf(" ")

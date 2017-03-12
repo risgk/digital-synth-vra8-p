@@ -3,22 +3,29 @@
 #include <stdint.h>
 
 typedef signed char boolean;
+typedef uint32_t __uint24;
 
 inline uint8_t pgm_read_byte(const void* addr) {
-  const uint8_t* p = (const uint8_t*) addr;
+  const uint8_t* p = static_cast<const uint8_t*>(addr);
   return p[0];
 }
 
 inline uint16_t pgm_read_word(const void* addr) {
   // for little endian cpu
-  const uint8_t* p = (const uint8_t*) addr;
+  const uint8_t* p = static_cast<const uint8_t*>(addr);
   return p[0] | (p[1] << 8);
 }
 
+inline uint32_t pgm_read_dword(const void* addr) {
+  // for little endian cpu
+  const uint8_t* p = static_cast<const uint8_t*>(addr);
+  return p[0] | (p[1] << 8) | (p[2] << 16) | (p[3] << 24);
+}
+
 #include <stdio.h>
-#include "./DigitalSynthVRA8P/common.h"
-#include "./DigitalSynthVRA8P/synth.h"
-#include "./DigitalSynthVRA8P/wav-file-out.h"
+#include "./DigitalSynthVRA8Px/common.h"
+#include "./DigitalSynthVRA8Px/synth.h"
+#include "./DigitalSynthVRA8Px/wav-file-out.h"
 
 const uint16_t RECORDING_SEC = 60;
 
