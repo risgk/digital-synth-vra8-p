@@ -30,13 +30,23 @@ public:
 
   INLINE static void write(int8_t level) {
 #if defined(DEBUG)
-    // Output Channel Pressure
+    // Output Elapsed Time as Channel Pressure
     m_count++;
     if (m_count == 0x7F) {
       UDR0 = 0xDF;
     } else if (m_count == 0xFF) {
+#if 0
+      static uint8_t s_maxCnt = 0;
+      uint8_t cnt = TCNT1 >> 3;
+      if ((cnt < 64) && (cnt > s_maxCnt)) {
+        s_maxCnt = cnt;
+      }
+      UDR0 = s_maxCnt;
+      m_count = 0;
+#else
       UDR0 = TCNT1 >> 3;
       m_count = 0;
+#endif
     }
 #endif
     if (TIFR1 & _BV(TOV1)) {
