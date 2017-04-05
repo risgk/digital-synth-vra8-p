@@ -65,7 +65,7 @@ public:
         m_rest--;
         if (m_rest == 0) {
           m_rest = m_decay_update_interval;
-          if (m_level <= ENV_GEN_LEVEL_A_R_STEP) {
+          if (m_level < 0x0100) {
             m_level = 0;
             m_rest = 255;
           } else {
