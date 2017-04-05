@@ -1,6 +1,6 @@
 # Digital Synth VRA8-Px 1.2.1
 
-- 2017-03-12 ISGK Instruments
+- 2017-04-05 ISGK Instruments
 - <https://github.com/risgk/digital-synth-vra8-p/tree/vra8-px>
 
 ## Concept
