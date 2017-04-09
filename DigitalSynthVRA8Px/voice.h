@@ -217,6 +217,9 @@ public:
     case DETUNE_EG_AMT:
       IOsc<0>::set_detune_env_amt(controller_value);
       break;
+    case EG_ATTACK:
+      IEnvGen<0>::set_attack(controller_value);
+      break;
     case ALL_NOTES_OFF:
     case OMNI_MODE_OFF:
     case OMNI_MODE_ON:

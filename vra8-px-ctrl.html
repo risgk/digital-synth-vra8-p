@@ -51,10 +51,14 @@ const VELOCITY_SENS = 24;
 const CUTOFF_V_SENS = 25;
 const CC26_DUMMY    = 26;
 const DETUNE_EG_AMT = 27;
+const CC28_DUMMY    = 28;
+const CC29_DUMMY    = 29;
+const CC30_DUMMY    = 30;
+const EG_ATTACK     = 31;
 const ALL_NOTES_OFF = 123;
 
 const CONTROLLERS_FIRST = 16;
-const CONTROLLERS_LAST  = 27;
+const CONTROLLERS_LAST  = 31;
 </script>
 <script>
 var transpose = 0;
@@ -244,11 +248,15 @@ function preset(number) {
   presetControllers[FILTER_CUTOFF] = [0  , 64 , 0  , 96 , 127, 127, 127, 64 , 64 , 0  ];
   presetControllers[FILTER_RESO  ] = [0  , 64 , 64 , 64 , 0  , 0  , 0  , 64 , 64 , 127];
   presetControllers[FILTER_EG_AMT] = [0  , 96 , 127, 16 , 64 , 64 , 64 , 96 , 96 , 96 ];
-  presetControllers[EG_DECAY     ] = [0  , 64 , 64 , 32 , 64 , 64 , 64 , 32 , 127, 48 ];
+  presetControllers[EG_DECAY     ] = [0  , 64 , 64 , 32 , 64 , 64 , 64 , 32 , 126, 48 ];
   presetControllers[VELOCITY_SENS] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  ];
   presetControllers[CUTOFF_V_SENS] = [0  , 127, 127, 127, 0  , 0  , 0  , 127, 127, 127];
   presetControllers[CC26_DUMMY   ] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  ];
   presetControllers[DETUNE_EG_AMT] = [0  , 48 , 48 , 48 , 64 , 64 , 64 , 48 , 48 , 48 ];
+  presetControllers[CC28_DUMMY   ] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  ];
+  presetControllers[CC29_DUMMY   ] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  ];
+  presetControllers[CC30_DUMMY   ] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  ];
+  presetControllers[EG_ATTACK    ] = [0  , 32 , 32 , 32 , 32 , 32 , 32 , 32 , 32 , 32 ];
   for (var i = CONTROLLERS_FIRST; i <= CONTROLLERS_LAST; i++) {
     onChangeControlChange(i, presetControllers[i][number]);
   }
@@ -311,7 +319,7 @@ function noteOff(noteNumber) {
 <body>
 
 <table>
-<tr><td><strong>VRA8-Px CTRL 1.2.2</strong>&nbsp;&nbsp;Digital Synth VRA8-Px Controller (<a href="https://github.com/risgk/digital-synth-vra8-p/tree/vra8-px">View on GitHub</a>), We recommend Google Chrome</td></tr>
+<tr><td><strong>VRA8-Px CTRL 2.x.x</strong>&nbsp;&nbsp;Digital Synth VRA8-Px Controller (<a href="https://github.com/risgk/digital-synth-vra8-p/tree/vra8-px">View on GitHub</a>), We recommend Google Chrome</td></tr>
 </table>
 
 <table>
@@ -368,10 +376,6 @@ function noteOff(noteNumber) {
 </table>
 
 <table>
-<tr><td>&nbsp;</td><td></td>
-    <td>&nbsp;</td><td></td>
-    <td>&nbsp;</td><td></td>
-    <td>&nbsp;</td></tr>
 <tr><td>UNISON/MIX            </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
     <td>WAVEFORM/SUB          </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
     <td>DETUNE                </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
@@ -408,10 +412,18 @@ function noteOff(noteNumber) {
     <td><span id="spanCC26" style="visibility:hidden">-1</span></td>
     <td><input id="inputCC27" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(27, value)"></td>
     <td><span id="spanCC27">-1</span></td>
-<tr><td>&nbsp;</td><td></td>
-    <td>&nbsp;</td><td></td>
-    <td>&nbsp;</td><td></td>
-    <td>&nbsp;</td></tr>
+<tr><td>                      </td><td></td>
+    <td>                      </td><td></td>
+    <td>                      </td><td></td>
+    <td>EG ATTACK             </td></tr>
+<tr><td><input id="inputCC28" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(28, value)" style="visibility:hidden"></td>
+    <td><span id="spanCC28" style="visibility:hidden">-1</span></td>
+    <td><input id="inputCC29" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(29, value)" style="visibility:hidden"></td>
+    <td><span id="spanCC29" style="visibility:hidden">-1</span></td>
+    <td><input id="inputCC30" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(30, value)" style="visibility:hidden"></td>
+    <td><span id="spanCC30" style="visibility:hidden">-1</span></td>
+    <td><input id="inputCC31" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(31, value)"></td>
+    <td><span id="spanCC31">-1</span></td>
 </table>
 
 <table>

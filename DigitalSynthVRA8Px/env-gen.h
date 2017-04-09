@@ -16,7 +16,7 @@ class EnvGen {
   static uint8_t  m_state;
   static uint16_t m_level;
   static uint8_t  m_count;
-  static uint8_t  m_attack_update_interval;
+  static uint16_t m_attack_step;
   static uint8_t  m_decay_update_interval;
   static uint8_t  m_rest;
 
@@ -25,8 +25,14 @@ public:
     m_state = STATE_RELEASE;
     m_level = 0;
     m_count = 3;
-    m_decay_update_interval = 1;
+    set_attack(64);
+    set_decay(64);
     m_rest = RELEASE_UPDATE_INTERVAL;
+  }
+
+  INLINE static void set_attack(uint8_t controller_value) {
+    m_attack_step = (static_cast<uint16_t>(((127 - controller_value) << 1) + 1) *
+                                          (((127 - controller_value) << 1) + 1) >> 4) + 4;
   }
 
   INLINE static void set_decay(uint8_t controller_value) {
@@ -52,12 +58,12 @@ public:
         m_rest--;
         if (m_rest == 0) {
           m_rest = ATTACK_UPDATE_INTERVAL;
-          if (m_level >= ENV_GEN_LEVEL_MAX - ENV_GEN_LEVEL_A_R_STEP) {
+          if (m_level >= ENV_GEN_LEVEL_MAX - m_attack_step) {
             m_level = ENV_GEN_LEVEL_MAX;
             m_state = STATE_DECAY;
             m_rest = m_decay_update_interval;
           } else {
-            m_level += ENV_GEN_LEVEL_A_R_STEP;
+            m_level += m_attack_step;
           }
         }
         break;
@@ -68,7 +74,7 @@ public:
           if (m_level < 0x0100) {
             m_level = 0;
             m_rest = 255;
-          } else {
+          } else if (m_decay_update_interval < 253) {
             m_level = mul_q16_q8(m_level, ENV_GEN_DECAY_FACTOR);
           }
         }
@@ -77,11 +83,11 @@ public:
         m_rest--;
         if (m_rest == 0) {
           m_rest = RELEASE_UPDATE_INTERVAL;
-          if (m_level <= ENV_GEN_LEVEL_A_R_STEP) {
+          if (m_level <= ENV_GEN_LEVEL_RELEASE_STEP) {
             m_level = 0;
             m_state = STATE_IDLE;
           } else {
-            m_level -= ENV_GEN_LEVEL_A_R_STEP;
+            m_level -= ENV_GEN_LEVEL_RELEASE_STEP;
           }
         }
         break;
@@ -98,5 +104,6 @@ public:
 template <uint8_t T> uint8_t  EnvGen<T>::m_count;
 template <uint8_t T> uint8_t  EnvGen<T>::m_state;
 template <uint8_t T> uint16_t EnvGen<T>::m_level;
+template <uint8_t T> uint16_t EnvGen<T>::m_attack_step;
 template <uint8_t T> uint8_t  EnvGen<T>::m_decay_update_interval;
 template <uint8_t T> uint8_t  EnvGen<T>::m_rest;

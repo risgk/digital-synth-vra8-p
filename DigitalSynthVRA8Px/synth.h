@@ -40,6 +40,10 @@ public:
     ISynthCore<0>::control_change(CUTOFF_V_SENS, 127);
     ISynthCore<0>::control_change(CC26_DUMMY   , 0  );
     ISynthCore<0>::control_change(DETUNE_EG_AMT, 48 );
+    ISynthCore<0>::control_change(CC28_DUMMY   , 0  );
+    ISynthCore<0>::control_change(CC29_DUMMY   , 0  );
+    ISynthCore<0>::control_change(CC30_DUMMY   , 0  );
+    ISynthCore<0>::control_change(EG_ATTACK    , 32 );
   }
 
   INLINE static void receive_midi_byte(uint8_t b) {

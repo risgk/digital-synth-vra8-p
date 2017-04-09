@@ -1,6 +1,6 @@
-# Digital Synth VRA8-Px 1.2.2
+# Digital Synth VRA8-Px 2.x.x
 
-- 2017-04-09 ISGK Instruments
+- 2017-xx-xx ISGK Instruments
 - <https://github.com/risgk/digital-synth-vra8-p/tree/vra8-px>
 
 ## Concept
@@ -69,6 +69,7 @@
     | RESONANCE     | 64   | Q = 0.7        | Q = 2.8  | Q = 11.3       |                             |
     | CUTOFF EG AMT | 96   | -126 (EG 100%) | 0        | +125 (EG 100%) | Modulates CUTOFF            |
     | EG DECAY      | 64   | 34 ms          | 2.2 s    | 8.7 s          | Decay Time                  |
+    | EG ATTACK     | 32   | 4 ms           | 60 ms    | 4.2 s          | Attack Time                 |
     +---------------+------+----------------+----------+----------------+-----------------------------+
     | VELOCITY SENS | 0    | 0%             | 50.4%    | 100%           | Gain Velocity Sensitivity   |
     | CUTOFF V SENS | 127  | 0%             | 50.4%    | 100%           | Cutoff Velocity Sensitivity |
@@ -76,8 +77,8 @@
 
 ## MIDI Implementation Chart
 
-      [Experimental Synthesizer]                                      Date: 2017-04-09       
-      Model  Digital Synth VRA8-Px    MIDI Implementation Chart       Version: 1.2.2         
+      [Experimental Synthesizer]                                      Date: 2017-xx-xx       
+      Model  Digital Synth VRA8-Px    MIDI Implementation Chart       Version: 2.x.x         
     +-------------------------------+---------------+---------------+-----------------------+
     | Function...                   | Transmitted   | Recognized    | Remarks               |
     +-------------------------------+---------------+---------------+-----------------------+
@@ -110,6 +111,7 @@
     |                            24 | x             | o             | VELOCITY SENS         |
     |                            25 | x             | o             | CUTOFF V SENS         |
     |                            27 | x             | o             | DETUNE EG AMT         |
+    |                            31 | x             | o             | EG ATTACK             |
     +-------------------------------+---------------+---------------+-----------------------+
     | Program                       | x             | x             |                       |
     | Change       : True #         | ************* |               |                       |
