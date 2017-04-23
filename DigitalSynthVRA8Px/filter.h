@@ -114,9 +114,11 @@ private:
       cutoff_candidate = 0;
     }
 
-    cutoff_candidate -= high_sbyte(m_noise_gen_amt * low_byte(m_rnd));
+    cutoff_candidate += high_sbyte(((m_noise_gen_amt - 64) << 1) * low_byte(m_rnd));
     uint8_t cutoff_target;
-    if (cutoff_candidate < 0) {
+    if (cutoff_candidate > 127) {
+      cutoff_target = 127;
+    } else if (cutoff_candidate < 0) {
       cutoff_target = 0;
     } else {
       cutoff_target = cutoff_candidate;

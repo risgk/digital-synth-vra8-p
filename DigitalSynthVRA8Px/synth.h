@@ -41,7 +41,7 @@ public:
     ISynthCore<0>::control_change(CC26_DUMMY   , 0  );
     ISynthCore<0>::control_change(DETUNE_EG_AMT, 48 );
     ISynthCore<0>::control_change(CC28_DUMMY   , 0  );
-    ISynthCore<0>::control_change(FILTER_NG_AMT, 8  );
+    ISynthCore<0>::control_change(FILTER_NG_AMT, 60 );
     ISynthCore<0>::control_change(CC30_DUMMY   , 0  );
     ISynthCore<0>::control_change(EG_ATTACK    , 32 );
   }

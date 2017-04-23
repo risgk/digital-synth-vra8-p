@@ -68,7 +68,7 @@
     | CUTOFF        | 64   | 0.22 kHz       | 1.2 kHz  | 7.0 kHz        | Range 4 to 124              |
     | RESONANCE     | 64   | Q = 0.7        | Q = 2.8  | Q = 11.3       |                             |
     | CUTOFF EG AMT | 96   | -126 (EG 100%) | 0        | +125 (EG 100%) | EnvGen Modulates CUTOFF     |
-    | CUTOFF NG AMT | 8    | -0 (NG 0%)     | -63      | -126 (NG 100%) | NoiseGen Modulates CUTOFF   |
+    | CUTOFF NG AMT | 60   | -126 (NG 100%) | 0        | +125 (NG 100%) | NoiseGen Modulates CUTOFF   |
     | EG DECAY      | 64   | 34 ms          | 2.2 s    | Infinity       | Decay Time                  |
     | EG ATTACK     | 32   | 4 ms           | 60 ms    | 4.2 s          | Attack Time                 |
     +---------------+------+----------------+----------+----------------+-----------------------------+
