@@ -52,7 +52,7 @@ const CUTOFF_V_SENS = 25;
 const CC26_DUMMY    = 26;
 const DETUNE_EG_AMT = 27;
 const CC28_DUMMY    = 28;
-const CC29_DUMMY    = 29;
+const FILTER_NG_AMT = 29;
 const CC30_DUMMY    = 30;
 const EG_ATTACK     = 31;
 const ALL_NOTES_OFF = 123;
@@ -254,7 +254,7 @@ function preset(number) {
   presetControllers[CC26_DUMMY   ] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  ];
   presetControllers[DETUNE_EG_AMT] = [0  , 48 , 48 , 48 , 64 , 64 , 64 , 48 , 48 , 48 ];
   presetControllers[CC28_DUMMY   ] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  ];
-  presetControllers[CC29_DUMMY   ] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  ];
+  presetControllers[FILTER_NG_AMT] = [0  , 8  , 8  , 8  , 0  , 0  , 0  , 8  , 8  , 8  ];
   presetControllers[CC30_DUMMY   ] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  ];
   presetControllers[EG_ATTACK    ] = [0  , 32 , 32 , 32 , 32 , 32 , 32 , 32 , 32 , 32 ];
   for (var i = CONTROLLERS_FIRST; i <= CONTROLLERS_LAST; i++) {
@@ -413,13 +413,13 @@ function noteOff(noteNumber) {
     <td><input id="inputCC27" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(27, value)"></td>
     <td><span id="spanCC27">-1</span></td>
 <tr><td>                      </td><td></td>
-    <td>                      </td><td></td>
+    <td>CUTOFF NG AMT         </td><td></td>
     <td>                      </td><td></td>
     <td>EG ATTACK             </td></tr>
 <tr><td><input id="inputCC28" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(28, value)" style="visibility:hidden"></td>
     <td><span id="spanCC28" style="visibility:hidden">-1</span></td>
-    <td><input id="inputCC29" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(29, value)" style="visibility:hidden"></td>
-    <td><span id="spanCC29" style="visibility:hidden">-1</span></td>
+    <td><input id="inputCC29" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(29, value)"></td>
+    <td><span id="spanCC29">-1</span></td>
     <td><input id="inputCC30" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(30, value)" style="visibility:hidden"></td>
     <td><span id="spanCC30" style="visibility:hidden">-1</span></td>
     <td><input id="inputCC31" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(31, value)"></td>

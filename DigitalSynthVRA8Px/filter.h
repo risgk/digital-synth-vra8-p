@@ -22,6 +22,8 @@ class Filter {
   static uint8_t        m_cutoff;
   static uint8_t        m_cutoff_velocity;
   static uint8_t        m_mod_amt;
+  static uint8_t        m_noise_gen_amt;
+  static uint16_t       m_rnd;
 
   static const uint8_t AUDIO_FRACTION_BITS = 14;
 
@@ -36,8 +38,10 @@ public:
     m_cutoff_velocity = 64;
     set_cutoff(127);
     set_resonance(0);
-    set_env_amt(0);
+    set_env_amt(64);
+    set_noise_gen_amt(0);
     update_coefs(0);
+    m_rnd = 1;
   }
 
   INLINE static void set_cutoff(uint8_t controller_value) {
@@ -52,6 +56,10 @@ public:
     m_mod_amt = controller_value;
   }
 
+  INLINE static void set_noise_gen_amt(uint8_t controller_value) {
+    m_noise_gen_amt = controller_value;
+  }
+
   INLINE static void note_on(uint8_t cutoff_velocity) {
     m_cutoff_velocity = cutoff_velocity;
   }
@@ -60,6 +68,8 @@ public:
     m_count++;
     if ((m_count & (FILTER_CONTROL_INTERVAL - 1)) == 0) {
       update_coefs(mod_input);
+    } else if ((m_count & (FILTER_CONTROL_INTERVAL - 1)) == 3) {
+      update_rnd();
     }
 
     int16_t b_2_over_a_0 = m_b_2_over_a_0_low | (m_b_2_over_a_0_high << 8);
@@ -90,12 +100,23 @@ public:
 
 private:
   INLINE static void update_coefs(uint8_t mod_input) {
-    int16_t cutoff_candidate = m_cutoff + static_cast<int8_t>(m_cutoff_velocity - 64) +
-                               high_sbyte(((m_mod_amt - 64) << 1) * mod_input);
-    uint8_t cutoff_target;
+    int16_t cutoff_candidate = m_cutoff + static_cast<int8_t>(m_cutoff_velocity - 64);
     if (cutoff_candidate > 127) {
-      cutoff_target = 127;
+      cutoff_candidate = 127;
     } else if (cutoff_candidate < 0) {
+      cutoff_candidate = 0;
+    }
+
+    cutoff_candidate += high_sbyte(((m_mod_amt - 64) << 1) * mod_input);
+    if (cutoff_candidate > 127) {
+      cutoff_candidate = 127;
+    } else if (cutoff_candidate < 0) {
+      cutoff_candidate = 0;
+    }
+
+    cutoff_candidate -= high_sbyte(m_noise_gen_amt * low_byte(m_rnd));
+    uint8_t cutoff_target;
+    if (cutoff_candidate < 0) {
       cutoff_target = 0;
     } else {
       cutoff_target = cutoff_candidate;
@@ -116,6 +137,12 @@ private:
     m_a_1_over_a_0_low  = (four_data >> 16) & 0xFF;
     m_a_1_over_a_0_high = (four_data >> 24) & 0xFF;
   }
+
+  INLINE static void update_rnd() {
+    m_rnd = m_rnd ^ (m_rnd << 5);
+    m_rnd = m_rnd ^ (m_rnd >> 9);
+    m_rnd = m_rnd ^ (m_rnd << 8);
+  }
 };
 
 template <uint8_t T> uint8_t        Filter<T>::m_count;
@@ -132,3 +159,5 @@ template <uint8_t T> uint8_t        Filter<T>::m_cutoff_current;
 template <uint8_t T> uint8_t        Filter<T>::m_cutoff;
 template <uint8_t T> uint8_t        Filter<T>::m_cutoff_velocity;
 template <uint8_t T> uint8_t        Filter<T>::m_mod_amt;
+template <uint8_t T> uint8_t        Filter<T>::m_noise_gen_amt;
+template <uint8_t T> uint16_t       Filter<T>::m_rnd;
