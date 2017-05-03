@@ -54,27 +54,27 @@
 
 ## Controllers
 
-    +---------------+------+----------------+----------+----------------+-----------------------------+
-    | Controller    | Init | Value 0        | Value 64 | Value 127      | Notes                       |
-    +---------------+------+----------------+----------+----------------+-----------------------------+
-    | UNISON/MIX    | 8    | OFF            | ON       | ON             | 3 Voice Unison              |
-    |               |      | +100%          | -100%    | +100%          | Osc 2 (Detune) Level        |
-    | WAVEFORM/SUB  | 16   | Sawtooth       | Organ    | Square         | Waveform                    |
-    |               |      | 100%           | (0%)     | 100%           | Sub Osc Level               |
-    | DETUNE        | 64   | 0.06 Hz        | 1.0 Hz   | 3.8 Hz         |                             |
-    | DETUNE EG AMT | 0    | -126 (EG 100%) | 0        | +125 (EG 100%) | Modulates DETUNE            |
-    | AMP EG        | 0    | OFF            | ON       | ON             |                             |
-    +---------------+------+----------------+----------+----------------+-----------------------------+
-    | CUTOFF        | 64   | 0.22 kHz       | 1.2 kHz  | 7.0 kHz        | Range 4 to 124              |
-    | RESONANCE     | 64   | Q = 0.7        | Q = 2.8  | Q = 11.3       |                             |
-    | CUTOFF EG AMT | 96   | -126 (EG 100%) | 0        | +125 (EG 100%) | EnvGen Modulates CUTOFF     |
-    | CUTOFF NG AMT | 60   | -126 (NG 100%) | 0        | +125 (NG 100%) | NoiseGen Modulates CUTOFF   |
-    | EG DECAY      | 64   | 34 ms          | 2.2 s    | Infinity       | Decay Time                  |
-    | EG ATTACK     | 32   | 4 ms           | 60 ms    | 4.2 s          | Attack Time                 |
-    +---------------+------+----------------+----------+----------------+-----------------------------+
-    | VELOCITY SENS | 0    | 0%             | 50.4%    | 100%           | Gain Velocity Sensitivity   |
-    | CUTOFF V SENS | 127  | 0%             | 50.4%    | 100%           | Cutoff Velocity Sensitivity |
-    +---------------+------+----------------+----------+----------------+-----------------------------+
+    +---------------+------+----------------+-----------+----------------+-----------------------------+
+    | Controller    | Init | Value 0        | Value 64  | Value 127      | Notes                       |
+    +---------------+------+----------------+-----------+----------------+-----------------------------+
+    | UNISON/MIX    | 8    | OFF            | ON        | ON             | 3 Voice Unison              |
+    |               |      | +100%          | -100%     | +100%          | Osc 2 (Detune) Level        |
+    | WAVEFORM/SUB  | 16   | Sawtooth       | Organ     | Square         | Waveform                    |
+    |               |      | 100%           | (0%)      | 100%           | Sub Osc Level               |
+    | DETUNE        | 64   | 0.06 Hz        | 1.0 Hz    | 3.8 Hz         |                             |
+    | DETUNE EG AMT | 0    | -126 (EG 100%) | 0         | +125 (EG 100%) | Modulates DETUNE            |
+    | AMP EG/HOLD   | 0    | AMP EG OFF     | AMP EG ON | AMP EG ON      | HOLD ON: 32 to 95           |
+    +---------------+------+----------------+-----------+----------------+-----------------------------+
+    | CUTOFF        | 64   | 0.22 kHz       | 1.2 kHz   | 7.0 kHz        | Range 4 to 124              |
+    | RESONANCE     | 64   | Q = 0.7        | Q = 2.8   | Q = 11.3       |                             |
+    | CUTOFF EG AMT | 96   | -126 (EG 100%) | 0         | +125 (EG 100%) | EnvGen Modulates CUTOFF     |
+    | CUTOFF NG AMT | 60   | -126 (NG 100%) | 0         | +125 (NG 100%) | NoiseGen Modulates CUTOFF   |
+    | EG DECAY      | 64   | 34 ms          | 2.2 s     | Infinity       | Decay Time                  |
+    | EG ATTACK     | 32   | 4 ms           | 60 ms     | 4.2 s          | Attack Time                 |
+    +---------------+------+----------------+-----------+----------------+-----------------------------+
+    | VELOCITY SENS | 0    | 0%             | 50.4%     | 100%           | Gain Velocity Sensitivity   |
+    | CUTOFF V SENS | 127  | 0%             | 50.4%     | 100%           | Cutoff Velocity Sensitivity |
+    +---------------+------+----------------+-----------+----------------+-----------------------------+
 
 ## MIDI Implementation Chart
 
@@ -104,7 +104,7 @@
     | Control                    16 | x             | o             | UNISON/MIX            |
     | Change                     17 | x             | o             | WAVEFORM/SUB          |
     |                            18 | x             | o             | DETUNE                |
-    |                            19 | x             | o             | AMP EG                |
+    |                            19 | x             | o             | AMP EG/HOLD           |
     |                            20 | x             | o             | CUTOFF                |
     |                            21 | x             | o             | RESONANCE             |
     |                            22 | x             | o             | CUTOFF EG AMT         |

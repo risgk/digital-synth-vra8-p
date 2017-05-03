@@ -7,7 +7,9 @@ class Voice {
   static uint8_t m_waveform;
   static uint8_t m_amp_env_amt_current;
   static uint8_t m_amp_env_amt_target;
+  static boolean m_hold;
   static uint8_t m_note_number[3];
+  static boolean m_note_hold[3];
   static uint8_t m_velocity[1];
   static uint8_t m_output_error;
   static uint8_t m_velocity_sensitivity;
@@ -20,9 +22,13 @@ public:
     m_waveform = OSC_WAVEFORM_SAW;
     m_amp_env_amt_current = 0;
     m_amp_env_amt_target = 0;
+    m_hold = false;
     m_note_number[0] = NOTE_NUMBER_INVALID;
     m_note_number[1] = NOTE_NUMBER_INVALID;
     m_note_number[2] = NOTE_NUMBER_INVALID;
+    m_note_hold[0] = false;
+    m_note_hold[1] = false;
+    m_note_hold[2] = false;
     m_velocity[0] = 127;
     m_output_error = 0;
     m_velocity_sensitivity = 0;
@@ -114,23 +120,39 @@ public:
       m_note_number[0] = note_number;
       m_note_number[1] = NOTE_NUMBER_INVALID;
       m_note_number[2] = NOTE_NUMBER_INVALID;
+      m_note_hold[0] = false;
+      m_note_hold[1] = false;
+      m_note_hold[2] = false;
       IOsc<0>::note_on(0, note_number);
       IGate<0>::note_on(0, v);
       IGate<0>::note_on(1, v);
       IGate<0>::note_on(2, v);
       m_velocity[0] = v;
     } else {
-      if (m_note_number[0] == NOTE_NUMBER_INVALID) {
+      if (m_note_number[0] == note_number) {
+        m_note_hold[0] = false;
+        IGate<0>::note_on(0, v);
+        m_velocity[0] = v;
+      } else if (m_note_number[1] == note_number) {
+        m_note_hold[1] = false;
+        IGate<0>::note_on(1, v);
+      } else if (m_note_number[2] == note_number) {
+        m_note_hold[2] = false;
+        IGate<0>::note_on(2, v);
+      } else if ((m_note_number[0] == NOTE_NUMBER_INVALID) || m_note_hold[0]) {
         m_note_number[0] = note_number;
+        m_note_hold[0] = false;
         IOsc<0>::note_on(0, note_number);
         IGate<0>::note_on(0, v);
         m_velocity[0] = v;
-      } else if (m_note_number[1] == NOTE_NUMBER_INVALID) {
+      } else if ((m_note_number[1] == NOTE_NUMBER_INVALID) || m_note_hold[1]) {
         m_note_number[1] = note_number;
+        m_note_hold[1] = false;
         IOsc<0>::note_on(1, note_number);
         IGate<0>::note_on(1, v);
       } else {
         m_note_number[2] = note_number;
+        m_note_hold[2] = false;
         IOsc<0>::note_on(2, note_number);
         IGate<0>::note_on(2, v);
       }
@@ -144,18 +166,36 @@ public:
   INLINE static void note_off(uint8_t note_number) {
     if (m_unison_on) {
       if (m_note_number[0] == note_number) {
-        all_note_off();
+        if (m_hold) {
+          m_note_hold[0] = true;
+          m_note_hold[1] = true;
+          m_note_hold[2] = true;
+        } else {
+          all_note_off();
+        }
       }
     } else {
       if (m_note_number[0] == note_number) {
-        m_note_number[0] = NOTE_NUMBER_INVALID;
-        IGate<0>::note_off(0);
+        if (m_hold) {
+          m_note_hold[0] = true;
+        } else {
+          m_note_number[0] = NOTE_NUMBER_INVALID;
+          IGate<0>::note_off(0);
+        }
       } else if (m_note_number[1] == note_number) {
-        m_note_number[1] = NOTE_NUMBER_INVALID;
-        IGate<0>::note_off(1);
+        if (m_hold) {
+          m_note_hold[1] = true;
+        } else {
+          m_note_number[1] = NOTE_NUMBER_INVALID;
+          IGate<0>::note_off(1);
+        }
       } else if (m_note_number[2] == note_number) {
-        m_note_number[2] = NOTE_NUMBER_INVALID;
-        IGate<0>::note_off(2);
+        if (m_hold) {
+          m_note_hold[2] = true;
+        } else {
+          m_note_number[2] = NOTE_NUMBER_INVALID;
+          IGate<0>::note_off(2);
+        }
       }
     }
 
@@ -169,10 +209,13 @@ public:
 
   INLINE static void all_note_off() {
     m_note_number[0] = NOTE_NUMBER_INVALID;
+    m_note_hold[0] = false;
     IGate<0>::note_off(0);
     m_note_number[1] = NOTE_NUMBER_INVALID;
+    m_note_hold[1] = false;
     IGate<0>::note_off(1);
     m_note_number[2] = NOTE_NUMBER_INVALID;
+    m_note_hold[2] = false;
     IGate<0>::note_off(2);
     IGate<0>::note_off(3);
     IEnvGen<0>::note_off();
@@ -207,6 +250,7 @@ public:
       } else {
         m_amp_env_amt_target = AMP_ENV_AMT_MAX;
       }
+      set_hold(controller_value);
       break;
     case VELOCITY_SENS:
       m_velocity_sensitivity = controller_value;
@@ -270,6 +314,41 @@ private:
       m_amp_env_amt_current -= AMP_ENV_AMT_STEP;
     }
   }
+
+  INLINE static void set_hold(uint8_t controller_value) {
+    if ((32 <= controller_value) && (controller_value < 96)) {
+      if (!m_hold) {
+        m_hold = true;
+      }
+    } else {
+      if (m_hold) {
+        m_hold = false;
+
+        if (m_note_hold[0]) {
+          m_note_number[0] = NOTE_NUMBER_INVALID;
+          m_note_hold[0] = false;
+          IGate<0>::note_off(0);
+        }
+        if (m_note_hold[1]) {
+          m_note_number[1] = NOTE_NUMBER_INVALID;
+          m_note_hold[1] = false;
+          IGate<0>::note_off(1);
+        }
+        if (m_note_hold[2]) {
+          m_note_number[2] = NOTE_NUMBER_INVALID;
+          m_note_hold[2] = false;
+          IGate<0>::note_off(2);
+        }
+
+        if ((m_note_number[0] == NOTE_NUMBER_INVALID) &&
+            (m_note_number[1] == NOTE_NUMBER_INVALID) &&
+            (m_note_number[2] == NOTE_NUMBER_INVALID)) {
+          IGate<0>::note_off(3);
+          IEnvGen<0>::note_off();
+        }
+      }
+    }
+  }
 };
 
 template <uint8_t T> uint8_t Voice<T>::m_count;
@@ -277,7 +356,9 @@ template <uint8_t T> boolean Voice<T>::m_unison_on;
 template <uint8_t T> uint8_t Voice<T>::m_waveform;
 template <uint8_t T> uint8_t Voice<T>::m_amp_env_amt_current;
 template <uint8_t T> uint8_t Voice<T>::m_amp_env_amt_target;
+template <uint8_t T> boolean Voice<T>::m_hold;
 template <uint8_t T> uint8_t Voice<T>::m_note_number[3];
+template <uint8_t T> boolean Voice<T>::m_note_hold[3];
 template <uint8_t T> uint8_t Voice<T>::m_velocity[1];
 template <uint8_t T> uint8_t Voice<T>::m_output_error;
 template <uint8_t T> uint8_t Voice<T>::m_velocity_sensitivity;
