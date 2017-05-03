@@ -13,7 +13,7 @@ class Voice {
   static uint8_t m_velocity[1];
   static uint8_t m_output_error;
   static uint8_t m_velocity_sensitivity;
-  static uint8_t m_cutoff_velocity_sensitivity;
+  static int8_t  m_cutoff_velocity_sensitivity;
 
 public:
   INLINE static void initialize() {
@@ -113,8 +113,8 @@ public:
 
     uint8_t v = high_byte((velocity + 1) * (m_velocity_sensitivity << 1)) +
                           (127 - m_velocity_sensitivity);
-    uint8_t cutoff_v = high_sbyte(static_cast<int8_t>(velocity - 64) *
-                                  (m_cutoff_velocity_sensitivity << 1)) + 64;
+    uint8_t cutoff_v = high_sbyte((static_cast<int8_t>(velocity - 64) << 1) *
+                                  m_cutoff_velocity_sensitivity) + 64;
 
     if (m_unison_on) {
       m_note_number[0] = note_number;
@@ -256,7 +256,7 @@ public:
       m_velocity_sensitivity = controller_value;
       break;
     case CUTOFF_V_SENS:
-      m_cutoff_velocity_sensitivity = controller_value;
+      m_cutoff_velocity_sensitivity = (controller_value - 64) << 1;
       break;
     case DETUNE_EG_AMT:
       IOsc<0>::set_detune_env_amt(controller_value);
@@ -362,4 +362,4 @@ template <uint8_t T> boolean Voice<T>::m_note_hold[3];
 template <uint8_t T> uint8_t Voice<T>::m_velocity[1];
 template <uint8_t T> uint8_t Voice<T>::m_output_error;
 template <uint8_t T> uint8_t Voice<T>::m_velocity_sensitivity;
-template <uint8_t T> uint8_t Voice<T>::m_cutoff_velocity_sensitivity;
+template <uint8_t T> int8_t  Voice<T>::m_cutoff_velocity_sensitivity;

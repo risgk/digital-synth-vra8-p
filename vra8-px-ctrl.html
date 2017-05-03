@@ -250,7 +250,7 @@ function preset(number) {
   presetControllers[FILTER_EG_AMT] = [0  , 96 , 127, 16 , 64 , 64 , 64 , 96 , 96 , 96 ];
   presetControllers[EG_DECAY     ] = [0  , 64 , 64 , 32 , 64 , 64 , 64 , 32 , 126, 48 ];
   presetControllers[VELOCITY_SENS] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  ];
-  presetControllers[CUTOFF_V_SENS] = [0  , 127, 127, 127, 0  , 0  , 0  , 127, 127, 127];
+  presetControllers[CUTOFF_V_SENS] = [0  , 127, 127, 127, 64 , 64 , 64 , 127, 127, 127];
   presetControllers[CC26_DUMMY   ] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  ];
   presetControllers[DETUNE_EG_AMT] = [0  , 48 , 48 , 48 , 64 , 64 , 64 , 48 , 48 , 48 ];
   presetControllers[CC28_DUMMY   ] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  ];
@@ -390,7 +390,7 @@ function noteOff(noteNumber) {
     <td><span id="spanCC19">-1</span></td></tr>
 <tr><td>CUTOFF                </td><td></td>
     <td>RESONANCE             </td><td></td>
-    <td>CUTOFF EG AMT         </td><td></td>
+    <td>CUTOFF EG AMT (-/+)   </td><td></td>
     <td>EG DECAY              </td></tr>
 <tr><td><input id="inputCC20" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(20, value)"></td>
     <td><span id="spanCC20">-1</span></td>
@@ -401,9 +401,9 @@ function noteOff(noteNumber) {
     <td><input id="inputCC23" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(23, value)"></td>
     <td><span id="spanCC23">-1</span></td></tr>
 <tr><td>VELOCITY SENS         </td><td></td>
-    <td>CUTOFF V SENS         </td><td></td>
+    <td>CUTOFF V SENS (-/+)   </td><td></td>
     <td>                      </td><td></td>
-    <td>DETUNE EG AMT         </td></tr>
+    <td>DETUNE EG AMT (-/+)   </td></tr>
 <tr><td><input id="inputCC24" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(24, value)"></td>
     <td><span id="spanCC24">-1</span></td>
     <td><input id="inputCC25" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(25, value)"></td>
@@ -413,7 +413,7 @@ function noteOff(noteNumber) {
     <td><input id="inputCC27" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(27, value)"></td>
     <td><span id="spanCC27">-1</span></td>
 <tr><td>                      </td><td></td>
-    <td>CUTOFF NG AMT         </td><td></td>
+    <td>CUTOFF NG AMT (-/+)   </td><td></td>
     <td>                      </td><td></td>
     <td>EG ATTACK             </td></tr>
 <tr><td><input id="inputCC28" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(28, value)" style="visibility:hidden"></td>

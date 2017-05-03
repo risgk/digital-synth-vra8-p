@@ -73,7 +73,7 @@
     | EG ATTACK     | 32   | 4 ms           | 60 ms     | 4.2 s          | Attack Time                 |
     +---------------+------+----------------+-----------+----------------+-----------------------------+
     | VELOCITY SENS | 0    | 0%             | 50.4%     | 100%           | Gain Velocity Sensitivity   |
-    | CUTOFF V SENS | 127  | 0%             | 50.4%     | 100%           | Cutoff Velocity Sensitivity |
+    | CUTOFF V SENS | 127  | -100.8%        | 0%        | +99.2%         | Cutoff Velocity Sensitivity |
     +---------------+------+----------------+-----------+----------------+-----------------------------+
 
 ## MIDI Implementation Chart
