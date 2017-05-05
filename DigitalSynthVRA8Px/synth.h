@@ -31,19 +31,22 @@ public:
     ISynthCore<0>::control_change(UNISON       , 8  );
     ISynthCore<0>::control_change(OSC_WAVEFORM , 16 );
     ISynthCore<0>::control_change(OSC_DETUNE   , 64 );
-    ISynthCore<0>::control_change(AMP_EG       , 0  );
+    ISynthCore<0>::control_change(FILTER_NG_AMT, 60 );
+
     ISynthCore<0>::control_change(FILTER_CUTOFF, 64 );
     ISynthCore<0>::control_change(FILTER_RESO  , 64 );
     ISynthCore<0>::control_change(FILTER_EG_AMT, 96 );
     ISynthCore<0>::control_change(EG_DECAY     , 64 );
-    ISynthCore<0>::control_change(VELOCITY_SENS, 0  );
-    ISynthCore<0>::control_change(CUTOFF_V_SENS, 127);
+
+    ISynthCore<0>::control_change(EG_ATTACK    , 32 );
     ISynthCore<0>::control_change(CC26_DUMMY   , 0  );
     ISynthCore<0>::control_change(DETUNE_EG_AMT, 48 );
+    ISynthCore<0>::control_change(AMP_EG       , 0  );
+
+    ISynthCore<0>::control_change(VELOCITY_SENS, 0  );
+    ISynthCore<0>::control_change(CUTOFF_V_SENS, 127);
     ISynthCore<0>::control_change(CC28_DUMMY   , 0  );
-    ISynthCore<0>::control_change(FILTER_NG_AMT, 60 );
     ISynthCore<0>::control_change(CC30_DUMMY   , 0  );
-    ISynthCore<0>::control_change(EG_ATTACK    , 32 );
   }
 
   INLINE static void receive_midi_byte(uint8_t b) {
