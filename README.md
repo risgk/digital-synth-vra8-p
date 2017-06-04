@@ -5,7 +5,7 @@
 
 ## Concept
 
-- 3 Voice Pseudo Polyphonic Synthesizer for Arduino Uno
+- 3 Voice Paraphonic Synthesizer for Arduino Uno
 - A Variant of Digital Synth VRA8-P <https://github.com/risgk/digital-synth-vra8-p>
 
 ## v1.2 New Features
