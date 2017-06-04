@@ -7,7 +7,8 @@ class Voice {
   static uint8_t m_waveform;
   static uint8_t m_amp_env_amt_current;
   static uint8_t m_amp_env_amt_target;
-  static boolean m_hold;
+  static boolean m_forced_hold;
+  static boolean m_damper_pedal;
   static uint8_t m_note_number[3];
   static boolean m_note_hold[3];
   static uint8_t m_velocity[1];
@@ -22,7 +23,8 @@ public:
     m_waveform = OSC_WAVEFORM_SAW;
     m_amp_env_amt_current = 0;
     m_amp_env_amt_target = 0;
-    m_hold = false;
+    m_forced_hold = false;
+    m_damper_pedal = false;
     m_note_number[0] = NOTE_NUMBER_INVALID;
     m_note_number[1] = NOTE_NUMBER_INVALID;
     m_note_number[2] = NOTE_NUMBER_INVALID;
@@ -170,7 +172,7 @@ public:
   INLINE static void note_off(uint8_t note_number) {
     if (m_unison_on) {
       if (m_note_number[0] == note_number) {
-        if (m_hold) {
+        if (m_forced_hold || m_damper_pedal) {
           m_note_hold[0] = true;
           m_note_hold[1] = true;
           m_note_hold[2] = true;
@@ -180,21 +182,21 @@ public:
       }
     } else {
       if (m_note_number[0] == note_number) {
-        if (m_hold) {
+        if (m_forced_hold || m_damper_pedal) {
           m_note_hold[0] = true;
         } else {
           m_note_number[0] = NOTE_NUMBER_INVALID;
           IGate<0>::note_off(0);
         }
       } else if (m_note_number[1] == note_number) {
-        if (m_hold) {
+        if (m_forced_hold || m_damper_pedal) {
           m_note_hold[1] = true;
         } else {
           m_note_number[1] = NOTE_NUMBER_INVALID;
           IGate<0>::note_off(1);
         }
       } else if (m_note_number[2] == note_number) {
-        if (m_hold) {
+        if (m_forced_hold || m_damper_pedal) {
           m_note_hold[2] = true;
         } else {
           m_note_number[2] = NOTE_NUMBER_INVALID;
@@ -269,13 +271,24 @@ public:
       } else {
         m_amp_env_amt_target = AMP_ENV_AMT_MAX;
       }
-      set_hold(controller_value);
+      if ((32 <= controller_value) && (controller_value < 96)) {
+        set_forced_hold(true);
+      } else {
+        set_forced_hold(false);
+      }
       break;
     case VELOCITY_SENS:
       m_velocity_sensitivity = controller_value;
       break;
     case CUTOFF_V_SENS:
       m_cutoff_velocity_sensitivity = (controller_value - 64) << 1;
+      break;
+    case DAMPER_PEDAL:
+      if (controller_value < 64) {
+        set_damper_pedal(false);
+      } else {
+        set_damper_pedal(true);
+      }
       break;
     case ALL_NOTES_OFF:
     case OMNI_MODE_OFF:
@@ -325,38 +338,54 @@ private:
     }
   }
 
-  INLINE static void set_hold(uint8_t controller_value) {
-    if ((32 <= controller_value) && (controller_value < 96)) {
-      if (!m_hold) {
-        m_hold = true;
-      }
+  INLINE static void set_forced_hold(boolean on) {
+    if (on) {
+      m_forced_hold = true;
     } else {
-      if (m_hold) {
-        m_hold = false;
-
-        if (m_note_hold[0]) {
-          m_note_number[0] = NOTE_NUMBER_INVALID;
-          m_note_hold[0] = false;
-          IGate<0>::note_off(0);
-        }
-        if (m_note_hold[1]) {
-          m_note_number[1] = NOTE_NUMBER_INVALID;
-          m_note_hold[1] = false;
-          IGate<0>::note_off(1);
-        }
-        if (m_note_hold[2]) {
-          m_note_number[2] = NOTE_NUMBER_INVALID;
-          m_note_hold[2] = false;
-          IGate<0>::note_off(2);
-        }
-
-        if ((m_note_number[0] == NOTE_NUMBER_INVALID) &&
-            (m_note_number[1] == NOTE_NUMBER_INVALID) &&
-            (m_note_number[2] == NOTE_NUMBER_INVALID)) {
-          IGate<0>::note_off(3);
-          IEnvGen<0>::note_off();
+      if (m_forced_hold) {
+        m_forced_hold = false;
+        if (!m_damper_pedal) {
+          turn_hold_off();
         }
       }
+    }
+  }
+
+  INLINE static void set_damper_pedal(uint8_t on) {
+    if (on) {
+      m_damper_pedal = true;
+    } else {
+      if (m_damper_pedal) {
+        m_damper_pedal = false;
+        if (!m_forced_hold) {
+          turn_hold_off();
+        }
+      }
+    }
+  }
+
+  INLINE static void turn_hold_off() {
+    if (m_note_hold[0]) {
+      m_note_number[0] = NOTE_NUMBER_INVALID;
+      m_note_hold[0] = false;
+      IGate<0>::note_off(0);
+    }
+    if (m_note_hold[1]) {
+      m_note_number[1] = NOTE_NUMBER_INVALID;
+      m_note_hold[1] = false;
+      IGate<0>::note_off(1);
+    }
+    if (m_note_hold[2]) {
+      m_note_number[2] = NOTE_NUMBER_INVALID;
+      m_note_hold[2] = false;
+      IGate<0>::note_off(2);
+    }
+
+    if ((m_note_number[0] == NOTE_NUMBER_INVALID) &&
+        (m_note_number[1] == NOTE_NUMBER_INVALID) &&
+        (m_note_number[2] == NOTE_NUMBER_INVALID)) {
+      IGate<0>::note_off(3);
+      IEnvGen<0>::note_off();
     }
   }
 };
@@ -366,7 +395,8 @@ template <uint8_t T> boolean Voice<T>::m_unison_on;
 template <uint8_t T> uint8_t Voice<T>::m_waveform;
 template <uint8_t T> uint8_t Voice<T>::m_amp_env_amt_current;
 template <uint8_t T> uint8_t Voice<T>::m_amp_env_amt_target;
-template <uint8_t T> boolean Voice<T>::m_hold;
+template <uint8_t T> boolean Voice<T>::m_forced_hold;
+template <uint8_t T> boolean Voice<T>::m_damper_pedal;
 template <uint8_t T> uint8_t Voice<T>::m_note_number[3];
 template <uint8_t T> boolean Voice<T>::m_note_hold[3];
 template <uint8_t T> uint8_t Voice<T>::m_velocity[1];

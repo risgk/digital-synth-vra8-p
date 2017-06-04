@@ -119,6 +119,7 @@
     |                            27 | x             | o             | AMP EG/HOLD           |
     |                            28 | x             | o             | VELOCITY SENS         |
     |                            29 | x             | o             | CUTOFF V SENS         |
+    |                            64 | x             | o             | DAMPER PEDAL          |
     +-------------------------------+---------------+---------------+-----------------------+
     | Program                       | x             | x             |                       |
     | Change       : True #         | ************* |               |                       |
