@@ -59,6 +59,8 @@ const CUTOFF_V_SENS = 29;
 const CC28_DUMMY    = 30;
 const UNISON_OPTION = 31;
 
+const DAMPER_PEDAL  = 64;
+
 const ALL_NOTES_OFF = 123;
 
 const CONTROLLERS_FIRST = 16;
@@ -234,6 +236,13 @@ function updateDisplayOfControl(number, value) {
   localStorage.setItem("keyCC" + String(number), value);
 }
 
+function onChangeSustain(value) {
+  if (midiOutput) {
+    midiOutput.send([(CONTROL_CHANGE | MIDI_CH), DAMPER_PEDAL, value ? 127 : 0]);
+    sleep(2);
+  }
+}
+
 function onChangeControlChange(number, value) {
   updateDisplayOfControl(number, value);
   if (midiOutput) {
@@ -333,15 +342,20 @@ function noteOff(noteNumber) {
 
 <table>
 <tr><td>MIDI IN 1</td>
-    <td colspan="2"><select id="selectInputPort1" size="1" onchange="onChangeInputPort1()"></select></td>
+    <td><select id="selectInputPort1" size="1" onchange="onChangeInputPort1()"></select></td>
     <td>&nbsp;</td>
     <td>MIDI OUT</td>
-    <td colspan="2"><select id="selectOutputPort" size="1" onchange="onChangeOutputPort()"></select></td></tr>
+    <td><select id="selectOutputPort" size="1" onchange="onChangeOutputPort()"></select></td>
+    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td style="display:none">SUSTAIN</td><td>
+    <td style="display:none"><input type="checkbox" value=0 onclick="onChangeSustain(this.checked)"></td></tr>
 <tr><td>MIDI IN 2</td>
-    <td colspan="2"><select id="selectInputPort2" size="1" onchange="onChangeInputPort2()"></select></td>
+    <td><select id="selectInputPort2" size="1" onchange="onChangeInputPort2()"></select></td>
     <td>&nbsp;</td>
     <td>KBD TRANSPOSE</td>
-    <td><input id="inputTranspose" type="range" min="-24" max="12" step="12" oninput="onChangeTranspose(value)" ></td><td><span id="spanTranspose" >-1</span></td></tr>
+    <td><input id="inputTranspose" type="range" min="-24" max="12" step="12" oninput="onChangeTranspose(value)" ></td>
+    <td><span id="spanTranspose" >-1</span></td>
+    <td>&nbsp;</td></tr>
 </table>
 
 <table>
