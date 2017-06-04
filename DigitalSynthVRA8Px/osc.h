@@ -140,6 +140,7 @@ public:
     int8_t wave_0_detune, wave_1_detune, wave_2_detune;
     int8_t wave_0_sub,    wave_1_sub,    wave_2_sub;
     int16_t level_sub;
+    int16_t result;
     if ((m_waveform == OSC_WAVEFORM_ORGAN_3) ||
         (m_waveform == OSC_WAVEFORM_ORGAN_9) ||
         (m_waveform == OSC_WAVEFORM_ORGAN_4)) {
@@ -151,6 +152,29 @@ public:
       wave_2_detune = get_wave_level(m_wave_table[2], m_phase_array[2] + m_phase_detune);
 
       level_sub = 0;
+
+      // amp and mix
+      int16_t level_main;
+      int16_t level_detune;
+      if (m_amp_mod & 0x40) {
+        level_main   =           ((high_sbyte(wave_0_main * static_cast<uint8_t>(wave_0_detune + 128)) * (amp_0 << 1)) +
+                                  (high_sbyte(wave_1_main * static_cast<uint8_t>(wave_1_detune + 128)) * (amp_1 << 1)) +
+                                  (high_sbyte(wave_2_main * static_cast<uint8_t>(wave_2_detune + 128)) * (amp_2 << 1))) >> 1;
+        level_detune = 0;
+      } else {
+        level_main   = mul_q15_q7((wave_0_main   * amp_0) +
+                                  (wave_1_main   * amp_1) +
+                                  (wave_2_main   * amp_2), m_mix_main);
+        level_detune = mul_q15_q7((wave_0_detune * amp_0) +
+                                  (wave_1_detune * amp_1) +
+                                  (wave_2_detune * amp_2), m_mix_detune);
+      }
+      result = level_main + level_detune + level_sub;
+
+      if ((m_waveform == OSC_WAVEFORM_ORGAN_3) ||
+          (m_waveform == OSC_WAVEFORM_ORGAN_4)) {
+        result += result;
+      }
     } else {
       wave_0_main   = get_wave_level(m_wave_table[0], (m_phase_array[0] << 1));
       wave_1_main   = get_wave_level(m_wave_table[1], (m_phase_array[1] << 1));
@@ -166,29 +190,22 @@ public:
       level_sub    = mul_q15_q7((wave_0_sub    * amp_0) +
                                 (wave_1_sub    * amp_1) +
                                 (wave_2_sub    * amp_2), m_mix_sub);
-    }
-
-    // amp and mix
-    int16_t level_main;
-    int16_t level_detune;
-    if (m_amp_mod & 0x40) {
-      level_main   =           ((high_sbyte(wave_0_main * static_cast<uint8_t>(wave_0_detune + 128)) * (amp_0 << 1)) +
-                                (high_sbyte(wave_1_main * static_cast<uint8_t>(wave_1_detune + 128)) * (amp_1 << 1)) +
-                                (high_sbyte(wave_2_main * static_cast<uint8_t>(wave_2_detune + 128)) * (amp_2 << 1))) >> 1;
-      level_detune = 0;
-    } else {
-      level_main   = mul_q15_q7((wave_0_main   * amp_0) +
-                                (wave_1_main   * amp_1) +
-                                (wave_2_main   * amp_2), m_mix_main);
-      level_detune = mul_q15_q7((wave_0_detune * amp_0) +
-                                (wave_1_detune * amp_1) +
-                                (wave_2_detune * amp_2), m_mix_detune);
-    }
-    int16_t result = level_main + level_detune + level_sub;
-
-    if ((m_waveform == OSC_WAVEFORM_ORGAN_3) ||
-        (m_waveform == OSC_WAVEFORM_ORGAN_4)) {
-      result += result;
+      int16_t level_main;
+      int16_t level_detune;
+      if (m_amp_mod & 0x40) {
+        level_main   =           ((high_sbyte(wave_0_main * static_cast<uint8_t>(wave_0_detune + 128)) * (amp_0 << 1)) +
+                                  (high_sbyte(wave_1_main * static_cast<uint8_t>(wave_1_detune + 128)) * (amp_1 << 1)) +
+                                  (high_sbyte(wave_2_main * static_cast<uint8_t>(wave_2_detune + 128)) * (amp_2 << 1))) >> 1;
+        level_detune = 0;
+      } else {
+        level_main   = mul_q15_q7((wave_0_main   * amp_0) +
+                                  (wave_1_main   * amp_1) +
+                                  (wave_2_main   * amp_2), m_mix_main);
+        level_detune = mul_q15_q7((wave_0_detune * amp_0) +
+                                  (wave_1_detune * amp_1) +
+                                  (wave_2_detune * amp_2), m_mix_detune);
+      }
+      result = level_main + level_detune + level_sub;
     }
 
     return result;
