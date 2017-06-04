@@ -11,6 +11,7 @@ template <uint8_t T>
 class Osc {
   static uint8_t        m_count;
   static boolean        m_unison_on;
+  static uint8_t        m_unison_option;
   static int8_t         m_mix_main;
   static int8_t         m_mix_detune;
   static int8_t         m_mix_sub;
@@ -29,6 +30,7 @@ public:
   INLINE static void initialize() {
     m_count = 128;
     m_unison_on = false;
+    m_unison_option = 0;
     for (uint8_t i = 0; i < OSC_MIX_TABLE_LENGTH; i++) {
       m_mix_table[i] = static_cast<uint8_t>(sqrtf(static_cast<float>(i) /
                                                   (OSC_MIX_TABLE_LENGTH - 1)) * 127);
@@ -99,6 +101,10 @@ public:
     }
   }
 
+  INLINE static void set_unison_option(uint8_t controller_value) {
+    m_unison_option = controller_value;
+  }
+
   INLINE static void note_on(uint8_t osc_number, uint8_t note_number) {
     if (m_unison_on) {
       m_wave_table[0] = get_wave_table(m_waveform, note_number);
@@ -117,6 +123,12 @@ public:
     m_count++;
     if (m_count == 0) {
       update_freq_detune(mod_input);
+    }
+
+    if (m_unison_on && (m_unison_option & 0x40)) {
+      amp_0 = amp_0 + (amp_0 >> 1);
+      amp_1 = 0;
+      amp_2 = 0;
     }
 
     m_phase_array[0] += m_freq_array[0];
@@ -240,6 +252,7 @@ private:
 
 template <uint8_t T> uint8_t         Osc<T>::m_count;
 template <uint8_t T> boolean         Osc<T>::m_unison_on;
+template <uint8_t T> uint8_t         Osc<T>::m_unison_option;
 template <uint8_t T> int8_t          Osc<T>::m_mix_main;
 template <uint8_t T> int8_t          Osc<T>::m_mix_detune;
 template <uint8_t T> int8_t          Osc<T>::m_mix_sub;

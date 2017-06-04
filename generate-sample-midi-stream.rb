@@ -83,7 +83,7 @@ control_change(AMP_EG       , 0  )
 control_change(VELOCITY_SENS, 0  )
 control_change(CUTOFF_V_SENS, 127)
 control_change(CC28_DUMMY   , 0  )
-control_change(CC30_DUMMY   , 0  )
+control_change(UNISON_OPTION, 0  )
 
 play_a(4)
 play_b(3)

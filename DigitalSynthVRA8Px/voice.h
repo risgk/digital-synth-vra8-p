@@ -238,6 +238,9 @@ public:
     case OSC_AMP_MOD:
       IOsc<0>::set_amp_mod(controller_value);
       break;
+    case UNISON_OPTION:
+      IOsc<0>::set_unison_option(controller_value);
+      break;
     case FILTER_CUTOFF:
       IFilter<0>::set_cutoff(controller_value);
       break;

@@ -63,7 +63,7 @@ const uint8_t   AMP_EG        = 27;
 const uint8_t   VELOCITY_SENS = 28;
 const uint8_t   CUTOFF_V_SENS = 29;
 const uint8_t   CC28_DUMMY    = 30;
-const uint8_t   CC30_DUMMY    = 31;
+const uint8_t   UNISON_OPTION = 31;
 
 const uint8_t   ALL_NOTES_OFF = 123;
 const uint8_t   OMNI_MODE_OFF = 124;
