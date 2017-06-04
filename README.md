@@ -64,7 +64,8 @@
     |               |      | 100%           | (0%)      | 100%           | Sub Osc Level               |
     | DETUNE        | 64   | 0.06 Hz        | 1.0 Hz    | 3.8 Hz         |                             |
     | DETUNE EG AMT | 0    | -126 (EG 100%) | 0         | +125 (EG 100%) | Modulates DETUNE            |
-    | AMPLITUDE MOD | 0    | OFF            | ON        | ON             | Outputs Main x (Detune + 1) |
+    | AMPLITUDE MOD | 0    | OFF            | ON        | ON             | On: Ignores MIX,            |
+    |               |      |                |           |                | Outputs Main x (Detune + 1) |
     +---------------+------+----------------+-----------+----------------+-----------------------------+
     | CUTOFF        | 64   | 0.22 kHz (A3)  | 1.2 kHz   | 7.04 kHz (A8)  | Range 4 to 124              |
     | RESONANCE     | 64   | Q = 0.7        | Q = 2.8   | Q = 11.3       |                             |
