@@ -61,17 +61,17 @@ $osc_harmonics_restriction_table = []
   $osc_harmonics_restriction_table << freq
 end
 
-def last_harmonic(freq, organ = false)
+def last_harmonic(freq, organ = false, organ_last)
   last = (freq != 0) ? ((FREQUENCY_MAX * (1 << OSC_PHASE_RESOLUTION_BITS)) /
                         ((freq + OSC_DETUNE_FREQ_MAX) * 2 * SAMPLING_RATE)) : 0
-  last = 8 if organ && last > 8
+  last = organ_last if organ && last > organ_last
   last = 127 if last > 127
   last
 end
 
-def generate_osc_wave_table_arrays(organ = false)
+def generate_osc_wave_table_arrays(organ = false, organ_last = 8)
   $osc_harmonics_restriction_table.
-    map { |freq| last_harmonic(freq, organ) }.uniq.sort.reverse.each do |i|
+    map { |freq| last_harmonic(freq, organ, organ_last) }.uniq.sort.reverse.each do |i|
     yield(i)
   end
 end
@@ -94,7 +94,29 @@ generate_osc_wave_table_arrays do |last|
   end
 end
 
-generate_osc_wave_table_arrays(true) do |last|
+generate_osc_wave_table_arrays(true, 2) do |last|
+  generate_osc_wave_table("org3", last, 1.0 / 1.7 / Math.sqrt(3.0), true) do |n, k|
+    if [1, 2, 3].include?(k)
+      Math.sin((2.0 * Math::PI) * ((n + 0.5) /
+        (1 << OSC_WAVE_TABLE_SAMPLES_BITS)) * (k * 2))
+    else
+      0.0
+    end
+  end
+end
+
+generate_osc_wave_table_arrays(true, 2) do |last|
+  generate_osc_wave_table("org4", last, 1.0 / 1.7 / Math.sqrt(4.0), true) do |n, k|
+    if [1, 2, 3, 4].include?(k)
+      Math.sin((2.0 * Math::PI) * ((n + 0.5) /
+        (1 << OSC_WAVE_TABLE_SAMPLES_BITS)) * (k * 2))
+    else
+      0.0
+    end
+  end
+end
+
+generate_osc_wave_table_arrays(true, 8) do |last|
   generate_osc_wave_table("org9", last, 1.0 / 1.7 / Math.sqrt(9.0), true) do |n, k|
     if [1, 2, 3, 4, 6, 8, 10, 12, 16].include?(k)
       Math.sin((2.0 * Math::PI) * ((n + 0.5) /
@@ -105,10 +127,10 @@ generate_osc_wave_table_arrays(true) do |last|
   end
 end
 
-def generate_osc_wave_tables_array(name, organ = false)
+def generate_osc_wave_tables_array(name, organ = false, organ_last = 8)
   $file.printf("const uint8_t* g_osc_#{name}_wave_tables[] = {\n  ")
   $osc_harmonics_restriction_table.each_with_index do |freq, idx|
-    $file.printf("g_osc_#{name}_wave_table_h%-3d,", last_harmonic(freq, organ))
+    $file.printf("g_osc_#{name}_wave_table_h%-3d,", last_harmonic(freq, organ, organ_last))
     if idx == DATA_BYTE_MAX
       $file.printf("\n")
     elsif idx % 3 == (3 - 1)
@@ -122,6 +144,8 @@ end
 
 generate_osc_wave_tables_array("saw")
 generate_osc_wave_tables_array("sq")
-generate_osc_wave_tables_array("org9", true)
+generate_osc_wave_tables_array("org3", true, 2)
+generate_osc_wave_tables_array("org4", true, 2)
+generate_osc_wave_tables_array("org9", true, 8)
 
 $file.close

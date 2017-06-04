@@ -140,7 +140,9 @@ public:
     int8_t wave_0_detune, wave_1_detune, wave_2_detune;
     int8_t wave_0_sub,    wave_1_sub,    wave_2_sub;
     int16_t level_sub;
-    if (m_waveform == OSC_WAVEFORM_ORGAN) {
+    if ((m_waveform == OSC_WAVEFORM_ORGAN_3) ||
+        (m_waveform == OSC_WAVEFORM_ORGAN_9) ||
+        (m_waveform == OSC_WAVEFORM_ORGAN_4)) {
       wave_0_main   = get_wave_level(m_wave_table[0], m_phase_array[0]);
       wave_1_main   = get_wave_level(m_wave_table[1], m_phase_array[1]);
       wave_2_main   = get_wave_level(m_wave_table[2], m_phase_array[2]);
@@ -184,6 +186,11 @@ public:
     }
     int16_t result = level_main + level_detune + level_sub;
 
+    if ((m_waveform == OSC_WAVEFORM_ORGAN_3) ||
+        (m_waveform == OSC_WAVEFORM_ORGAN_4)) {
+      result += result;
+    }
+
     return result;
   }
 
@@ -192,8 +199,12 @@ private:
     const uint8_t* result;
     if (waveform == OSC_WAVEFORM_SAW) {
       result = g_osc_saw_wave_tables[note_number - NOTE_NUMBER_MIN];
-    } else if (waveform == OSC_WAVEFORM_ORGAN) {
+    } else if (waveform == OSC_WAVEFORM_ORGAN_3) {
+      result = g_osc_org3_wave_tables[note_number - NOTE_NUMBER_MIN];
+    } else if (waveform == OSC_WAVEFORM_ORGAN_9) {
       result = g_osc_org9_wave_tables[note_number - NOTE_NUMBER_MIN];
+    } else if (waveform == OSC_WAVEFORM_ORGAN_4) {
+      result = g_osc_org4_wave_tables[note_number - NOTE_NUMBER_MIN];
     } else {
       result = g_osc_sq_wave_tables[note_number - NOTE_NUMBER_MIN];
     }
