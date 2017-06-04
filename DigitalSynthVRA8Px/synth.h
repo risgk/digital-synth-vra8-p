@@ -39,7 +39,7 @@ public:
     ISynthCore<0>::control_change(EG_DECAY     , 64 );
 
     ISynthCore<0>::control_change(EG_ATTACK    , 32 );
-    ISynthCore<0>::control_change(CC26_DUMMY   , 0  );
+    ISynthCore<0>::control_change(OSC_AMP_MOD  , 0  );
     ISynthCore<0>::control_change(DETUNE_EG_AMT, 48 );
     ISynthCore<0>::control_change(AMP_EG       , 0  );
 

@@ -17,6 +17,7 @@ class Osc {
   static int8_t         m_mix_table[OSC_MIX_TABLE_LENGTH];
   static uint8_t        m_detune;
   static uint8_t        m_detune_mod_amt;
+  static uint8_t        m_amp_mod;
   static uint8_t        m_waveform;
   static const uint8_t* m_wave_table[3];
   static __uint24       m_freq_array[3];
@@ -28,15 +29,16 @@ public:
   INLINE static void initialize() {
     m_count = 128;
     m_unison_on = false;
-    m_mix_main   = m_mix_table[(OSC_MIX_TABLE_LENGTH - 1) >> 1];
-    m_mix_detune = m_mix_table[(OSC_MIX_TABLE_LENGTH - 1) >> 1];
-    m_mix_sub = 0;
     for (uint8_t i = 0; i < OSC_MIX_TABLE_LENGTH; i++) {
       m_mix_table[i] = static_cast<uint8_t>(sqrtf(static_cast<float>(i) /
                                                   (OSC_MIX_TABLE_LENGTH - 1)) * 127);
     }
+    m_mix_main   = m_mix_table[(OSC_MIX_TABLE_LENGTH - 1) >> 1];
+    m_mix_detune = m_mix_table[(OSC_MIX_TABLE_LENGTH - 1) >> 1];
+    m_mix_sub = 0;
     m_detune = 0;
     m_detune_mod_amt = 0;
+    m_amp_mod = 0;
     m_waveform = OSC_WAVEFORM_SAW;
     m_wave_table[0] = g_osc_saw_wave_tables[0];
     m_wave_table[1] = g_osc_saw_wave_tables[2];
@@ -89,6 +91,14 @@ public:
     m_detune_mod_amt = controller_value;
   }
 
+  INLINE static void set_amp_mod(uint8_t controller_value) {
+    if (controller_value < 64) {
+      m_amp_mod = 0;
+    } else {
+      m_amp_mod = 127;
+    }
+  }
+
   INLINE static void note_on(uint8_t osc_number, uint8_t note_number) {
     if (m_unison_on) {
       m_wave_table[0] = get_wave_table(m_waveform, note_number);
@@ -114,47 +124,53 @@ public:
     m_phase_array[2] += m_freq_array[2];
     m_phase_detune += m_freq_detune;
 
-    int16_t result;
+    int8_t wave_0_main,   wave_1_main,   wave_2_main;
+    int8_t wave_0_detune, wave_1_detune, wave_2_detune;
+    int8_t wave_0_sub,    wave_1_sub,    wave_2_sub;
+    int16_t level_sub;
     if (m_waveform == OSC_WAVEFORM_ORGAN) {
-      int8_t wave_0_main   = get_wave_level(m_wave_table[0], m_phase_array[0]);
-      int8_t wave_1_main   = get_wave_level(m_wave_table[1], m_phase_array[1]);
-      int8_t wave_2_main   = get_wave_level(m_wave_table[2], m_phase_array[2]);
-      int8_t wave_0_detune = get_wave_level(m_wave_table[0], m_phase_array[0] + m_phase_detune);
-      int8_t wave_1_detune = get_wave_level(m_wave_table[1], m_phase_array[1] + m_phase_detune);
-      int8_t wave_2_detune = get_wave_level(m_wave_table[2], m_phase_array[2] + m_phase_detune);
+      wave_0_main   = get_wave_level(m_wave_table[0], m_phase_array[0]);
+      wave_1_main   = get_wave_level(m_wave_table[1], m_phase_array[1]);
+      wave_2_main   = get_wave_level(m_wave_table[2], m_phase_array[2]);
+      wave_0_detune = get_wave_level(m_wave_table[0], m_phase_array[0] + m_phase_detune);
+      wave_1_detune = get_wave_level(m_wave_table[1], m_phase_array[1] + m_phase_detune);
+      wave_2_detune = get_wave_level(m_wave_table[2], m_phase_array[2] + m_phase_detune);
 
-      // amp and mix
-      int16_t level_main   = mul_q15_q7((wave_0_main   * amp_0) +
-                                        (wave_1_main   * amp_1) +
-                                        (wave_2_main   * amp_2), m_mix_main);
-      int16_t level_detune = mul_q15_q7((wave_0_detune * amp_0) +
-                                        (wave_1_detune * amp_1) +
-                                        (wave_2_detune * amp_2), m_mix_detune);
-      result = level_main + level_detune;
+      level_sub = 0;
     } else {
-      int8_t wave_0_main   = get_wave_level(m_wave_table[0], (m_phase_array[0] << 1));
-      int8_t wave_1_main   = get_wave_level(m_wave_table[1], (m_phase_array[1] << 1));
-      int8_t wave_2_main   = get_wave_level(m_wave_table[2], (m_phase_array[2] << 1));
-      int8_t wave_0_detune = get_wave_level(m_wave_table[0], (m_phase_array[0] << 1) + (m_phase_detune << 1));
-      int8_t wave_1_detune = get_wave_level(m_wave_table[1], (m_phase_array[1] << 1) + (m_phase_detune << 1));
-      int8_t wave_2_detune = get_wave_level(m_wave_table[2], (m_phase_array[2] << 1) + (m_phase_detune << 1));
-      int8_t wave_0_sub    = get_tri_wave_level(m_phase_array[0]);
-      int8_t wave_1_sub    = get_tri_wave_level(m_phase_array[1]);
-      int8_t wave_2_sub    = get_tri_wave_level(m_phase_array[2]);
+      wave_0_main   = get_wave_level(m_wave_table[0], (m_phase_array[0] << 1));
+      wave_1_main   = get_wave_level(m_wave_table[1], (m_phase_array[1] << 1));
+      wave_2_main   = get_wave_level(m_wave_table[2], (m_phase_array[2] << 1));
+      wave_0_detune = get_wave_level(m_wave_table[0], (m_phase_array[0] << 1) + (m_phase_detune << 1));
+      wave_1_detune = get_wave_level(m_wave_table[1], (m_phase_array[1] << 1) + (m_phase_detune << 1));
+      wave_2_detune = get_wave_level(m_wave_table[2], (m_phase_array[2] << 1) + (m_phase_detune << 1));
+      wave_0_sub    = get_tri_wave_level(m_phase_array[0]);
+      wave_1_sub    = get_tri_wave_level(m_phase_array[1]);
+      wave_2_sub    = get_tri_wave_level(m_phase_array[2]);
 
       // amp and mix
-      int16_t level_main   = mul_q15_q7((wave_0_main   * amp_0) +
-                                        (wave_1_main   * amp_1) +
-                                        (wave_2_main   * amp_2), m_mix_main);
-      int16_t level_detune = mul_q15_q7((wave_0_detune * amp_0) +
-                                        (wave_1_detune * amp_1) +
-                                        (wave_2_detune * amp_2), m_mix_detune);
-      int16_t level_sub    = mul_q15_q7((wave_0_sub    * amp_0) +
-                                        (wave_1_sub    * amp_1) +
-                                        (wave_2_sub    * amp_2), m_mix_sub);
-
-      result = level_main + level_detune + level_sub;
+      level_sub    = mul_q15_q7((wave_0_sub    * amp_0) +
+                                (wave_1_sub    * amp_1) +
+                                (wave_2_sub    * amp_2), m_mix_sub);
     }
+
+    // amp and mix
+    int16_t level_main;
+    int16_t level_detune;
+    if (m_amp_mod & 0x40) {
+      level_main   =           ((high_sbyte(wave_0_main * static_cast<uint8_t>(wave_0_detune + 128)) * (amp_0 << 1)) +
+                                (high_sbyte(wave_1_main * static_cast<uint8_t>(wave_1_detune + 128)) * (amp_1 << 1)) +
+                                (high_sbyte(wave_2_main * static_cast<uint8_t>(wave_2_detune + 128)) * (amp_2 << 1))) >> 1;
+      level_detune = 0;
+    } else {
+      level_main   = mul_q15_q7((wave_0_main   * amp_0) +
+                                (wave_1_main   * amp_1) +
+                                (wave_2_main   * amp_2), m_mix_main);
+      level_detune = mul_q15_q7((wave_0_detune * amp_0) +
+                                (wave_1_detune * amp_1) +
+                                (wave_2_detune * amp_2), m_mix_detune);
+    }
+    int16_t result = level_main + level_detune + level_sub;
 
     return result;
   }
@@ -230,6 +246,7 @@ template <uint8_t T> int8_t          Osc<T>::m_mix_sub;
 template <uint8_t T> int8_t          Osc<T>::m_mix_table[OSC_MIX_TABLE_LENGTH];
 template <uint8_t T> uint8_t         Osc<T>::m_detune;
 template <uint8_t T> uint8_t         Osc<T>::m_detune_mod_amt;
+template <uint8_t T> uint8_t         Osc<T>::m_amp_mod;
 template <uint8_t T> uint8_t         Osc<T>::m_waveform;
 template <uint8_t T> const uint8_t*  Osc<T>::m_wave_table[3];
 template <uint8_t T> __uint24        Osc<T>::m_freq_array[3];

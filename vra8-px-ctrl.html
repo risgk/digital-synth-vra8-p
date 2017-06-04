@@ -50,7 +50,7 @@ const FILTER_EG_AMT = 22;
 const EG_DECAY      = 23;
 
 const EG_ATTACK     = 24;
-const CC26_DUMMY    = 25;
+const OSC_AMP_MOD   = 25;
 const DETUNE_EG_AMT = 26;
 const AMP_EG        = 27;
 
@@ -257,7 +257,7 @@ function preset(number) {
   presetControllers[EG_DECAY     ] = [0  , 64 , 64 , 32 , 64 , 64 , 64 , 32 , 126, 48 ];
 
   presetControllers[EG_ATTACK    ] = [0  , 32 , 32 , 32 , 32 , 32 , 32 , 32 , 32 , 32 ];
-  presetControllers[CC26_DUMMY   ] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  ];
+  presetControllers[OSC_AMP_MOD  ] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  ];
   presetControllers[DETUNE_EG_AMT] = [0  , 48 , 48 , 48 , 64 , 64 , 64 , 48 , 48 , 48 ];
   presetControllers[AMP_EG       ] = [0  , 0  , 127, 0  , 0  , 0  , 0  , 0  , 0  , 127];
 
@@ -410,7 +410,7 @@ function noteOff(noteNumber) {
     <td><input id="inputCC23" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(23, value)"></td>
     <td><span id="spanCC23">-1</span></td></tr>
 <tr><td>EG ATTACK             </td><td></td>
-    <td>TODO                  </td><td></td>
+    <td>AMPLITUDE MOD         </td><td></td>
     <td>DETUNE EG AMT (-/+)   </td><td></td>
     <td>AMP EG/HOLD   </td></tr>
 <tr><td><input id="inputCC24" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(24, value)"></td>

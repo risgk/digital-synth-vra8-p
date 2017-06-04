@@ -76,7 +76,7 @@ control_change(FILTER_EG_AMT, 96 )
 control_change(EG_DECAY     , 64 )
 
 control_change(EG_ATTACK    , 32 )
-control_change(CC26_DUMMY   , 0  )
+control_change(OSC_AMP_MOD  , 0  )
 control_change(DETUNE_EG_AMT, 48 )
 control_change(AMP_EG       , 0  )
 

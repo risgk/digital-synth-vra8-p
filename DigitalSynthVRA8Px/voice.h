@@ -232,6 +232,12 @@ public:
     case OSC_DETUNE:
       IOsc<0>::set_detune(controller_value);
       break;
+    case DETUNE_EG_AMT:
+      IOsc<0>::set_detune_env_amt(controller_value);
+      break;
+    case OSC_AMP_MOD:
+      IOsc<0>::set_amp_mod(controller_value);
+      break;
     case FILTER_CUTOFF:
       IFilter<0>::set_cutoff(controller_value);
       break;
@@ -240,6 +246,12 @@ public:
       break;
     case FILTER_EG_AMT:
       IFilter<0>::set_env_amt(controller_value);
+      break;
+    case FILTER_NG_AMT:
+      IFilter<0>::set_noise_gen_amt(controller_value);
+      break;
+    case EG_ATTACK:
+      IEnvGen<0>::set_attack(controller_value);
       break;
     case EG_DECAY:
       IEnvGen<0>::set_decay(controller_value);
@@ -257,15 +269,6 @@ public:
       break;
     case CUTOFF_V_SENS:
       m_cutoff_velocity_sensitivity = (controller_value - 64) << 1;
-      break;
-    case DETUNE_EG_AMT:
-      IOsc<0>::set_detune_env_amt(controller_value);
-      break;
-    case FILTER_NG_AMT:
-      IFilter<0>::set_noise_gen_amt(controller_value);
-      break;
-    case EG_ATTACK:
-      IEnvGen<0>::set_attack(controller_value);
       break;
     case ALL_NOTES_OFF:
     case OMNI_MODE_OFF:

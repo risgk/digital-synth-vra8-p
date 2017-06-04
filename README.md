@@ -63,14 +63,16 @@
     |               |      | 100%           | (0%)      | 100%           | Sub Osc Level               |
     | DETUNE        | 64   | 0.06 Hz        | 1.0 Hz    | 3.8 Hz         |                             |
     | DETUNE EG AMT | 0    | -126 (EG 100%) | 0         | +125 (EG 100%) | Modulates DETUNE            |
-    | AMP EG/HOLD   | 0    | AMP EG OFF     | AMP EG ON | AMP EG ON      | HOLD ON: 32 to 95           |
+    | AMPLITUDE MOD | 0    | OFF            | ON        | ON             | Outputs Main x (Detune + 1) |
     +---------------+------+----------------+-----------+----------------+-----------------------------+
     | CUTOFF        | 64   | 0.22 kHz       | 1.2 kHz   | 7.0 kHz        | Range 4 to 124              |
     | RESONANCE     | 64   | Q = 0.7        | Q = 2.8   | Q = 11.3       |                             |
     | CUTOFF EG AMT | 96   | -126 (EG 100%) | 0         | +125 (EG 100%) | EnvGen Modulates CUTOFF     |
     | CUTOFF NG AMT | 60   | -126 (NG 100%) | 0         | +125 (NG 100%) | NoiseGen Modulates CUTOFF   |
-    | EG DECAY      | 64   | 34 ms          | 2.2 s     | Infinity       | Decay Time                  |
+    +---------------+------+----------------+-----------+----------------+-----------------------------+
     | EG ATTACK     | 32   | 4 ms           | 60 ms     | 4.2 s          | Attack Time                 |
+    | EG DECAY      | 64   | 34 ms          | 2.2 s     | Infinity       | Decay Time                  |
+    | AMP EG/HOLD   | 0    | AMP EG OFF     | AMP EG ON | AMP EG ON      | HOLD ON: 32 to 95           |
     +---------------+------+----------------+-----------+----------------+-----------------------------+
     | VELOCITY SENS | 0    | 0%             | 50.4%     | 100%           | Gain Velocity Sensitivity   |
     | CUTOFF V SENS | 127  | -100.8%        | 0%        | +99.2%         | Cutoff Velocity Sensitivity |
@@ -104,16 +106,17 @@
     | Control                    16 | x             | o             | UNISON/MIX            |
     | Change                     17 | x             | o             | WAVEFORM/SUB          |
     |                            18 | x             | o             | DETUNE                |
-    |                            19 | x             | o             | AMP EG/HOLD           |
+    |                            19 | x             | o             | CUTOFF NG AMT         |
     |                            20 | x             | o             | CUTOFF                |
     |                            21 | x             | o             | RESONANCE             |
     |                            22 | x             | o             | CUTOFF EG AMT         |
     |                            23 | x             | o             | EG DECAY              |
-    |                            24 | x             | o             | VELOCITY SENS         |
-    |                            25 | x             | o             | CUTOFF V SENS         |
-    |                            27 | x             | o             | DETUNE EG AMT         |
-    |                            29 | x             | o             | CUTOFF NG AMT         |
-    |                            31 | x             | o             | EG ATTACK             |
+    |                            24 | x             | o             | EG ATTACK             |
+    |                            25 | x             | o             | AMPLITUDE MOD         |
+    |                            26 | x             | o             | DETUNE EG AMT         |
+    |                            27 | x             | o             | AMP EG/HOLD           |
+    |                            28 | x             | o             | VELOCITY SENS         |
+    |                            29 | x             | o             | CUTOFF V SENS         |
     +-------------------------------+---------------+---------------+-----------------------+
     | Program                       | x             | x             |                       |
     | Change       : True #         | ************* |               |                       |
