@@ -3,7 +3,6 @@
 A4_PITCH = 440.0
 
 MIDI_CH             = 0
-SERIAL_SPEED        = 38400
 SAMPLING_RATE       = 15625
 FREQUENCY_MAX       = 7812
 BIT_DEPTH           = 8

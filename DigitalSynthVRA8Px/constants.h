@@ -3,7 +3,6 @@
 const double    A4_PITCH = 440.0;
 
 const uint8_t   MIDI_CH             = 0;
-const uint16_t  SERIAL_SPEED        = 38400;
 const uint16_t  SAMPLING_RATE       = 15625;
 const uint16_t  FREQUENCY_MAX       = 7812;
 const uint8_t   BIT_DEPTH           = 8;

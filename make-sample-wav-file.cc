@@ -28,6 +28,7 @@ inline uint32_t pgm_read_dword(const void* addr) {
 #include "./DigitalSynthVRA8Px/wav-file-out.h"
 
 const uint16_t RECORDING_SEC = 60;
+const uint16_t SERIAL_SPEED_38400 = 38400;
 
 int main(int argc, char *argv[]) {
   // setup
@@ -39,7 +40,7 @@ int main(int argc, char *argv[]) {
   int c;
   while ((c = ::fgetc(bin_file)) != EOF) {
     Synth<0>::receive_midi_byte(c);
-    uint16_t r = SAMPLING_RATE / (SERIAL_SPEED / 10);
+    uint16_t r = SAMPLING_RATE / (SERIAL_SPEED_38400 / 10);
     for (uint16_t i = 0; i < r; i++) {
       uint8_t level = Synth<0>::clock();
       WAVFileOut<0>::write(level);

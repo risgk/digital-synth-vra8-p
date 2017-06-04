@@ -1,5 +1,8 @@
 //#define DEBUG
 
+#define SERIAL_SPEED (38400)    // for Serial MIDI
+//#define SERIAL_SPEED (31250)    // for MIDI Shield
+
 #include "common.h"
 #include "synth.h"
 #include "serial-in.h"
@@ -8,7 +11,7 @@
 void setup() {
   noInterrupts();
   Synth<0>::initialize();
-  SerialIn<0>::open();
+  SerialIn<0>::open(SERIAL_SPEED);
   AudioOut<0>::open();
 }
 
