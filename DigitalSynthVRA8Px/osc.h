@@ -176,12 +176,12 @@ public:
         result += result;
       }
     } else {
-      wave_0_main   = get_wave_level(m_wave_table[0], (m_phase_array[0] << 1));
-      wave_1_main   = get_wave_level(m_wave_table[1], (m_phase_array[1] << 1));
-      wave_2_main   = get_wave_level(m_wave_table[2], (m_phase_array[2] << 1));
-      wave_0_detune = get_wave_level(m_wave_table[0], (m_phase_array[0] << 1) + (m_phase_detune << 1));
-      wave_1_detune = get_wave_level(m_wave_table[1], (m_phase_array[1] << 1) + (m_phase_detune << 1));
-      wave_2_detune = get_wave_level(m_wave_table[2], (m_phase_array[2] << 1) + (m_phase_detune << 1));
+      wave_0_main   = get_wave_level(m_wave_table[0],  m_phase_array[0] << 1);
+      wave_1_main   = get_wave_level(m_wave_table[1],  m_phase_array[1] << 1);
+      wave_2_main   = get_wave_level(m_wave_table[2],  m_phase_array[2] << 1);
+      wave_0_detune = get_wave_level(m_wave_table[0], (m_phase_array[0] + m_phase_detune) << 1);
+      wave_1_detune = get_wave_level(m_wave_table[1], (m_phase_array[1] + m_phase_detune) << 1);
+      wave_2_detune = get_wave_level(m_wave_table[2], (m_phase_array[2] + m_phase_detune) << 1);
       wave_0_sub    = get_tri_wave_level(m_phase_array[0]);
       wave_1_sub    = get_tri_wave_level(m_phase_array[1]);
       wave_2_sub    = get_tri_wave_level(m_phase_array[2]);
