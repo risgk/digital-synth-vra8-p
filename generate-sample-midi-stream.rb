@@ -76,13 +76,13 @@ control_change(FILTER_EG_AMT, 96 )
 control_change(EG_DECAY     , 64 )
 
 control_change(EG_ATTACK    , 32 )
-control_change(OSC_AMP_MOD  , 0  )
+control_change(CC25_DUMMY   , 0  )
 control_change(DETUNE_EG_AMT, 48 )
 control_change(AMP_EG       , 0  )
 
 control_change(VELOCITY_SENS, 0  )
 control_change(CUTOFF_V_SENS, 127)
-control_change(CC28_DUMMY   , 0  )
+control_change(CC30_DUMMY   , 0  )
 control_change(UNISON_OPTION, 0  )
 
 play_a(4)

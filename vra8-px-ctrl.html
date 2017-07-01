@@ -50,13 +50,13 @@ const FILTER_EG_AMT = 22;
 const EG_DECAY      = 23;
 
 const EG_ATTACK     = 24;
-const OSC_AMP_MOD   = 25;
+const CC25_DUMMY    = 25;
 const DETUNE_EG_AMT = 26;
 const AMP_EG        = 27;
 
 const VELOCITY_SENS = 28;
 const CUTOFF_V_SENS = 29;
-const CC28_DUMMY    = 30;
+const CC30_DUMMY    = 30;
 const UNISON_OPTION = 31;
 
 const DAMPER_PEDAL  = 64;
@@ -266,13 +266,13 @@ function preset(number) {
   presetControllers[EG_DECAY     ] = [0  , 64 , 64 , 32 , 32 , 64 , 64 , 64 , 64 , 64 , 32 , 32 , 126, 126, 48 ];
 
   presetControllers[EG_ATTACK    ] = [0  , 32 , 32 , 32 , 96 , 32 , 32 , 32 , 32 , 32 , 32 , 32 , 32 , 32 , 32 ];
-  presetControllers[OSC_AMP_MOD  ] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 127, 0  ];
+  presetControllers[CC25_DUMMY   ] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  ];
   presetControllers[DETUNE_EG_AMT] = [0  , 48 , 48 , 48 , 48 , 64 , 64 , 64 , 64 , 64 , 48 , 48 , 48 , 48 , 48 ];
   presetControllers[AMP_EG       ] = [0  , 0  , 127, 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 127];
 
   presetControllers[VELOCITY_SENS] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  ];
   presetControllers[CUTOFF_V_SENS] = [0  , 127, 127, 127, 127, 64 , 64 , 64 , 64 , 64 , 127, 127, 127, 127, 127];
-  presetControllers[CC28_DUMMY   ] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  ];
+  presetControllers[CC30_DUMMY   ] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  ];
   presetControllers[UNISON_OPTION] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 127, 0  , 0  , 0  ];
 
   for (var i = CONTROLLERS_FIRST; i <= CONTROLLERS_LAST; i++) {
@@ -429,7 +429,7 @@ function noteOff(noteNumber) {
     <td><input id="inputCC23" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(23, value)"></td>
     <td><span id="spanCC23">-1</span></td></tr>
 <tr><td>EG ATTACK             </td><td></td>
-    <td>AMPLITUDE MOD         </td><td></td>
+    <td>TODO                  </td><td></td>
     <td>DETUNE EG AMT (-/+)   </td><td></td>
     <td>AMP EG/HOLD   </td></tr>
 <tr><td><input id="inputCC24" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(24, value)"></td>

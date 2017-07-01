@@ -241,9 +241,6 @@ public:
     case DETUNE_EG_AMT:
       IOsc<0>::set_detune_env_amt(controller_value);
       break;
-    case OSC_AMP_MOD:
-      IOsc<0>::set_amp_mod(controller_value);
-      break;
     case UNISON_OPTION:
       IOsc<0>::set_unison_option(controller_value);
       break;

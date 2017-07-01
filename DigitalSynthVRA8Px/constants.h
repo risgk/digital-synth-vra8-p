@@ -56,13 +56,13 @@ const uint8_t   FILTER_EG_AMT = 22;
 const uint8_t   EG_DECAY      = 23;
 
 const uint8_t   EG_ATTACK     = 24;
-const uint8_t   OSC_AMP_MOD   = 25;
+const uint8_t   CC25_DUMMY    = 25;
 const uint8_t   DETUNE_EG_AMT = 26;
 const uint8_t   AMP_EG        = 27;
 
 const uint8_t   VELOCITY_SENS = 28;
 const uint8_t   CUTOFF_V_SENS = 29;
-const uint8_t   CC28_DUMMY    = 30;
+const uint8_t   CC30_DUMMY    = 30;
 const uint8_t   UNISON_OPTION = 31;
 
 const uint8_t   DAMPER_PEDAL  = 64;
