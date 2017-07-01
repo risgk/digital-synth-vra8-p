@@ -158,7 +158,7 @@ public:
           (m_waveform == OSC_WAVEFORM_ORGAN_4)) {
         result += result;
       }
-    } else {+
+    } else {
       wave_0_main   = get_wave_level(m_wave_table[0],  m_phase_array[0]                   << 1);
       wave_1_main   = get_wave_level(m_wave_table[1],  m_phase_array[1]                   << 1);
       wave_2_main   = get_wave_level(m_wave_table[2],  m_phase_array[2]                   << 1);
