@@ -68,7 +68,7 @@ public:
     m_count++;
     if ((m_count & (FILTER_CONTROL_INTERVAL - 1)) == 0) {
       update_coefs(mod_input);
-    } else if ((m_count & (FILTER_CONTROL_INTERVAL - 1)) == 3) {
+    } else if (m_count == 3) {
       update_rnd();
     }
 
@@ -101,19 +101,7 @@ public:
 private:
   INLINE static void update_coefs(uint8_t mod_input) {
     int16_t cutoff_candidate = m_cutoff + static_cast<int8_t>(m_cutoff_velocity - 64);
-    if (cutoff_candidate > 127) {
-      cutoff_candidate = 127;
-    } else if (cutoff_candidate < 0) {
-      cutoff_candidate = 0;
-    }
-
     cutoff_candidate += high_sbyte(((m_mod_amt - 64) << 1) * mod_input);
-    if (cutoff_candidate > 127) {
-      cutoff_candidate = 127;
-    } else if (cutoff_candidate < 0) {
-      cutoff_candidate = 0;
-    }
-
     cutoff_candidate += high_sbyte(((m_noise_gen_amt - 64) << 1) * low_byte(m_rnd));
     uint8_t cutoff_target;
     if (cutoff_candidate > 127) {
