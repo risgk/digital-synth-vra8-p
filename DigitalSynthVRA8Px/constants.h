@@ -56,7 +56,7 @@ const uint8_t   FILTER_EG_AMT = 22;
 const uint8_t   EG_DECAY      = 23;
 
 const uint8_t   EG_ATTACK     = 24;
-const uint8_t   CC25_DUMMY    = 25;
+const uint8_t   DETUNE_NG_AMT = 25;
 const uint8_t   DETUNE_EG_AMT = 26;
 const uint8_t   AMP_EG        = 27;
 

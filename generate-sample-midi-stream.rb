@@ -67,7 +67,7 @@ sound_off
 
 control_change(UNISON       , 8  )
 control_change(OSC_WAVEFORM , 16 )
-control_change(OSC_DETUNE   , 64 )
+control_change(OSC_DETUNE   , 48 )
 control_change(FILTER_NG_AMT, 60 )
 
 control_change(FILTER_CUTOFF, 64 )
@@ -76,7 +76,7 @@ control_change(FILTER_EG_AMT, 96 )
 control_change(EG_DECAY     , 64 )
 
 control_change(EG_ATTACK    , 32 )
-control_change(CC25_DUMMY   , 0  )
+control_change(DETUNE_NG_AMT, 32 )
 control_change(DETUNE_EG_AMT, 48 )
 control_change(AMP_EG       , 0  )
 

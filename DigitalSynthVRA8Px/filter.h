@@ -98,11 +98,15 @@ public:
     return y_0 << (16 - AUDIO_FRACTION_BITS);
   }
 
+  INLINE static uint8_t get_rnd8() {
+    return low_byte(m_rnd);
+  }
+
 private:
   INLINE static void update_coefs(uint8_t mod_input) {
     int16_t cutoff_candidate = m_cutoff + static_cast<int8_t>(m_cutoff_velocity - 64);
     cutoff_candidate += high_sbyte(((m_mod_amt - 64) << 1) * mod_input);
-    cutoff_candidate += high_sbyte(((m_noise_gen_amt - 64) << 1) * low_byte(m_rnd));
+    cutoff_candidate += high_sbyte(((m_noise_gen_amt - 64) << 1) * get_rnd8());
     uint8_t cutoff_target;
     if (cutoff_candidate > 127) {
       cutoff_target = 127;

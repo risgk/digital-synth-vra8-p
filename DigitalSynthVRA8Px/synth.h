@@ -13,8 +13,8 @@
 #define IVoice      Voice
 #define ISynthCore  SynthCore
 
-#include "osc.h"
 #include "filter.h"
+#include "osc.h"
 #include "amp.h"
 #include "gate.h"
 #include "env-gen.h"
@@ -30,7 +30,7 @@ public:
     // DEFAULT
     ISynthCore<0>::control_change(UNISON       , 8  );
     ISynthCore<0>::control_change(OSC_WAVEFORM , 16 );
-    ISynthCore<0>::control_change(OSC_DETUNE   , 64 );
+    ISynthCore<0>::control_change(OSC_DETUNE   , 48 );
     ISynthCore<0>::control_change(FILTER_NG_AMT, 60 );
 
     ISynthCore<0>::control_change(FILTER_CUTOFF, 64 );
@@ -39,7 +39,7 @@ public:
     ISynthCore<0>::control_change(EG_DECAY     , 64 );
 
     ISynthCore<0>::control_change(EG_ATTACK    , 32 );
-    ISynthCore<0>::control_change(CC25_DUMMY   , 0  );
+    ISynthCore<0>::control_change(DETUNE_NG_AMT, 32 );
     ISynthCore<0>::control_change(DETUNE_EG_AMT, 48 );
     ISynthCore<0>::control_change(AMP_EG       , 0  );
 

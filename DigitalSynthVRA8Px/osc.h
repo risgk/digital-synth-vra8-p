@@ -17,6 +17,7 @@ class Osc {
   static int8_t         m_mix_sub;
   static int8_t         m_mix_table[OSC_MIX_TABLE_LENGTH];
   static uint8_t        m_detune;
+  static uint8_t        m_detune_noise_gen_amt;
   static uint8_t        m_detune_mod_amt;
   static uint8_t        m_waveform;
   static const uint8_t* m_wave_table[3];
@@ -38,6 +39,7 @@ public:
     m_mix_detune = m_mix_table[(OSC_MIX_TABLE_LENGTH - 1) >> 1];
     m_mix_sub = 0;
     m_detune = 0;
+    m_detune_noise_gen_amt = 0;
     m_detune_mod_amt = 0;
     m_waveform = OSC_WAVEFORM_SAW;
     m_wave_table[0] = g_osc_saw_wave_tables[0];
@@ -85,6 +87,10 @@ public:
 
   INLINE static void set_detune(uint8_t controller_value) {
     m_detune = controller_value;
+  }
+
+  INLINE static void set_detune_noise_gen_amt(uint8_t controller_value) {
+    m_detune_noise_gen_amt = controller_value;
   }
 
   INLINE static void set_detune_env_amt(uint8_t controller_value) {
@@ -239,6 +245,8 @@ private:
   INLINE static void update_freq_detune(uint8_t mod_input) {
     int16_t detune_candidate = m_detune +
                                high_sbyte(((m_detune_mod_amt - 64) << 1) * mod_input);
+    // TODO: Not to use IFilter
+    detune_candidate += high_sbyte(m_detune_noise_gen_amt * IFilter<0>::get_rnd8());
     uint8_t detune_target;
     if (detune_candidate > 127) {
       detune_target = 127;
@@ -267,6 +275,7 @@ template <uint8_t T> int8_t          Osc<T>::m_mix_detune;
 template <uint8_t T> int8_t          Osc<T>::m_mix_sub;
 template <uint8_t T> int8_t          Osc<T>::m_mix_table[OSC_MIX_TABLE_LENGTH];
 template <uint8_t T> uint8_t         Osc<T>::m_detune;
+template <uint8_t T> uint8_t         Osc<T>::m_detune_noise_gen_amt;
 template <uint8_t T> uint8_t         Osc<T>::m_detune_mod_amt;
 template <uint8_t T> uint8_t         Osc<T>::m_waveform;
 template <uint8_t T> const uint8_t*  Osc<T>::m_wave_table[3];

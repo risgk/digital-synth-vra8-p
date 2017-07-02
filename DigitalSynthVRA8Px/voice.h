@@ -238,6 +238,9 @@ public:
     case OSC_DETUNE:
       IOsc<0>::set_detune(controller_value);
       break;
+    case DETUNE_NG_AMT:
+      IOsc<0>::set_detune_noise_gen_amt(controller_value);
+      break;
     case DETUNE_EG_AMT:
       IOsc<0>::set_detune_env_amt(controller_value);
       break;
