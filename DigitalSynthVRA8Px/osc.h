@@ -19,6 +19,7 @@ class Osc {
   static uint8_t        m_detune;
   static uint8_t        m_detune_noise_gen_amt;
   static uint8_t        m_detune_mod_amt;
+  static uint8_t        m_rnd_prev;
   static uint8_t        m_waveform;
   static const uint8_t* m_wave_table[3];
   static __uint24       m_freq_array[3];
@@ -41,6 +42,7 @@ public:
     m_detune = 0;
     m_detune_noise_gen_amt = 0;
     m_detune_mod_amt = 0;
+    m_rnd_prev = 0;
     m_waveform = OSC_WAVEFORM_SAW;
     m_wave_table[0] = g_osc_saw_wave_tables[0];
     m_wave_table[1] = g_osc_saw_wave_tables[2];
@@ -246,7 +248,10 @@ private:
     int16_t detune_candidate = m_detune +
                                high_sbyte(((m_detune_mod_amt - 64) << 1) * mod_input);
     // TODO: Not to use IFilter
-    detune_candidate += high_sbyte(m_detune_noise_gen_amt * IFilter<0>::get_rnd8());
+    uint8_t rnd = IFilter<0>::get_rnd8() >> 1;
+    uint8_t brownian_noise = m_rnd_prev + rnd;
+    detune_candidate += high_byte(m_detune_noise_gen_amt * brownian_noise);
+    m_rnd_prev = rnd;
     uint8_t detune_target;
     if (detune_candidate > 127) {
       detune_target = 127;
@@ -277,6 +282,7 @@ template <uint8_t T> int8_t          Osc<T>::m_mix_table[OSC_MIX_TABLE_LENGTH];
 template <uint8_t T> uint8_t         Osc<T>::m_detune;
 template <uint8_t T> uint8_t         Osc<T>::m_detune_noise_gen_amt;
 template <uint8_t T> uint8_t         Osc<T>::m_detune_mod_amt;
+template <uint8_t T> uint8_t         Osc<T>::m_rnd_prev;
 template <uint8_t T> uint8_t         Osc<T>::m_waveform;
 template <uint8_t T> const uint8_t*  Osc<T>::m_wave_table[3];
 template <uint8_t T> __uint24        Osc<T>::m_freq_array[3];
