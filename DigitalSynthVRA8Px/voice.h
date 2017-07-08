@@ -310,8 +310,9 @@ public:
 
   INLINE static int8_t clock() {
     m_count++;
-    if (m_count == 0) {
+    if (m_count == 0x7F) {
       update_amp_env_amt();
+      m_count = 0;
     }
 
     uint8_t gate_output_array[4];

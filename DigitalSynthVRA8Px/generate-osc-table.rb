@@ -31,6 +31,23 @@ $file.printf("const __uint24 g_osc_freq_table[] = {\n  ")
 end
 $file.printf("};\n\n")
 
+$file.printf("const uint16_t g_osc_tune_table[] = {\n  ")
+(0..(1 << OSC_TUNE_TABLE_STEPS_BITS) - 1).each do |i|
+  tune_rate = ((2.0 ** (i / (12.0 * (1 << OSC_TUNE_TABLE_STEPS_BITS)))) *
+               (1 << OSC_TUNE_DENOMINATOR_BITS) / 1.0).floor -
+              (1 << OSC_TUNE_DENOMINATOR_BITS) / 1.0
+
+  $file.printf("%5d,", tune_rate)
+  if i == (1 << OSC_TUNE_TABLE_STEPS_BITS) - 1
+    $file.printf("\n")
+  elsif i % 8 == 7
+    $file.printf("\n  ")
+  else
+    $file.printf(" ")
+  end
+end
+$file.printf("};\n\n")
+
 def generate_osc_wave_table(name, last, amp, organ = false)
   $file.printf("const uint8_t g_osc_#{name}_wave_table_h%d[] PROGMEM = {\n  ", last)
   (0..(1 << OSC_WAVE_TABLE_SAMPLES_BITS)).each do |n|
