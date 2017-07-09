@@ -18,7 +18,7 @@ class Voice {
 
 public:
   INLINE static void initialize() {
-    m_count = 0;
+    m_count = 3;
     m_unison_on = false;
     m_waveform = OSC_WAVEFORM_SAW;
     m_amp_env_amt_current = 0;
@@ -229,9 +229,6 @@ public:
 
   INLINE static void control_change(uint8_t controller_number, uint8_t controller_value) {
     switch (controller_number) {
-
-
-
     case UNISON:
       set_unison(controller_value);
       break;
@@ -316,9 +313,8 @@ public:
 
   INLINE static int8_t clock() {
     m_count++;
-    if (m_count == 0x7F) {
+    if (m_count == 0) {
       update_amp_env_amt();
-      m_count = 0;
     }
 
     uint8_t gate_output_array[4];

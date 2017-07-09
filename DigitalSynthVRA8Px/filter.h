@@ -66,9 +66,10 @@ public:
 
   INLINE static int16_t clock(int16_t audio_input, uint8_t mod_input) {
     m_count++;
-    if ((m_count & (FILTER_CONTROL_INTERVAL - 1)) == 0) {
+    uint8_t count_and_interval = m_count & (FILTER_CONTROL_INTERVAL - 1);
+    if (count_and_interval == 0) {
       update_coefs(mod_input);
-    } else if (m_count == 3) {
+    } else if (count_and_interval == 3) {
       update_rnd();
     }
 

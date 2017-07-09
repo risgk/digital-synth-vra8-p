@@ -114,6 +114,9 @@ public:
   }
 
   INLINE static void set_portamento(uint8_t controller_value) {
+    if (controller_value == 0) {
+      controller_value = 1;
+    }
     m_portamento = controller_value;
   }
 
@@ -318,7 +321,7 @@ private:
 
   template <uint8_t N>
   INLINE static void update_pitch_current_array() {
-    uint16_t step = (128 - m_portamento) << 4;
+    uint16_t step = (128 - m_portamento) << 8;
     if (m_pitch_current_array[N] + step < m_pitch_target_array[N]) {
       m_pitch_current_array[N] += step;
     } else if (m_pitch_current_array[N] > m_pitch_target_array[N] + step) {
