@@ -19,7 +19,7 @@ class Osc {
   static uint8_t        m_detune;
   static uint8_t        m_detune_noise_gen_amt;
   static uint8_t        m_detune_mod_amt;
-  static uint8_t        m_portamento;
+  static uint16_t       m_portamento;
   static uint8_t        m_rnd_prev;
   static uint8_t        m_waveform;
   static uint16_t       m_pitch_target_array[3];
@@ -45,7 +45,7 @@ public:
     m_detune = 0;
     m_detune_noise_gen_amt = 0;
     m_detune_mod_amt = 0;
-    m_portamento = 0;
+    m_portamento = 0x4000;
     m_rnd_prev = 0;
     m_waveform = OSC_WAVEFORM_SAW;
     m_pitch_target_array[0] = (NOTE_NUMBER_MIN + 0) << 8;
@@ -114,14 +114,18 @@ public:
   }
 
   INLINE static void set_portamento(uint8_t controller_value) {
-    m_portamento = controller_value;
+    if (controller_value < 4) {
+      m_portamento = 0x4000;
+    } else {
+      m_portamento = 134 - ((controller_value >> 1) << 1);
+    }
   }
 
   INLINE static void note_on(uint8_t osc_number, uint8_t note_number, int16_t pitch_bend) {
     pitch_bend++;
 #if (PITCH_BEND_RANGE == 12)
     int16_t pitch_bend_normalized = ((pitch_bend << 1) + pitch_bend) >> 3;
-#else // (PITCH_BEND_RANGE == 2)
+#else  // (PITCH_BEND_RANGE == 2)
     int16_t pitch_bend_normalized = pitch_bend >> 4;
 #endif
     int16_t pitch = note_number + high_sbyte(pitch_bend_normalized);
@@ -157,7 +161,9 @@ public:
         update_freq_2();
         break;
       case 3:
-        update_freq_detune(mod_input);
+        if (m_count == 3) {
+          update_freq_detune(mod_input);
+        }
         break;
       case 4:
         update_pitch_current_array<0>();
@@ -296,11 +302,10 @@ private:
 
   template <uint8_t N>
   INLINE static void update_pitch_current_array() {
-    uint16_t step = (128 - m_portamento) << 6;
-    if (m_pitch_current_array[N] + step < m_pitch_target_array[N]) {
-      m_pitch_current_array[N] += step;
-    } else if (m_pitch_current_array[N] > m_pitch_target_array[N] + step) {
-      m_pitch_current_array[N] -= step;
+    if (m_pitch_current_array[N] + m_portamento < m_pitch_target_array[N]) {
+      m_pitch_current_array[N] += m_portamento;
+    } else if (m_pitch_current_array[N] > m_pitch_target_array[N] + m_portamento) {
+      m_pitch_current_array[N] -= m_portamento;
     } else {
       m_pitch_current_array[N] = m_pitch_target_array[N];
     }
@@ -339,7 +344,7 @@ template <uint8_t T> int8_t          Osc<T>::m_mix_table[OSC_MIX_TABLE_LENGTH];
 template <uint8_t T> uint8_t         Osc<T>::m_detune;
 template <uint8_t T> uint8_t         Osc<T>::m_detune_noise_gen_amt;
 template <uint8_t T> uint8_t         Osc<T>::m_detune_mod_amt;
-template <uint8_t T> uint8_t         Osc<T>::m_portamento;
+template <uint8_t T> uint16_t        Osc<T>::m_portamento;
 template <uint8_t T> uint8_t         Osc<T>::m_rnd_prev;
 template <uint8_t T> uint8_t         Osc<T>::m_waveform;
 template <uint8_t T> uint16_t        Osc<T>::m_pitch_target_array[3];
