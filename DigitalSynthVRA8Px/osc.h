@@ -114,28 +114,19 @@ public:
   }
 
   INLINE static void set_portamento(uint8_t controller_value) {
+    if (controller_value == 0) {
+      controller_value = 1;
+    }
     m_portamento = controller_value;
   }
 
-  INLINE static void note_on(uint8_t osc_number, uint8_t note_number, int16_t pitch_bend) {
-    // PITCH_BEND_RANGE = 2
-    pitch_bend++;
-    int16_t pitch_bend_div_16 = pitch_bend >> 4;
-    uint8_t pitch_fine = low_byte(pitch_bend_div_16);
-    int16_t pitch = note_number + high_sbyte(pitch_bend_div_16);
-    if (pitch <= NOTE_NUMBER_MIN) {
-      pitch = NOTE_NUMBER_MIN;
-    } else if (pitch >= NOTE_NUMBER_MAX) {
-      pitch = NOTE_NUMBER_MAX;
-      pitch_fine = 0x00;
-    }
-
+  INLINE static void note_on(uint8_t osc_number, uint8_t note_number, uint8_t fine_tune = 0) {
     if (m_unison_on) {
-      m_pitch_target_array[0] = (static_cast<uint8_t>(pitch) << 8) + pitch_fine;
+      m_pitch_target_array[0] = (note_number << 8) + fine_tune;
       m_pitch_target_array[1] = m_pitch_target_array[0];
       m_pitch_target_array[2] = m_pitch_target_array[0];
     } else {
-      m_pitch_target_array[osc_number] = (static_cast<uint8_t>(pitch) << 8) + pitch_fine;
+      m_pitch_target_array[osc_number] = (note_number << 8) + fine_tune;
     }
   }
 
@@ -184,7 +175,9 @@ public:
     int16_t level_detune;
     int16_t level_sub;
     int16_t result;
-    if ((OSC_WAVEFORM_ORGAN_4 <= m_waveform) && (m_waveform <= OSC_WAVEFORM_ORGAN_3)) {
+    if ((m_waveform == OSC_WAVEFORM_ORGAN_3) ||
+        (m_waveform == OSC_WAVEFORM_ORGAN_9) ||
+        (m_waveform == OSC_WAVEFORM_ORGAN_4)) {
       wave_0_main   = get_wave_level(m_wave_table[0], m_phase_array[0]);
       wave_1_main   = get_wave_level(m_wave_table[1], m_phase_array[1]);
       wave_2_main   = get_wave_level(m_wave_table[2], m_phase_array[2]);
@@ -328,7 +321,7 @@ private:
 
   template <uint8_t N>
   INLINE static void update_pitch_current_array() {
-    uint16_t step = (128 - m_portamento) << 6;
+    uint16_t step = (128 - m_portamento) << 8;
     if (m_pitch_current_array[N] + step < m_pitch_target_array[N]) {
       m_pitch_current_array[N] += step;
     } else if (m_pitch_current_array[N] > m_pitch_target_array[N] + step) {

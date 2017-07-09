@@ -51,13 +51,6 @@ public:
           control_change(m_first_data, b);
           m_first_data = DATA_BYTE_INVALID;
         }
-      } else if (m_running_status == (PITCH_BEND | MIDI_CH)) {
-        if (!is_data_byte(m_first_data)) {
-          m_first_data = b;
-        } else {
-          pitch_bend(m_first_data, b);
-          m_first_data = DATA_BYTE_INVALID;
-        }
       }
     } else if (is_system_message(b)) {
       switch (b) {
@@ -94,10 +87,6 @@ public:
 
   INLINE static void control_change(uint8_t controller_number, uint8_t controller_value) {
     IVoice<0>::control_change(controller_number, controller_value);
-  }
-
-  INLINE static void pitch_bend(uint8_t lsb, uint8_t msb) {
-    IVoice<0>::pitch_bend(lsb, msb);
   }
 
   INLINE static int8_t clock() {
