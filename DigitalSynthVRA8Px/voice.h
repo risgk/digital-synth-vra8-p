@@ -225,6 +225,26 @@ public:
 
   INLINE static void control_change(uint8_t controller_number, uint8_t controller_value) {
     switch (controller_number) {
+    case FILTER_CUTOFF:
+      IFilter<0>::set_cutoff(controller_value);
+      break;
+    case FILTER_RESO:
+      IFilter<0>::set_resonance(controller_value);
+      break;
+    case FILTER_EG_AMT:
+      IFilter<0>::set_env_amt(controller_value);
+      break;
+    case FILTER_NG_AMT:
+      uint8_t noise_gen_amt;
+      if (controller_value < 32) {
+        noise_gen_amt = controller_value << 1;
+      } else if (controller_value < 96) {
+        noise_gen_amt = 64;
+      } else {
+        noise_gen_amt = ((controller_value - 96) << 2) + 64;
+      }
+      IFilter<0>::set_noise_gen_amt(noise_gen_amt);
+      break;
     case UNISON:
       set_unison(controller_value);
       break;
@@ -246,31 +266,11 @@ public:
     case PORTAMENTO:
       IOsc<0>::set_portamento(controller_value);
       break;
-    case FILTER_CUTOFF:
-      IFilter<0>::set_cutoff(controller_value);
-      break;
-    case FILTER_RESO:
-      IFilter<0>::set_resonance(controller_value);
-      break;
-    case FILTER_EG_AMT:
-      IFilter<0>::set_env_amt(controller_value);
-      break;
-    case FILTER_NG_AMT:
-      uint8_t noise_gen_amt;
-      if (controller_value < 32) {
-        noise_gen_amt = controller_value << 1;
-      } else if (controller_value < 96) {
-        noise_gen_amt = 64;
-      } else {
-        noise_gen_amt = ((controller_value - 96) << 2) + 64;
-      }
-      IFilter<0>::set_noise_gen_amt(noise_gen_amt);
+    case EG_DECAY:
+      IEnvGen<0>::set_decay(controller_value);
       break;
     case EG_ATTACK:
       IEnvGen<0>::set_attack(controller_value);
-      break;
-    case EG_DECAY:
-      IEnvGen<0>::set_decay(controller_value);
       break;
     case AMP_EG:
       if (controller_value < 64) {
@@ -290,6 +290,7 @@ public:
     case CUTOFF_V_SENS:
       m_cutoff_velocity_sensitivity = (controller_value - 64) << 1;
       break;
+#if 0
     case DAMPER_PEDAL:
       if (controller_value < 64) {
         set_damper_pedal(false);
@@ -297,6 +298,7 @@ public:
         set_damper_pedal(true);
       }
       break;
+#endif
     case ALL_NOTES_OFF:
     case OMNI_MODE_OFF:
     case OMNI_MODE_ON:
