@@ -22,6 +22,7 @@ class Osc {
   static uint16_t       m_portamento;
   static uint8_t        m_rnd_prev;
   static uint8_t        m_waveform;
+  static int16_t        m_pitch_bend_normalized;
   static uint16_t       m_pitch_target_array[3];
   static uint16_t       m_pitch_current_array[3];
   static const uint8_t* m_wave_table[3];
@@ -48,6 +49,7 @@ public:
     m_portamento = 0x4000;
     m_rnd_prev = 0;
     m_waveform = OSC_WAVEFORM_SAW;
+    m_pitch_bend_normalized = 0;
     m_pitch_target_array[0] = (NOTE_NUMBER_MIN + 0) << 8;
     m_pitch_target_array[1] = (NOTE_NUMBER_MIN + 2) << 8;
     m_pitch_target_array[2] = (NOTE_NUMBER_MIN + 4) << 8;
@@ -121,29 +123,23 @@ public:
     }
   }
 
-  INLINE static void note_on(uint8_t osc_number, uint8_t note_number, int16_t pitch_bend) {
-    pitch_bend++;
-#if (PITCH_BEND_RANGE == 12)
-    int16_t pitch_bend_normalized = ((pitch_bend << 1) + pitch_bend) >> 3;
-#else  // (PITCH_BEND_RANGE == 2)
-    int16_t pitch_bend_normalized = pitch_bend >> 4;
-#endif
-    int16_t pitch = note_number + high_sbyte(pitch_bend_normalized);
-    uint8_t pitch_fine = low_byte(pitch_bend_normalized);
-    if (pitch <= NOTE_NUMBER_MIN) {
-      pitch = NOTE_NUMBER_MIN;
-    } else if (pitch >= NOTE_NUMBER_MAX) {
-      pitch = NOTE_NUMBER_MAX;
-      pitch_fine = 0x00;
-    }
-
+  INLINE static void note_on(uint8_t osc_number, uint8_t note_number) {
     if (m_unison_on) {
-      m_pitch_target_array[0] = (static_cast<uint8_t>(pitch) << 8) + pitch_fine;
+      m_pitch_target_array[0] = note_number << 8;
       m_pitch_target_array[1] = m_pitch_target_array[0];
       m_pitch_target_array[2] = m_pitch_target_array[0];
     } else {
-      m_pitch_target_array[osc_number] = (static_cast<uint8_t>(pitch) << 8) + pitch_fine;
+      m_pitch_target_array[osc_number] = note_number << 8;
     }
+  }
+
+  INLINE static void set_pitch_bend(int16_t pitch_bend) {
+    pitch_bend++;
+#if (PITCH_BEND_RANGE == 12)
+    m_pitch_bend_normalized = ((pitch_bend << 1) + pitch_bend) >> 3;
+#else  // (PITCH_BEND_RANGE == 2)
+    m_pitch_bend_normalized = pitch_bend >> 4;
+#endif
   }
 
   INLINE static int16_t clock(uint8_t amp_0, uint8_t amp_1, uint8_t amp_2, uint8_t mod_input) {
@@ -161,7 +157,7 @@ public:
         update_freq_2();
         break;
       case 3:
-        if (m_count == 3) {
+        if (m_count == 3 * OSC_CONTROL_INTERVAL) {
           update_freq_detune(mod_input);
         }
         break;
@@ -291,8 +287,16 @@ private:
 
   template <uint8_t N>
   INLINE static void update_freq() {
-    uint8_t pitch = high_byte(m_pitch_current_array[N]);
-    uint8_t pitch_fine = low_byte(m_pitch_current_array[N]);
+    uint16_t pitch_real = m_pitch_current_array[N] + m_pitch_bend_normalized;
+    uint8_t pitch = high_byte(pitch_real);
+    uint8_t pitch_fine = low_byte(pitch_real);
+    if (pitch < NOTE_NUMBER_MIN) {
+      pitch = NOTE_NUMBER_MIN;
+    } else if (pitch > NOTE_NUMBER_MAX) {
+      pitch = NOTE_NUMBER_MAX;
+      pitch_fine = 0x00;
+    }
+
     m_wave_table[N] = get_wave_table(m_waveform, pitch);
     __uint24 freq_base = g_osc_freq_table[pitch - NOTE_NUMBER_MIN];
     uint16_t freq_div_256 = freq_base >> 8;
@@ -347,6 +351,7 @@ template <uint8_t T> uint8_t         Osc<T>::m_detune_mod_amt;
 template <uint8_t T> uint16_t        Osc<T>::m_portamento;
 template <uint8_t T> uint8_t         Osc<T>::m_rnd_prev;
 template <uint8_t T> uint8_t         Osc<T>::m_waveform;
+template <uint8_t T> int16_t         Osc<T>::m_pitch_bend_normalized;
 template <uint8_t T> uint16_t        Osc<T>::m_pitch_target_array[3];
 template <uint8_t T> uint16_t        Osc<T>::m_pitch_current_array[3];
 template <uint8_t T> const uint8_t*  Osc<T>::m_wave_table[3];
