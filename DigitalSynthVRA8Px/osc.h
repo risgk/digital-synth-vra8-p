@@ -118,11 +118,14 @@ public:
   }
 
   INLINE static void note_on(uint8_t osc_number, uint8_t note_number, int16_t pitch_bend) {
-    // PITCH_BEND_RANGE = 2
     pitch_bend++;
-    int16_t pitch_bend_div_16 = pitch_bend >> 4;
-    uint8_t pitch_fine = low_byte(pitch_bend_div_16);
-    int16_t pitch = note_number + high_sbyte(pitch_bend_div_16);
+#if (PITCH_BEND_RANGE == 12)
+    int16_t pitch_bend_normalized = (pitch_bend << 1) + pitch_bend;
+#else // (PITCH_BEND_RANGE == 2)
+    int16_t pitch_bend_normalized = (pitch_bend >> 1);
+#endif
+    uint8_t pitch_fine = low_byte(pitch_bend_normalized);
+    int16_t pitch = note_number + high_sbyte(pitch_bend_normalized);
     if (pitch <= NOTE_NUMBER_MIN) {
       pitch = NOTE_NUMBER_MIN;
     } else if (pitch >= NOTE_NUMBER_MAX) {
