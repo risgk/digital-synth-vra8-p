@@ -175,9 +175,7 @@ public:
     int16_t level_detune;
     int16_t level_sub;
     int16_t result;
-    if ((m_waveform == OSC_WAVEFORM_ORGAN_3) ||
-        (m_waveform == OSC_WAVEFORM_ORGAN_9) ||
-        (m_waveform == OSC_WAVEFORM_ORGAN_4)) {
+    if ((OSC_WAVEFORM_ORGAN_4 <= m_waveform) && (m_waveform <= OSC_WAVEFORM_ORGAN_3)) {
       wave_0_main   = get_wave_level(m_wave_table[0], m_phase_array[0]);
       wave_1_main   = get_wave_level(m_wave_table[1], m_phase_array[1]);
       wave_2_main   = get_wave_level(m_wave_table[2], m_phase_array[2]);
@@ -321,7 +319,7 @@ private:
 
   template <uint8_t N>
   INLINE static void update_pitch_current_array() {
-    uint16_t step = (128 - m_portamento) << 8;
+    uint16_t step = (128 - m_portamento) << 6;
     if (m_pitch_current_array[N] + step < m_pitch_target_array[N]) {
       m_pitch_current_array[N] += step;
     } else if (m_pitch_current_array[N] > m_pitch_target_array[N] + step) {
