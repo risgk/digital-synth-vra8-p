@@ -123,8 +123,9 @@ public:
 
   INLINE static int16_t clock(uint8_t amp_0, uint8_t amp_1, uint8_t amp_2, uint8_t mod_input) {
     m_count++;
+#if 1
     if ((m_count & (OSC_CONTROL_INTERVAL - 1)) == 0) {
-      uint8_t idx = (m_count >> OSC_CONTROL_INTERVAL_BITS) & 0x03;
+      uint8_t idx = (m_count >> OSC_CONTROL_INTERVAL_BITS) & 0x07;
       switch (idx) {
       case 0:
         update_freq_0();
@@ -138,8 +139,22 @@ public:
       case 3:
         update_freq_detune(mod_input);
         break;
+      case 4:
+        update_pitch_current_array<0>();
+        break;
+      case 5:
+        if (!m_unison_on) {
+          update_pitch_current_array<1>();
+        }
+        break;
+      case 6:
+        if (!m_unison_on) {
+          update_pitch_current_array<2>();
+        }
+        break;
       }
     }
+#endif
 
     m_phase_array[0] += m_freq_array[0];
     m_phase_array[1] += m_freq_array[1];
@@ -263,9 +278,7 @@ private:
   }
 
   INLINE static void update_freq_0() {
-    update_pitch_current_array<0>();
-    m_wave_table[0] = get_wave_table(m_waveform, high_byte(m_pitch_current_array[0]));
-    m_freq_array[0] = g_osc_freq_table[high_byte(m_pitch_current_array[0]) - NOTE_NUMBER_MIN];
+    update_freq<0>();
   }
 
   INLINE static void update_freq_1() {
@@ -274,9 +287,7 @@ private:
       m_wave_table[1] = m_wave_table[0];
       m_freq_array[1] = m_freq_array[0] + (m_freq_detune << 1);
     } else {
-      update_pitch_current_array<1>();
-      m_wave_table[1] = get_wave_table(m_waveform, high_byte(m_pitch_current_array[1]));
-      m_freq_array[1] = g_osc_freq_table[high_byte(m_pitch_current_array[1]) - NOTE_NUMBER_MIN];
+      update_freq<1>();
     }
   }
 
@@ -286,15 +297,24 @@ private:
       m_wave_table[2] = m_wave_table[0];
       m_freq_array[2] = m_freq_array[0] - (m_freq_detune << 1);
     } else {
-      update_pitch_current_array<2>();
-      m_wave_table[2] = get_wave_table(m_waveform, high_byte(m_pitch_current_array[2]));
-      m_freq_array[2] = g_osc_freq_table[high_byte(m_pitch_current_array[2]) - NOTE_NUMBER_MIN];
+      update_freq<2>();
     }
   }
 
   template <uint8_t N>
+  INLINE static void update_freq() {
+    uint8_t pitch = high_byte(m_pitch_current_array[N]);
+    uint8_t pitch_fine = low_byte(m_pitch_current_array[N]);
+    m_wave_table[N] = get_wave_table(m_waveform, pitch);
+    __uint24 freq_base = g_osc_freq_table[pitch - NOTE_NUMBER_MIN];
+    uint16_t freq_div_256 = freq_base >> 8;
+    uint16_t freq_offset = freq_div_256 * g_osc_tune_table[pitch_fine >> (8 - OSC_TUNE_TABLE_STEPS_BITS)];
+    m_freq_array[N] = freq_base + freq_offset;
+  }
+
+  template <uint8_t N>
   INLINE static void update_pitch_current_array() {
-    uint16_t STEP = 128;  // TODO: PORTAMENTO
+    uint16_t STEP = 32;  // TODO: PORTAMENTO
     if (m_pitch_current_array[N] + STEP < m_pitch_target_array[N]) {
       m_pitch_current_array[N] += STEP;
     } else if (m_pitch_current_array[N] > m_pitch_target_array[N] + STEP) {

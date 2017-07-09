@@ -34,7 +34,7 @@ $file.printf("};\n\n")
 $file.printf("const uint16_t g_osc_tune_table[] = {\n  ")
 (0..(1 << OSC_TUNE_TABLE_STEPS_BITS) - 1).each do |i|
   tune_rate = ((2.0 ** (i / (12.0 * (1 << OSC_TUNE_TABLE_STEPS_BITS)))) *
-               (1 << OSC_TUNE_DENOMINATOR_BITS) / 1.0).floor -
+               (1 << OSC_TUNE_DENOMINATOR_BITS) / 1.0).round -
               (1 << OSC_TUNE_DENOMINATOR_BITS) / 1.0
 
   $file.printf("%5d,", tune_rate)
