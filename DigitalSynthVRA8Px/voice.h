@@ -15,6 +15,7 @@ class Voice {
   static uint8_t m_output_error;
   static uint8_t m_velocity_sensitivity;
   static int8_t  m_cutoff_velocity_sensitivity;
+  static int16_t m_pitch_bend;
 
 public:
   INLINE static void initialize() {
@@ -25,6 +26,7 @@ public:
     m_amp_env_amt_target = 0;
     m_forced_hold = false;
     m_damper_pedal = false;
+    m_pitch_bend = 0;
     m_note_number[0] = NOTE_NUMBER_INVALID;
     m_note_number[1] = NOTE_NUMBER_INVALID;
     m_note_number[2] = NOTE_NUMBER_INVALID;
@@ -51,7 +53,7 @@ public:
         if (m_note_number[0] != NOTE_NUMBER_INVALID) {
           m_note_number[1] = NOTE_NUMBER_INVALID;
           m_note_number[2] = NOTE_NUMBER_INVALID;
-          IOsc<0>::note_on(0, m_note_number[0]);
+          IOsc<0>::note_on(0, m_note_number[0], m_pitch_bend);
           IGate<0>::note_on(1, m_velocity[0]);
           IGate<0>::note_on(2, m_velocity[0]);
         } else {
@@ -64,7 +66,7 @@ public:
         m_unison_on = false;
         IOsc<0>::set_unison(m_unison_on);
         if (m_note_number[0] != NOTE_NUMBER_INVALID) {
-          IOsc<0>::note_on(0, m_note_number[0]);
+          IOsc<0>::note_on(0, m_note_number[0], m_pitch_bend);
           IGate<0>::note_off(1);
           IGate<0>::note_off(2);
         } else {
@@ -92,13 +94,13 @@ public:
       m_waveform = waveform;
       IOsc<0>::set_waveform(m_waveform);
       if (m_note_number[0] != NOTE_NUMBER_INVALID) {
-        IOsc<0>::note_on(0, m_note_number[0]);
+        IOsc<0>::note_on(0, m_note_number[0], m_pitch_bend);
       }
       if (m_note_number[1] != NOTE_NUMBER_INVALID) {
-        IOsc<0>::note_on(1, m_note_number[1]);
+        IOsc<0>::note_on(1, m_note_number[1], m_pitch_bend);
       }
       if (m_note_number[2] != NOTE_NUMBER_INVALID) {
-        IOsc<0>::note_on(2, m_note_number[2]);
+        IOsc<0>::note_on(2, m_note_number[2], m_pitch_bend);
       }
     }
 
@@ -129,7 +131,7 @@ public:
       m_note_hold[0] = false;
       m_note_hold[1] = false;
       m_note_hold[2] = false;
-      IOsc<0>::note_on(0, note_number);
+      IOsc<0>::note_on(0, note_number, m_pitch_bend);
       IGate<0>::note_on(0, v);
       IGate<0>::note_on(1, v);
       IGate<0>::note_on(2, v);
@@ -148,18 +150,18 @@ public:
       } else if ((m_note_number[0] == NOTE_NUMBER_INVALID) || m_note_hold[0]) {
         m_note_number[0] = note_number;
         m_note_hold[0] = false;
-        IOsc<0>::note_on(0, note_number);
+        IOsc<0>::note_on(0, note_number, m_pitch_bend);
         IGate<0>::note_on(0, v);
         m_velocity[0] = v;
       } else if ((m_note_number[1] == NOTE_NUMBER_INVALID) || m_note_hold[1]) {
         m_note_number[1] = note_number;
         m_note_hold[1] = false;
-        IOsc<0>::note_on(1, note_number);
+        IOsc<0>::note_on(1, note_number, m_pitch_bend);
         IGate<0>::note_on(1, v);
       } else {
         m_note_number[2] = note_number;
         m_note_hold[2] = false;
-        IOsc<0>::note_on(2, note_number);
+        IOsc<0>::note_on(2, note_number, m_pitch_bend);
         IGate<0>::note_on(2, v);
       }
     }
@@ -311,6 +313,20 @@ public:
     }
   }
 
+  INLINE static void pitch_bend(uint8_t lsb, uint8_t msb) {
+    m_pitch_bend = (msb << 7) + lsb - 8192;
+
+    if (m_note_number[0] != NOTE_NUMBER_INVALID) {
+      IOsc<0>::note_on(0, m_note_number[0], m_pitch_bend);
+    }
+    if (m_note_number[1] != NOTE_NUMBER_INVALID) {
+      IOsc<0>::note_on(1, m_note_number[1], m_pitch_bend);
+    }
+    if (m_note_number[2] != NOTE_NUMBER_INVALID) {
+      IOsc<0>::note_on(2, m_note_number[2], m_pitch_bend);
+    }
+  }
+
   INLINE static int8_t clock() {
     m_count++;
     if (m_count == 0) {
@@ -414,3 +430,4 @@ template <uint8_t T> uint8_t Voice<T>::m_velocity[1];
 template <uint8_t T> uint8_t Voice<T>::m_output_error;
 template <uint8_t T> uint8_t Voice<T>::m_velocity_sensitivity;
 template <uint8_t T> int8_t  Voice<T>::m_cutoff_velocity_sensitivity;
+template <uint8_t T> int16_t Voice<T>::m_pitch_bend;
