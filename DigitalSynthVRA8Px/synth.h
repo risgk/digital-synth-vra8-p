@@ -45,7 +45,7 @@ public:
 
     ISynthCore<0>::control_change(VELOCITY_SENS, 0  );
     ISynthCore<0>::control_change(CUTOFF_V_SENS, 127);
-    ISynthCore<0>::control_change(CC30_DUMMY   , 0  );
+    ISynthCore<0>::control_change(PORTAMENTO   , 0  );
     ISynthCore<0>::control_change(UNISON_OPTION, 0  );
   }
 

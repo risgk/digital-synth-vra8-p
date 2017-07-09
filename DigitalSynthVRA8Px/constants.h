@@ -66,7 +66,7 @@ const uint8_t   AMP_EG        = 27;
 
 const uint8_t   VELOCITY_SENS = 28;
 const uint8_t   CUTOFF_V_SENS = 29;
-const uint8_t   CC30_DUMMY    = 30;
+const uint8_t   PORTAMENTO    = 30;
 const uint8_t   UNISON_OPTION = 31;
 
 const uint8_t   DAMPER_PEDAL  = 64;

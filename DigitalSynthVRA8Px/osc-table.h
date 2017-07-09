@@ -13,7 +13,7 @@ const __uint24 g_osc_freq_table[] = {
   0x060FDF, 0x066C25, 0x06CDEB, 0x07357F, 0x07A33B, 0x08177F,
   0x0892AD, };
 
-const uint16_t g_osc_tune_table[] = {
+const uint8_t g_osc_tune_table[] = {
       0,     0,     0,     0,     0,     1,     1,     1,
       1,     1,     1,     1,     1,     2,     2,     2,
       2,     2,     2,     2,     2,     2,     3,     3,

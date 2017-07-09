@@ -56,7 +56,7 @@ const AMP_EG        = 27;
 
 const VELOCITY_SENS = 28;
 const CUTOFF_V_SENS = 29;
-const CC30_DUMMY    = 30;
+const PORTAMENTO    = 30;
 const UNISON_OPTION = 31;
 
 const DAMPER_PEDAL  = 64;
@@ -272,7 +272,7 @@ function preset(number) {
 
   presetControllers[VELOCITY_SENS] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  ];
   presetControllers[CUTOFF_V_SENS] = [0  , 127, 127, 127, 127, 64 , 64 , 64 , 64 , 64 , 127, 127, 127, 127];
-  presetControllers[CC30_DUMMY   ] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  ];
+  presetControllers[PORTAMENTO   ] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  ];
   presetControllers[UNISON_OPTION] = [0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 127, 0  , 0  ];
 
   for (var i = CONTROLLERS_FIRST; i <= CONTROLLERS_LAST; i++) {
@@ -441,7 +441,7 @@ function noteOff(noteNumber) {
     <td><span id="spanCC27">-1</span></td>
 <tr><td>VELOCITY SENS         </td><td></td>
     <td>CUTOFF V SENS         </td><td></td>
-    <td>TODO                  </td><td></td>
+    <td>PORTAMENTO            </td><td></td>
     <td>UNI TO MONO           </td></tr>
 <tr><td><input id="inputCC28" type="range" min="0" max="127" step="1" oninput="onChangeControlChange(28, value)"></td>
     <td><span id="spanCC28">-1</span></td>

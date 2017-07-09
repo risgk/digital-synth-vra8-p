@@ -229,6 +229,9 @@ public:
 
   INLINE static void control_change(uint8_t controller_number, uint8_t controller_value) {
     switch (controller_number) {
+
+
+
     case UNISON:
       set_unison(controller_value);
       break;
@@ -246,6 +249,9 @@ public:
       break;
     case UNISON_OPTION:
       IOsc<0>::set_unison_option(controller_value);
+      break;
+    case PORTAMENTO:
+      IOsc<0>::set_portamento(controller_value);
       break;
     case FILTER_CUTOFF:
       IFilter<0>::set_cutoff(controller_value);
