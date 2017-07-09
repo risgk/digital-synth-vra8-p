@@ -184,36 +184,7 @@ public:
     int16_t level_detune;
     int16_t level_sub;
     int16_t result;
-    if ((OSC_WAVEFORM_ORGAN_4 <= m_waveform) && (m_waveform <= OSC_WAVEFORM_ORGAN_3)) {
-      wave_0_main   = get_wave_level(m_wave_table[0], m_phase_array[0]);
-      wave_1_main   = get_wave_level(m_wave_table[1], m_phase_array[1]);
-      wave_2_main   = get_wave_level(m_wave_table[2], m_phase_array[2]);
-      wave_0_detune = get_wave_level(m_wave_table[0], m_phase_array[0] + m_phase_detune);
-      wave_1_detune = get_wave_level(m_wave_table[1], m_phase_array[1] + m_phase_detune);
-      wave_2_detune = get_wave_level(m_wave_table[2], m_phase_array[2] + m_phase_detune);
-
-      // amp and mix
-      if (m_unison_on && (m_unison_option & 0x40)) {
-        amp_0 = amp_0 + (amp_0 >> 1);
-        level_main   = mul_q15_q7((wave_0_main   * amp_0), m_mix_main);
-        level_detune = mul_q15_q7((wave_0_detune * amp_0), m_mix_detune);
-        level_sub    = 0;
-      } else {
-        level_main   = mul_q15_q7((wave_0_main   * amp_0) +
-                                  (wave_1_main   * amp_1) +
-                                  (wave_2_main   * amp_2), m_mix_main);
-        level_detune = mul_q15_q7((wave_0_detune * amp_0) +
-                                  (wave_1_detune * amp_1) +
-                                  (wave_2_detune * amp_2), m_mix_detune);
-        level_sub    = 0;
-      }
-      result = level_main + level_detune + level_sub;
-
-      if ((m_waveform == OSC_WAVEFORM_ORGAN_3) ||
-          (m_waveform == OSC_WAVEFORM_ORGAN_4)) {
-        result += result;
-      }
-    } else {
+    {
       wave_0_main   = get_wave_level(m_wave_table[0],  m_phase_array[0]                   << 1);
       wave_1_main   = get_wave_level(m_wave_table[1],  m_phase_array[1]                   << 1);
       wave_2_main   = get_wave_level(m_wave_table[2],  m_phase_array[2]                   << 1);
@@ -252,12 +223,6 @@ private:
     const uint8_t* result;
     if (waveform == OSC_WAVEFORM_SAW) {
       result = g_osc_saw_wave_tables[note_number - NOTE_NUMBER_MIN];
-    } else if (waveform == OSC_WAVEFORM_ORGAN_3) {
-      result = g_osc_org3_wave_tables[note_number - NOTE_NUMBER_MIN];
-    } else if (waveform == OSC_WAVEFORM_ORGAN_9) {
-      result = g_osc_org9_wave_tables[note_number - NOTE_NUMBER_MIN];
-    } else if (waveform == OSC_WAVEFORM_ORGAN_4) {
-      result = g_osc_org4_wave_tables[note_number - NOTE_NUMBER_MIN];
     } else {
       result = g_osc_sq_wave_tables[note_number - NOTE_NUMBER_MIN];
     }

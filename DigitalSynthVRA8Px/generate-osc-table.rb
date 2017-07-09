@@ -161,8 +161,8 @@ end
 
 generate_osc_wave_tables_array("saw")
 generate_osc_wave_tables_array("sq")
-generate_osc_wave_tables_array("org3", true, 2)
-generate_osc_wave_tables_array("org4", true, 2)
-generate_osc_wave_tables_array("org9", true, 8)
+#generate_osc_wave_tables_array("org3", true, 2)
+#generate_osc_wave_tables_array("org4", true, 2)
+#generate_osc_wave_tables_array("org9", true, 8)
 
 $file.close

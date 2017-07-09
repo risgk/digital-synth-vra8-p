@@ -59,8 +59,7 @@
     +---------------+------+----------------+-----------+----------------+-----------------------------+
     | UNISON/MIX    | 8    | OFF            | ON        | ON             | 3 Voice Unison              |
     |               |      | +100%          | -100%     | +100%          | Osc 2 (Detune) Level        |
-    | WAVEFORM/SUB  | 16   | Sawtooth       | Organ 9   | Square         | Waveform                    |
-    |               |      |                |           |                |  (48: Organ 4, 80: Organ 3) |
+    | WAVEFORM/SUB  | 16   | Sawtooth       | (Square)  | Square         | Waveform                    |
     |               |      | 100%           | (0%)      | 100%           | Sub Osc Level               |
     | DETUNE        | 64   | 0.06 Hz        | 1.0 Hz    | 3.8 Hz         |                             |
     | DETUNE EG AMT | 0    | -126 (EG 100%) | 0         | +125 (EG 100%) | Modulates DETUNE            |
