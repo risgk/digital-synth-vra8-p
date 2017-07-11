@@ -42,7 +42,7 @@
         - `make-sample-wav-file-cc.bat` makes a sample WAV file (working on Windows)
     - `generate-*.rb` generate source files
         - Requiring a Ruby execution environment
-- **CAUTION**: Use Arduino IDE 1.8.1 or later
+- **CAUTION**: We recommend Arduino IDE 1.8.3
 
 ## VRA8-Px CTRL
 
@@ -63,7 +63,7 @@
     |                |      | 100%           | 0%         | 100%           | Sub Osc Level (0-30, 97-127) |
     | DETUNE         | 64   | 0.06 Hz        | 1.0 Hz     | 3.8 Hz         |                              |
     | DETUNE EG AMT  | 0    | -126 (EG 100%) | 0          | +125 (EG 100%) | Modulates DETUNE             |
-    | DETUNE S&H AMT | 0    | 0%             | 50.4%      | 100%           | S&H: 61.0 Hz (Brown Noise)   |
+    | DETUNE S&H AMT | 0    | 0%             | 50.4%      | 100%           | S&H: 488.3 Hz (Brown Noise)  |
     | PORTAMENTO     | 0    | Off            | 0.09 s/Oct | 0.8 s/Oct      | Portamento Time              |
     | UNI TO MONO    | 0    | OFF            | ON         | ON             | Change Unison to Mono        |
     +----------------+------+----------------+------------+----------------+------------------------------+

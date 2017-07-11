@@ -157,9 +157,7 @@ public:
         update_freq_2();
         break;
       case 3:
-        if (m_count == 3 * OSC_CONTROL_INTERVAL) {
-          update_freq_detune(mod_input);
-        }
+        update_freq_detune(mod_input);
         break;
       case 4:
         update_pitch_current_array<0>();
