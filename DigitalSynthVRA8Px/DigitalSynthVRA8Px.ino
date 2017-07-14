@@ -6,6 +6,9 @@
 #define PITCH_BEND_RANGE (2)
 //#define PITCH_BEND_RANGE (12)
 
+//#define TRANSPOSE (-24)
+
+
 #include "common.h"
 #include "synth.h"
 #include "serial-in.h"

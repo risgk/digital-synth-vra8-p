@@ -8,19 +8,21 @@
 - 3 Voice Paraphonic Synthesizer for Arduino Uno
 - A Variant of Digital Synth VRA8-P <https://github.com/risgk/digital-synth-vra8-p>
 
+## v2.0 New Features
+
+- Delete ORGAN Waveform, Change CC# of AMP EG (19 -> 27), Change RESONANCE steps (17 -> 9)
+- New PRESETs, Improved sound
+- DETUNE S&H AMT, DETUNE EG AMT, PORTAMENTO, UNI TO MONO, CUTOFF NG AMT, EG ATTACK, AMP EG/HOLD
+
 ## v1.2 New Features
 
-- Cutoff Velocity Sensitivity
-- Detune EG Amount
+- Cutoff Velocity Sensitivity, Detune EG Amount
 
 ## v1.0 New Features
 
-- Phase Resolution: 24 bit
-- Internal Signal Processing: 16 bit
-- Audio Output (8 bit) with Error Diffusion
-- Sub Oscillators (Triangle Wave)
-- Changeable Osc 2 (Detune) Level
-- Resonance with Q = 11.3 (Max)
+- Phase Resolution: 24 bit, Internal Signal Processing: 16 bit
+- Audio Output (8 bit) with Error Diffusion, Sub Oscillators (Triangle Wave)
+- Changeable Osc 2 (Detune) Level, Resonance with Q = 11.3 (Max)
 - Velocity Sensitivity
 
 ## Features
@@ -54,35 +56,36 @@
 
 ## Controllers
 
-    +----------------+------+----------------+------------+----------------+------------------------------+
-    | Controller     | Init | Value 0        | Value 64   | Value 127      | Notes                        |
-    +----------------+------+----------------+------------+----------------+------------------------------+
-    | UNISON/MIX     | 8    | OFF            | ON         | ON             | 3 Voice Unison               |
-    |                |      | +100%          | -100%      | +100%          | Osc 2 (Detune) Level         |
-    | WAVEFORM/SUB   | 16   | Sawtooth       | Square     | Square         | Waveform                     |
-    |                |      | 100%           | 0%         | 100%           | Sub Osc Level (0-30, 97-127) |
-    | DETUNE         | 64   | 0.06 Hz        | 1.0 Hz     | 3.8 Hz         |                              |
-    | DETUNE EG AMT  | 0    | -126 (EG 100%) | 0          | +125 (EG 100%) | Modulates DETUNE             |
-    | DETUNE S&H AMT | 0    | 0%             | 50.4%      | 100%           | S&H: 488.3 Hz (Brown Noise)  |
-    | PORTAMENTO     | 0    | Off            | 0.09 s/Oct | 0.8 s/Oct      | Portamento Time              |
-    | UNI TO MONO    | 0    | OFF            | ON         | ON             | Change Unison to Mono        |
-    +----------------+------+----------------+------------+----------------+------------------------------+
-    | CUTOFF         | 64   | 0.22 kHz (A3)  | 1.2 kHz    | 7.04 kHz (A8)  | Range 4 to 124               |
-    | RESONANCE      | 64   | Q = 0.7        | Q = 2.8    | Q = 11.3       |                              |
-    | CUTOFF EG AMT  | 96   | -126 (EG 100%) | 0          | +125 (EG 100%) | EnvGen Modulates CUTOFF      |
-    | CUTOFF NG AMT  | 60   | -126 (NG 100%) | 0          | +125 (NG 100%) | NoiseGen (White) Mods CUTOFF |
-    +----------------+------+----------------+------------+----------------+------------------------------+
-    | EG ATTACK      | 32   | 4 ms           | 60 ms      | 4.2 s          | Attack Time                  |
-    | EG DECAY       | 64   | 34 ms          | 2.2 s      | Infinity       | Decay Time                   |
-    | AMP EG/HOLD    | 0    | AMP EG OFF     | AMP EG ON  | AMP EG ON      | HOLD ON: 32-95               |
-    +----------------+------+----------------+------------+----------------+------------------------------+
-    | VELOCITY SENS  | 0    | 0%             | 50.4%      | 100%           | Gain Velocity Sensitivity    |
-    | CUTOFF V SENS  | 127  | -100.8%        | 0%         | +99.2%         | Cutoff Velocity Sensitivity  |
-    +----------------+------+----------------+------------+----------------+------------------------------+
+    +----------------+------+----------------+---------------+----------------+------------------------------+
+    | Controller     | INIT | Value 0        | Value 64      | Value 127      | Notes                        |
+    +----------------+------+----------------+---------------+----------------+------------------------------+
+    | UNISON/MIX     | 0    | OFF            | ON            | ON             | 3 Voice Unison               |
+    |                |      | +70.7%/+70.7%  | +70.7%/-70.7% | +70.7%/+70.7%  | Main/Detune Level            |
+    | WAVEFORM/SUB   | 0    | SAWtooth       | SQuare        | SQuare         | WAVEFORM                     |
+    |                |      | 100%           | 0%            | 100%           | SUB Osc Level                |
+    | DETUNE         | 48   | 0.06 Hz        | 1.0 Hz        | 3.8 Hz         |                              |
+    | DETUNE S&H AMT | 32   | Avg. 0         | Avg. +32      | Avg. +63.5     | S&H: 488.3 Hz (Red Noise)    |
+    | DETUNE EG AMT  | 48   | -126 (EG 100%) | 0             | +125 (EG 100%) | Modulates DETUNE             |
+    | PORTAMENTO     | 32   | Off            | 0.09 s/Oct    | 0.8 s/Oct      | Portamento Time              |
+    | UNI TO MONO    | 0    | OFF            | ON            | ON             | Change Unison to Mono        |
+    +----------------+------+----------------+---------------+----------------+------------------------------+
+    | CUTOFF         | 64   | 0.22 kHz (A3)  | 1.2 kHz       | 7.04 kHz (A8)  | Range: 4 to 124              |
+    | RESONANCE      | 64   | Q = 0.7        | Q = 2.8       | Q = 11.3       | 9 steps                      |
+    | CUTOFF EG AMT  | 96   | -126 (EG 100%) | 0             | +125 (EG 100%) | EnvGen Modulates CUTOFF      |
+    | CUTOFF NG AMT  | 64   | Avg. -32       | 0             | Avg. +31       | NoiseGen (White) Mods CUTOFF |
+    +----------------+------+----------------+---------------+----------------+------------------------------+
+    | EG ATTACK      | 0    | 4 ms           | 60 ms         | 4.2 s          | Attack Time                  |
+    | EG DECAY       | 64   | 34 ms          | 2.2 s         | Infinity       | Decay Time                   |
+    | AMP EG/HOLD    | 0    | AMP EG OFF     | AMP EG ON     | AMP EG ON      | AMP EG ON: 64-127            |
+    |                |      | HOLD OFF       | HOLD ON       | HOLD OFF       | HOLD ON: 32-95               |
+    +----------------+------+----------------+---------------+----------------+------------------------------+
+    | VELOCITY SENS  | 0    | 0%             | 50.4%         | 100%           | Gain Velocity Sensitivity    |
+    | CUTOFF V SENS  | 127  | -128 (V 127)   | 0 (V 127)     | +126 (V 127)   | Cutoff Velocity Sensitivity  |
+    +----------------+------+----------------+---------------+----------------+------------------------------+
 
 ## MIDI Implementation Chart
 
-      [Experimental Synthesizer]                                      Date: 2017-xx-xx       
+      [Paraphonic Synthesizer]                                        Date: 2017-xx-xx       
       Model  Digital Synth VRA8-Px    MIDI Implementation Chart       Version: 2.x.x         
     +-------------------------------+---------------+---------------+-----------------------+
     | Function...                   | Transmitted   | Recognized    | Remarks               |
@@ -94,8 +97,8 @@
     |              Messages         | x             | x             |                       |
     |              Altered          | ************* |               |                       |
     +-------------------------------+---------------+---------------+-----------------------+
-    | Note                          | x             | 24-84         |                       |
-    | Number       : True Voice     | ************* | 24-84         |                       |
+    | Note                          | x             | 0-127         |                       |
+    | Number       : True Voice     | ************* | 24-84         | (w/o TRANSPOSE)       |
     +-------------------------------+---------------+---------------+-----------------------+
     | Velocity     Note ON          | x             | o (V=1-127)   |                       |
     |              Note OFF         | x             | x             |                       |
@@ -103,7 +106,7 @@
     | After        Key's            | x             | x             |                       |
     | Touch        Ch's             | x             | x             |                       |
     +-------------------------------+---------------+---------------+-----------------------+
-    | Pitch Bend                    | x             | o             | Range: 2 or 12        |
+    | Pitch Bend                    | x             | o             | Range: 2 (or 12)      |
     +-------------------------------+---------------+---------------+-----------------------+
     | Control                    16 | x             | o             | UNISON/MIX            |
     | Change                     17 | x             | o             | WAVEFORM/SUB          |
@@ -114,7 +117,7 @@
     |                            22 | x             | o             | CUTOFF EG AMT         |
     |                            23 | x             | o             | EG DECAY              |
     |                            24 | x             | o             | EG ATTACK             |
-    |                            25 | x             | o             | AMPLITUDE MOD         |
+    |                            25 | x             | o             | DETUNE S&H AMT        |
     |                            26 | x             | o             | DETUNE EG AMT         |
     |                            27 | x             | o             | AMP EG/HOLD           |
     |                            28 | x             | o             | VELOCITY SENS         |

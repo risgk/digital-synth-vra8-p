@@ -285,7 +285,12 @@ private:
 
   template <uint8_t N>
   INLINE static void update_freq() {
+#if defined(TRANSPOSE)
+    int16_t transpose = (TRANSPOSE << 8) | 0x00;
+    uint16_t pitch_real = m_pitch_current_array[N] + m_pitch_bend_normalized + transpose;
+#else
     uint16_t pitch_real = m_pitch_current_array[N] + m_pitch_bend_normalized;
+#endif
     uint8_t pitch = high_byte(pitch_real);
     uint8_t pitch_fine = low_byte(pitch_real);
     if (pitch < NOTE_NUMBER_MIN) {
@@ -318,8 +323,8 @@ private:
                                high_sbyte(((m_detune_mod_amt - 64) << 1) * mod_input);
     // TODO: Not to use IFilter
     uint8_t rnd = IFilter<0>::get_rnd8() >> 1;
-    uint8_t brownian_noise = m_rnd_prev + rnd;
-    detune_candidate += high_byte(m_detune_noise_gen_amt * brownian_noise);
+    uint8_t red_noise = m_rnd_prev + rnd;
+    detune_candidate += high_byte(m_detune_noise_gen_amt * red_noise);
     m_rnd_prev = rnd;
     uint8_t detune_target;
     if (detune_candidate > 127) {

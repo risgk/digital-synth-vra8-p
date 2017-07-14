@@ -75,14 +75,14 @@ control_change(FILTER_RESO  , 64 )
 control_change(FILTER_EG_AMT, 96 )
 control_change(EG_DECAY     , 64 )
 
-control_change(EG_ATTACK    , 32 )
+control_change(EG_ATTACK    , 0  )
 control_change(DETUNE_NG_AMT, 32 )
 control_change(DETUNE_EG_AMT, 48 )
 control_change(AMP_EG       , 0  )
 
 control_change(VELOCITY_SENS, 0  )
 control_change(CUTOFF_V_SENS, 127)
-control_change(PORTAMENTO   , 0  )
+control_change(PORTAMENTO   , 32 )
 control_change(UNISON_OPTION, 0  )
 
 play_a(4)

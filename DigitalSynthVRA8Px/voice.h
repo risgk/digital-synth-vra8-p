@@ -106,10 +106,17 @@ public:
   }
 
   INLINE static void note_on(uint8_t note_number, uint8_t velocity) {
+#if defined(TRANSPOSE)
+    if ((note_number < NOTE_NUMBER_MIN - TRANSPOSE) ||
+        (note_number > NOTE_NUMBER_MAX - TRANSPOSE)) {
+      return;
+    }
+#else
     if ((note_number < NOTE_NUMBER_MIN) ||
         (note_number > NOTE_NUMBER_MAX)) {
       return;
     }
+#endif
 
     uint8_t v = high_byte((velocity + 1) * (m_velocity_sensitivity << 1)) +
                           (127 - m_velocity_sensitivity);
@@ -314,7 +321,7 @@ public:
 
   INLINE static int8_t clock() {
     m_count++;
-    if (m_count == 0) {
+    if ((m_count & (0x10 - 1)) == 0) {
       update_amp_env_amt();
     }
 
