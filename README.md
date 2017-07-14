@@ -10,8 +10,9 @@
 
 ## v2.0 New Features
 
-- Delete ORGAN Waveform, Change CC# of AMP EG (19 -> 27), Change RESONANCE steps (17 -> 9)
-- New PRESETs, Improved sound
+- ORGAN Waveform Deleted, CC# of AMP EG Changed (19 -> 27), RESONANCE Steps Changed (17 -> 9)
+- New PRESETs, Improved Sound, MIDI Shield Official Support
+- PITCH BEND Support, TRANSPOSE Support
 - DETUNE S&H AMT, DETUNE EG AMT, PORTAMENTO, UNI TO MONO, CUTOFF NG AMT, EG ATTACK, AMP EG/HOLD
 
 ## v1.2 New Features
@@ -27,7 +28,7 @@
 
 ## Features
 
-- 3 Voice Pseudo Polyphonic Synthesizer (Paraphonic Synthesizer), MIDI Sound Module
+- 3 Voice Paraphonic Synthesizer (Pseudo Polyphonic Synthesizer), MIDI Sound Module
 - Serial MIDI In (38400 bps), PWM Audio Out (Pin 6), PWM Rate: 62500 Hz
     - We recommend adding a RC filter circuit to reduce PWM ripples
     - A cutoff frequency 10.6 kHz (R: 150 ohm, C: 100 nF) works well
