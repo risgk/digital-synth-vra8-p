@@ -1,6 +1,6 @@
-# Digital Synth VRA8-Px 2.x.0
+# Digital Synth VRA8-Px v2.0.0
 
-- 2017-07-xx ISGK Instruments
+- 2017-07-22 ISGK Instruments
 - <https://github.com/risgk/digital-synth-vra8-p/tree/vra8-px-v2>
 
 ## Concept
@@ -87,8 +87,8 @@
 
 ## MIDI Implementation Chart
 
-      [Paraphonic Synthesizer]                                        Date: 2017-07-xx       
-      Model: Digital Synth VRA8-Px    MIDI Implementation Chart       Version: 2.x.0         
+      [Paraphonic Synthesizer]                                        Date: 2017-07-22       
+      Model: Digital Synth VRA8-Px    MIDI Implementation Chart       Version: 2.0.0         
     +-------------------------------+---------------+---------------+-----------------------+
     | Function...                   | Transmitted   | Recognized    | Remarks               |
     +-------------------------------+---------------+---------------+-----------------------+
